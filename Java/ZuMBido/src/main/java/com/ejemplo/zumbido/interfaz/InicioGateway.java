@@ -19,6 +19,7 @@ public class InicioGateway extends JFrame {
     private JTextArea txtHistorial;
     private JTextField txtMensaje;
     private JButton btnEnviar;
+    private JButton btnActualizarPlacas;
     private JPanel pnlContenido;
     private JPanel pnlEstado;
     private JLabel lblEstado;
@@ -52,6 +53,10 @@ public class InicioGateway extends JFrame {
         JButton btnConectar = new JButton("Conectar");
         btnConectar.setFont(fuentes.VENTANA_NEGRITA_A);
         btnConectar.addActionListener(e -> conectarPuerto());
+        
+        btnActualizarPlacas = new JButton("Actualizar");
+        btnActualizarPlacas.setFont(fuentes.VENTANA_NORMAL_A_CH);
+        
 
         JLabel lblP = new JLabel("Puerto:");
         lblP.setFont(fuentes.VENTANA_NEGRITA_A);
@@ -59,6 +64,7 @@ public class InicioGateway extends JFrame {
 
         pnlSuperior.add(cmbListaPuertos);
         pnlSuperior.add(btnConectar);
+        pnlSuperior.add(btnActualizarPlacas);
         add(pnlSuperior, BorderLayout.NORTH);
 
         //Panel de Contenido
