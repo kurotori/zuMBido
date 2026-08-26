@@ -8,10 +8,12 @@ id_placa = "".join("{:02x}".format(b) for b in machine.unique_id())
 tiempo=0
 tiempoKa=0 #Temporizador para detectar conexión activa
 tempoAnterior=0
+grupoRadial=0
+
 
 conexion=False
 
-radio.config(length=250)
+radio.config(length=250, group=grupoRadial)
 radio.on()
 
 
@@ -22,7 +24,8 @@ buffer_serial = ""
 
 # Configuración del canal de radio y tamaño de paquete
 def activarRadio(grupo):
-    radio.config(length=250, group=int(grupo))
+    grupoRadial=int(grupo)
+    radio.config(length=250, group=grupoRadial)
     radio.on()
     display.set_pixel(1,0,9)
 
@@ -52,7 +55,7 @@ def evaluarComando(comando):
         if(datos[1]=='c'):
             display.set_pixel(0,0,9);
             escribir("c:bid:"+id_placa)
-            escribir("c:gr")
+            escribir("c:gr:"+str(grupoRadial))
             conexion=True
         
         if(datos[1]=='ka'): #Keep Alive - Mantiene la conexión
