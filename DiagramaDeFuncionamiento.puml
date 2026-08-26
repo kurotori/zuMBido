@@ -1,0 +1,24 @@
+@startuml Diagrama de Funcionamiento
+
+<style>
+document {
+  BackGroundColor #00375C
+}
+root {
+  FontColor #?black:white
+  LineColor white
+}
+</style>
+
+
+participant "Aplicación A" as appA #EFDB1F
+participant "Placa A" as plA #FF0A0E
+participant "Placa B" as plB #FF800A
+participant "Aplicación B" as appB #1F34EF
+
+appA <- appA: Selección de placa
+appA -> plA: Solicitud de \nidentificación
+plA <- plA: Activar \nLED 0
+plA -> appA: Solicitud de\ngrupo radial
+
+@enduml

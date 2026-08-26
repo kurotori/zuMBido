@@ -5,14 +5,30 @@ import machine
 #ID de la placa
 id_placa = "".join("{:02x}".format(b) for b in machine.unique_id())
 
-# Configuración del canal de radio y tamaño de paquete
-radio.config(channel=7, length=250)
+tiempo=0
+tiempoKa=0 #Temporizador para detectar conexión activa
+tempoAnterior=0
+
+conexion=False
+
+radio.config(length=250)
 radio.on()
+
 
 # Configuración de comunicación serial con la PC
 uart.init(baudrate=115200)
 
 buffer_serial = ""
+
+# Configuración del canal de radio y tamaño de paquete
+def activarRadio(grupo):
+    radio.config(length=250, group=int(grupo))
+    radio.on()
+    display.set_pixel(1,0,9)
+
+def desactivarRadio():
+    radio.off()
+    display.set_pixel(1,0,0)
 
 def escribir(texto):
     uart.write(texto + '\r\n')
@@ -29,17 +45,25 @@ def parpadear(xLed, yLed, intensidad, tiempo):
     
 
 def evaluarComando(comando):
-    orden=comando[0:(comando.find(':'))]
+    datos=comando.split(':')
+    orden = datos[0]
     
-    if(orden=="iniciar"):
-       escribir("c:bid:"+id_placa)
-       escribir("c:gr")
+    if(orden=="c"):    
+        if(datos[1]=='c'):
+            display.set_pixel(0,0,9);
+            escribir("c:bid:"+id_placa)
+            escribir("c:gr")
+            conexion=True
+        
+        if(datos[1]=='ka'): #Keep Alive - Mantiene la conexión
+            conexion=True
     if(orden=="gr"):
-        grupo=comando[(comando.find(grupo))+1:len(comando)]
+        grupo=datos[1]
+        activarRadio(grupo)
         escribir("m:b:Grupo establecido a " + grupo)
-        radio.config(group=int(grupo))
-
+        
 while True:
+    tiempo = running_time()
     # -------------------------------------------------------------
     # 1. RADIO -> SERIAL: Mensajes recibidos de otros micro:bits
     # -------------------------------------------------------------
@@ -68,5 +92,5 @@ while True:
                     buffer_serial = ""
             else:
                 buffer_serial += char
-
+    
     sleep(10)

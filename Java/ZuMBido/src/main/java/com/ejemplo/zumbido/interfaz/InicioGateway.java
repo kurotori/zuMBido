@@ -142,7 +142,7 @@ public class InicioGateway extends JFrame {
             //Inicializar la salida de datos hascia el puerto
             salidaSerie = puertoActivo.getOutputStream();
             if (usuario == null) {
-                enviarComando("iniciar:");
+                enviarComando("c:c");
             }
 
             btnEnviar.setEnabled(true);
@@ -247,7 +247,7 @@ public class InicioGateway extends JFrame {
 
                     case Mensajes.GRUPO_RADIO:
                         int grupo = elegirGrupoRadio();
-                        enviarComando("gr:");
+                        enviarComando("gr:"+grupo);
                         break;
                     default:
                         throw new AssertionError();
