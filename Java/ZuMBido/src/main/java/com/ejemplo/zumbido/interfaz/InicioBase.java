@@ -30,7 +30,7 @@ import java.util.Scanner;
 public class InicioBase extends JFrame {
 
     private JPanel pnlPlacas;
-    private JPanel pnlGrupoRadio;
+    //private JPanel pnlGrupoRadio;
     private JPanel pnlEstado;
 
     private JComboBox<String> cmbListaPlacas;
@@ -67,64 +67,92 @@ public class InicioBase extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        pnlPlacas = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        pnlPlacas.setPreferredSize(new Dimension(0, 55));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(2, 10, 2, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        pnlPlacas = new JPanel(new GridBagLayout());//new FlowLayout(FlowLayout.CENTER, 5, 5));
+        pnlPlacas.setPreferredSize(new Dimension(0, 200));
         pnlPlacas.setBackground(Color.white);
         pnlPlacas.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Colores.COLOR_GRIS_CLARO));
         add(pnlPlacas, BorderLayout.NORTH);
-
-        LabelConImagen lblMicrobit = new LabelConImagen(48, 38, "/imagen/microbit.png");
-        pnlPlacas.add(lblMicrobit);
         
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.fill = GridBagConstraints.NONE;
+        LabelConImagen lblMicrobit = new LabelConImagen(48, 38, "/imagen/microbit.png");
+        pnlPlacas.add(lblMicrobit,gbc);
+        
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         cmbListaPlacas = new JComboBox<>();
         cmbListaPlacas.setPreferredSize(new Dimension(300,40));
         cmbListaPlacas.setFont(fuentes.VENTANA_NORMAL_A_CH);
         
-        pnlPlacas.add(cmbListaPlacas);
+        pnlPlacas.add(cmbListaPlacas,gbc);
 
+        gbc.gridx = 2;
         btnConectarPlaca = new BotonImagenChico(null,"/imagen/conectar.png",32,32);
         
-        pnlPlacas.add(btnConectarPlaca);
+        pnlPlacas.add(btnConectarPlaca,gbc);
         
+        gbc.gridx = 3;
         btnActualizarListaPlacas = new BotonImagenChico(null,"/imagen/actualizar.png",32,32);
-        pnlPlacas.add(btnActualizarListaPlacas);
+        pnlPlacas.add(btnActualizarListaPlacas, gbc);
         
+        
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.fill = GridBagConstraints.NONE;
+        JLabel lblEtIdPlaca = new JLabel(Textos.INICIO_ET_ID_PLACA);
+        lblEtIdPlaca.setFont(fuentes.VENTANA_NEGRITA_A_CH);
+        pnlPlacas.add(lblEtIdPlaca,gbc);
+        
+        lblIdPlaca = new JLabel("---");
+        lblIdPlaca.setFont(fuentes.VENTANA_NORMAL_A_CH);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        pnlPlacas.add(lblIdPlaca,gbc);
+        
+        //Panel de Grupo Radial
+        /*
         pnlGrupoRadio = new JPanel(new FlowLayout());
         pnlGrupoRadio.setPreferredSize( new Dimension(55,360) );
         pnlGrupoRadio.setBackground(Color.white);
         pnlGrupoRadio.setBorder( BorderFactory.createMatteBorder(0, 0, 1, 0, Colores.COLOR_GRIS_CLARO) );
+        */
         
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         JLabel lblEtGrupoRadial = new JLabel(Textos.INICIO_ET_GRUPO_RADIO);
         lblEtGrupoRadial.setFont(fuentes.VENTANA_NEGRITA_A);
+
+        pnlPlacas.add(lblEtGrupoRadial,gbc);
         
-        pnlGrupoRadio.add(lblEtGrupoRadial);
-        
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         cmbGruposRadio = new JComboBox<>();
         cmbGruposRadio.setPreferredSize(new Dimension(300,40));
         cmbGruposRadio.setFont(fuentes.VENTANA_NORMAL_A_CH);
         cmbGruposRadio.setEnabled(false);
-        pnlGrupoRadio.add(cmbGruposRadio);
+        
+        //String[] canales = new String[256];
+        for (int i = 0; i < 256; i++) {
+            cmbGruposRadio.addItem("Grupo " + i);
+        }
+        
+        pnlPlacas.add(cmbGruposRadio, gbc);
                 
         pnlEstado = new JPanel(new GridBagLayout());
         pnlEstado.setPreferredSize( new Dimension(0,220) );
         pnlEstado.setBackground(Color.white);
         
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(2, 15, 2, 15);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        
-        JLabel lblEtIdPlaca = new JLabel(Textos.INICIO_ET_ID_PLACA);
-        lblEtIdPlaca.setFont(fuentes.VENTANA_NEGRITA_A);
-        pnlEstado.add(lblEtIdPlaca,gbc);
-        
-        lblIdPlaca = new JLabel("---");
-        lblIdPlaca.setFont(fuentes.VENTANA_NORMAL_A);
-        gbc.gridx = 1;
-        pnlEstado.add(lblIdPlaca,gbc);
         
         
-        add(pnlGrupoRadio,BorderLayout.CENTER);
+        
+        
+        //add(pnlGrupoRadio,BorderLayout.CENTER);
         add(pnlEstado, BorderLayout.SOUTH);
     }
     
@@ -186,12 +214,20 @@ public class InicioBase extends JFrame {
                 switch (cadena[1]) {
 
                     case Mensajes.BOARD_ID:
+                        placa.setId(cadena[2]);
+                        lblIdPlaca.setText(cadena[2]);
                         //idPlaca = cadena[2];
                         //lblEstado.setText(lblEstado.getText() + idPlaca);
                         break;
 
                     case Mensajes.GRUPO_RADIO:
-                        int grupo = elegirGrupoRadio();
+                        if(cadena.length>2){
+                            int gr = Integer.parseInt(cadena[2]); 
+                            placa.setGrupoRadial(gr);
+                            cmbGruposRadio.setEnabled(true);
+                            cmbGruposRadio.setSelectedIndex(gr);
+                        }
+                        //int grupo = elegirGrupoRadio();
                         //enviarComando("gr:"+grupo);
                         break;
                     default:

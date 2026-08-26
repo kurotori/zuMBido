@@ -21,6 +21,7 @@ public class Fuentes {
     public Font VENTANA_NORMAL_B;
     public Font VENTANA_NORMAL_C;
     public Font VENTANA_NEGRITA_A;
+    public Font VENTANA_NEGRITA_A_CH;
     public Font VENTANA_NEGRITA_B;
     public Font VENTANA_NEGRITA_C;
 
@@ -32,6 +33,7 @@ public class Fuentes {
         this.VENTANA_NORMAL_B = cargarFuente("/fuentes/Lekton/Lekton-Regular.ttf", 24);
         this.VENTANA_NORMAL_A = cargarFuente("/fuentes/Lekton/Lekton-Regular.ttf", 28);
         
+        this.VENTANA_NEGRITA_A_CH = cargarFuente("/fuentes/Lekton/Lekton-Bold.ttf", 17);
         this.VENTANA_NEGRITA_A = cargarFuente("/fuentes/Lekton/Lekton-Bold.ttf", 18);
         this.VENTANA_NEGRITA_B = cargarFuente("/fuentes/Lekton/Lekton-Bold.ttf", 24);
         this.VENTANA_NEGRITA_C = cargarFuente("/fuentes/Lekton/Lekton-Bold.ttf", 28);
