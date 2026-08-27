@@ -58,7 +58,8 @@ public class InicioBase extends JFrame {
      * Configura los componentes de la ventana
      */
     private void configurar() {
-        setSize(500, 360);
+        setSize(640, 360);
+        
         setBackground(Color.white);
         setTitle(Textos.APP_NAME + Textos.INICIO_TITULO);
         setFont(fuentes.VENTANA_NORMAL_A);
