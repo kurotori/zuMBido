@@ -19,6 +19,7 @@ public class Mensajes {
     // 2 - Sub comandos
     public static final String BOARD_ID = "bid";
     public static final String GRUPO_RADIO = "gr";
+    public static final String KEEEP_ALIVE = "ka";
     public static final String MENSAJE_PLACA = "b";
     
 }

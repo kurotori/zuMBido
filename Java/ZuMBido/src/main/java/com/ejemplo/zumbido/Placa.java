@@ -5,6 +5,7 @@
 package com.ejemplo.zumbido;
 
 import com.ejemplo.zumbido.interfaz.InicioBase;
+import com.ejemplo.zumbido.interfaz.VentanaSerial;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
@@ -22,7 +23,7 @@ public class Placa {
     public static final int ACTIVA = 0;
     public static final int INACTIVA = 1;
     
-    private InicioBase ventana;
+    private VentanaSerial ventana;
     
     private String id;
     private int grupoRadial;
@@ -34,7 +35,7 @@ public class Placa {
     
     private Usuario usuario = null;
 
-    public Placa(InicioBase ventana, SerialPort puerto) {
+    public Placa(VentanaSerial ventana, SerialPort puerto) {
         this.ventana = ventana;
         this.id = null;
         this.grupoRadial = 0;
@@ -49,7 +50,7 @@ public class Placa {
      *
      * @param texto
      */
-    private void enviarComando(String texto) {
+    public void enviarComando(String texto) {
         texto = texto.trim();
         if (!texto.isEmpty() && salidaSerie != null) {
             try {

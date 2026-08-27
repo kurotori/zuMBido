@@ -27,7 +27,7 @@ import java.util.Scanner;
  *
  * @author sebastian
  */
-public class InicioBase extends JFrame {
+public class InicioBase extends VentanaSerial {
 
     private JPanel pnlPlacas;
     //private JPanel pnlGrupoRadio;
@@ -36,14 +36,14 @@ public class InicioBase extends JFrame {
     private JComboBox<String> cmbListaPlacas;
     private BotonImagenChico btnConectarPlaca;
     private BotonImagenChico btnActualizarListaPlacas;
-    
+
     private JComboBox<String> cmbGruposRadio;
-    
+
     private JLabel lblIdPlaca;
     private JLabel lblGrupoRadio;
-    
+
     private Placa placa;// = new Placa();
-    
+
     GridBagConstraints gbc = new GridBagConstraints();
 
     private Fuentes fuentes = new Fuentes();
@@ -59,7 +59,7 @@ public class InicioBase extends JFrame {
      */
     private void configurar() {
         setSize(640, 360);
-        
+
         setBackground(Color.white);
         setTitle(Textos.APP_NAME + Textos.INICIO_TITULO);
         setFont(fuentes.VENTANA_NORMAL_A);
@@ -72,108 +72,104 @@ public class InicioBase extends JFrame {
         gbc.gridy = 0;
         gbc.insets = new Insets(2, 10, 2, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        
+
         pnlPlacas = new JPanel(new GridBagLayout());//new FlowLayout(FlowLayout.CENTER, 5, 5));
         pnlPlacas.setPreferredSize(new Dimension(0, 200));
         pnlPlacas.setBackground(Color.white);
         pnlPlacas.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Colores.COLOR_GRIS_CLARO));
         add(pnlPlacas, BorderLayout.NORTH);
-        
+
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.NONE;
         LabelConImagen lblMicrobit = new LabelConImagen(48, 38, "/imagen/microbit.png");
-        pnlPlacas.add(lblMicrobit,gbc);
-        
+        pnlPlacas.add(lblMicrobit, gbc);
+
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         cmbListaPlacas = new JComboBox<>();
-        cmbListaPlacas.setPreferredSize(new Dimension(300,40));
+        cmbListaPlacas.setPreferredSize(new Dimension(300, 40));
         cmbListaPlacas.setFont(fuentes.VENTANA_NORMAL_A_CH);
-        
-        pnlPlacas.add(cmbListaPlacas,gbc);
+
+        pnlPlacas.add(cmbListaPlacas, gbc);
 
         gbc.gridx = 2;
-        btnConectarPlaca = new BotonImagenChico(null,"/imagen/conectar.png",32,32);
-        
-        pnlPlacas.add(btnConectarPlaca,gbc);
-        
+        btnConectarPlaca = new BotonImagenChico(null, "/imagen/conectar.png", 32, 32);
+
+        pnlPlacas.add(btnConectarPlaca, gbc);
+
         gbc.gridx = 3;
-        btnActualizarListaPlacas = new BotonImagenChico(null,"/imagen/actualizar.png",32,32);
+        btnActualizarListaPlacas = new BotonImagenChico(null, "/imagen/actualizar.png", 32, 32);
         pnlPlacas.add(btnActualizarListaPlacas, gbc);
-        
-        
+
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.NONE;
         JLabel lblEtIdPlaca = new JLabel(Textos.INICIO_ET_ID_PLACA);
         lblEtIdPlaca.setFont(fuentes.VENTANA_NEGRITA_A_CH);
-        pnlPlacas.add(lblEtIdPlaca,gbc);
-        
+        pnlPlacas.add(lblEtIdPlaca, gbc);
+
         lblIdPlaca = new JLabel("---");
         lblIdPlaca.setFont(fuentes.VENTANA_NORMAL_A_CH);
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
-        pnlPlacas.add(lblIdPlaca,gbc);
-        
+        pnlPlacas.add(lblIdPlaca, gbc);
+
         //Panel de Grupo Radial
         /*
         pnlGrupoRadio = new JPanel(new FlowLayout());
         pnlGrupoRadio.setPreferredSize( new Dimension(55,360) );
         pnlGrupoRadio.setBackground(Color.white);
         pnlGrupoRadio.setBorder( BorderFactory.createMatteBorder(0, 0, 1, 0, Colores.COLOR_GRIS_CLARO) );
-        */
-        
+         */
         gbc.gridx = 0;
         gbc.gridy = 2;
         JLabel lblEtGrupoRadial = new JLabel(Textos.INICIO_ET_GRUPO_RADIO);
         lblEtGrupoRadial.setFont(fuentes.VENTANA_NEGRITA_A);
 
-        pnlPlacas.add(lblEtGrupoRadial,gbc);
-        
+        pnlPlacas.add(lblEtGrupoRadial, gbc);
+
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         cmbGruposRadio = new JComboBox<>();
-        cmbGruposRadio.setPreferredSize(new Dimension(300,40));
+        cmbGruposRadio.setPreferredSize(new Dimension(300, 40));
         cmbGruposRadio.setFont(fuentes.VENTANA_NORMAL_A_CH);
         cmbGruposRadio.setEnabled(false);
-        
+
         //String[] canales = new String[256];
         for (int i = 0; i < 256; i++) {
             cmbGruposRadio.addItem("Grupo " + i);
         }
-        
+
         pnlPlacas.add(cmbGruposRadio, gbc);
-                
+
         pnlEstado = new JPanel(new GridBagLayout());
-        pnlEstado.setPreferredSize( new Dimension(0,220) );
+        pnlEstado.setPreferredSize(new Dimension(0, 220));
         pnlEstado.setBackground(Color.white);
-        
-        
-        
-        
-        
+
         //add(pnlGrupoRadio,BorderLayout.CENTER);
         add(pnlEstado, BorderLayout.SOUTH);
     }
-    
-    
+
     /**
      * Configurar funciones de los componentes de la ventana
      */
-    private void configurarFunciones(){
-        btnActualizarListaPlacas.addActionListener(e->cargarPuertosDisponibles());
+    private void configurarFunciones() {
+        
+        btnActualizarListaPlacas.addActionListener(e -> cargarPuertosDisponibles());
         cargarPuertosDisponibles();
-        btnConectarPlaca.addActionListener(e->conectarAPlaca());
+        
+        btnConectarPlaca.addActionListener(e -> conectarAPlaca());
+        
+        cmbGruposRadio.addActionListener(e -> );
     }
-    
-    
+
     /**
      * Carga los puertos seriales detectados en el combobox
      */
     private void cargarPuertosDisponibles() {
         cmbListaPlacas.removeAllItems();
-        
+
         SerialPort[] puertos = SerialPort.getCommPorts();
 
         if (puertos.length < 1) {
@@ -186,21 +182,26 @@ public class InicioBase extends JFrame {
             btnConectarPlaca.setEnabled(true);
         }
     }
-    
+
     /**
-     * 
+     *
      */
-    private void conectarAPlaca(){
-        String puerto = (String)cmbListaPlacas.getSelectedItem();
+    private void conectarAPlaca() {
+        String puerto = (String) cmbListaPlacas.getSelectedItem();
         placa = new Placa(this, SerialPort.getCommPort(puerto));
+
+    }
+
+    private void cambiarGrupoRadial(){
         
     }
     
-    
     /**
      * Evalúa los mensajes recibidos en esta ventana
-     * @param mensaje 
+     *
+     * @param mensaje
      */
+    @Override
     public void evaluarMensaje(String mensaje) {
         String[] cadena = mensaje.split(":");
 
@@ -222,8 +223,8 @@ public class InicioBase extends JFrame {
                         break;
 
                     case Mensajes.GRUPO_RADIO:
-                        if(cadena.length>2){
-                            int gr = Integer.parseInt(cadena[2]); 
+                        if (cadena.length > 2) {
+                            int gr = Integer.parseInt(cadena[2]);
                             placa.setGrupoRadial(gr);
                             cmbGruposRadio.setEnabled(true);
                             cmbGruposRadio.setSelectedIndex(gr);
@@ -231,8 +232,13 @@ public class InicioBase extends JFrame {
                         //int grupo = elegirGrupoRadio();
                         //enviarComando("gr:"+grupo);
                         break;
+                        
+                    case Mensajes.KEEEP_ALIVE:
+                        placa.enviarComando(Mensajes.KEEEP_ALIVE);
+                        break;
                     default:
-                        throw new AssertionError();
+                        System.out.println("SubComando no conocido: " + cadena[1]);
+                    //throw new AssertionError();
                 }
 
                 break;
@@ -244,7 +250,8 @@ public class InicioBase extends JFrame {
 
     /**
      * Muestra un diálogo para la selección de grupo radial
-     * @return 
+     *
+     * @return
      */
     private int elegirGrupoRadio() {
         String[] canales = new String[256];
@@ -268,10 +275,10 @@ public class InicioBase extends JFrame {
             return 0;
         }
     }
-    
+
     public static void main(String[] args) {
         FlatLightLaf.setup();
-        
+
         SwingUtilities.invokeLater(InicioBase::new);
     }
 }

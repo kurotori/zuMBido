@@ -8,7 +8,7 @@ id_placa = "".join("{:02x}".format(b) for b in machine.unique_id())
 tiempo=0
 tiempoKa=0 #Temporizador para detectar conexión activa
 tempoAnterior=0
-grupoRadial=0
+grupoRadial=7
 
 
 conexion=False
@@ -33,7 +33,7 @@ def desactivarRadio():
     radio.off()
     display.set_pixel(1,0,0)
 
-def escribir(texto):
+def enviarSerial(texto):
     uart.write(texto + '\r\n')
     
 def enviarRadio(mensaje):
@@ -48,14 +48,15 @@ def parpadear(xLed, yLed, intensidad, tiempo):
     
 
 def evaluarComando(comando):
+    global conexion,tiempoKa, tiempo
     datos=comando.split(':')
     orden = datos[0]
     
     if(orden=="c"):    
         if(datos[1]=='c'):
-            display.set_pixel(0,0,9);
-            escribir("c:bid:"+id_placa)
-            escribir("c:gr:"+str(grupoRadial))
+            display.set_pixel(0,0,9)
+            enviarSerial("c:bid:"+id_placa)
+            enviarSerial("c:gr:"+str(grupoRadial))
             conexion=True
         
         if(datos[1]=='ka'): #Keep Alive - Mantiene la conexión
@@ -63,10 +64,20 @@ def evaluarComando(comando):
     if(orden=="gr"):
         grupo=datos[1]
         activarRadio(grupo)
-        escribir("m:b:Grupo establecido a " + grupo)
+        enviarSerial("m:b:Grupo establecido a " + grupo)
         
 while True:
+    
     tiempo = running_time()
+    # if(tiempo>=tiempoKa):
+    #     enviarSerial("c:ka")
+    #     tiempoKa = tiempo + 1000
+    # if(tiempo>=(tiempoKa-100)):
+    #     conexion=False
+    # if(conexion==True):
+    #     
+    # else:
+    #     display.set_pixel(0,0,0)
     # -------------------------------------------------------------
     # 1. RADIO -> SERIAL: Mensajes recibidos de otros micro:bits
     # -------------------------------------------------------------
@@ -88,7 +99,7 @@ while True:
                 comando = buffer_serial.strip()
                 if comando:
                     # Emitir el comando a la red RF
-                    escribir("recibido:" + comando)
+                    enviarSerial("recibido:" + comando)
                     evaluarComando(comando)
                     # radio.send(comando)
                     enviarRadio(comando)
