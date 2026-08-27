@@ -59,6 +59,10 @@ public class InicioBase extends VentanaSerial {
      */
     private void configurar() {
         setSize(640, 360);
+        
+        ImageIcon img = new ImageIcon(getClass().getResource("/imagen/icono.png"));
+        
+        setIconImage(img.getImage());
 
         setBackground(Color.white);
         setTitle(Textos.APP_NAME + Textos.INICIO_TITULO);
@@ -88,6 +92,7 @@ public class InicioBase extends VentanaSerial {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         cmbListaPlacas = new JComboBox<>();
         cmbListaPlacas.setPreferredSize(new Dimension(300, 40));
+        
         cmbListaPlacas.setFont(fuentes.VENTANA_NORMAL_A_CH);
 
         pnlPlacas.add(cmbListaPlacas, gbc);
@@ -161,7 +166,7 @@ public class InicioBase extends VentanaSerial {
         
         btnConectarPlaca.addActionListener(e -> conectarAPlaca());
         
-        cmbGruposRadio.addActionListener(e -> );
+        cmbGruposRadio.addActionListener(e -> cambiarGrupoRadial());
     }
 
     /**
@@ -192,14 +197,15 @@ public class InicioBase extends VentanaSerial {
 
     }
 
-    private void cambiarGrupoRadial(){
-        
+    private void cambiarGrupoRadial() {
+        int grupo = cmbGruposRadio.getSelectedIndex();
+        placa.enviarComando(Mensajes.GRUPO_RADIO + ":" + grupo);
     }
     
     /**
      * Evalúa los mensajes recibidos en esta ventana
      *
-     * @param mensaje
+     * @param mensaje mensaje a evaluar
      */
     @Override
     public void evaluarMensaje(String mensaje) {
@@ -208,9 +214,21 @@ public class InicioBase extends VentanaSerial {
         switch (cadena[0]) {
 
             case Mensajes.RECIBIDO:
-                System.out.println("La placa dice: " + mensaje);
+                System.out.println("La placa dice->> " + mensaje);
                 break;
-
+            
+            case Mensajes.MENSAJE:
+                
+                switch (cadena[1]) {
+                    case Mensajes.MENSAJE_PLACA:
+                        JOptionPane.showMessageDialog(this, cadena[2],placa.getId() + " dice:", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                
+                break;
+                
             case Mensajes.COMANDO:
 
                 switch (cadena[1]) {

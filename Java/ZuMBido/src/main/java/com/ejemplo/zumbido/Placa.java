@@ -19,20 +19,20 @@ import javax.swing.SwingUtilities;
  * @author sebastian
  */
 public class Placa {
-    
+
     public static final int ACTIVA = 0;
     public static final int INACTIVA = 1;
-    
+
     private VentanaSerial ventana;
-    
+
     private String id;
     private int grupoRadial;
     private int estado;
-    
+
     private SerialPort puerto;
-    
+
     private OutputStream salidaSerie = null;
-    
+
     private Usuario usuario = null;
 
     public Placa(VentanaSerial ventana, SerialPort puerto) {
@@ -43,9 +43,8 @@ public class Placa {
         this.puerto = puerto;
         conectarPuerto();
     }
-    
-    
-     /**
+
+    /**
      * Envía un comando específico a la placa
      *
      * @param texto
@@ -66,8 +65,7 @@ public class Placa {
             }
         }
     }
-    
-    
+
     /**
      * Conecta al sistema al puerto seleccionado
      */
@@ -100,7 +98,6 @@ public class Placa {
             }
 
             //btnEnviar.setEnabled(true);
-
             // Iniciar la escucha asíncrona de datos entrantes desde la pasarela
             iniciarEscuchaSerie();
         } else {
@@ -108,42 +105,53 @@ public class Placa {
             System.err.println("Error al abrir el puerto " + nombrePuerto + "\n");
         }
     }
-    
-    
-        /**
-     * Inicia la escucha de respuestas desde la placa
+
+    /**
+     * Inicia la escucha de respuestas desde la placa acumulando el buffer
      */
     private void iniciarEscuchaSerie() {
         puerto.addDataListener(new SerialPortDataListener() {
+            // Buffer persistente para acumular fragmentos de texto
+            private final StringBuilder bufferEntrada = new StringBuilder();
+
             @Override
             public int getListeningEvents() {
-                return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
+                // Cambiado a DATA_RECEIVED para obtener los bytes directamente
+                return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
             }
 
             @Override
             public void serialEvent(SerialPortEvent event) {
-                if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
+                if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_RECEIVED) {
                     return;
                 }
 
-                // Leer líneas completas desde el puerto serie
-                Scanner scanner = new Scanner(puerto.getInputStream(), "UTF-8");
-                while (scanner.hasNextLine()) {
-                    String lineaRecibida = scanner.nextLine();
+                // 1. Obtener los bytes recién recibidos
+                byte[] bytesRecibidos = event.getReceivedData();
+                String fragmento = new String(bytesRecibidos, StandardCharsets.UTF_8);
 
-                    // Actualizar la GUI desde el hilo de eventos de Swing
-                    SwingUtilities.invokeLater(
-                            () -> {
-                                //txtHistorial.append
-                                System.out.println("<< [Radio]: " + lineaRecibida + "\n");
-                                ventana.evaluarMensaje(lineaRecibida);
-                            }
-                    );
+                // 2. Acumular en el buffer
+                bufferEntrada.append(fragmento);
+
+                // 3. Extraer todas las líneas completas (terminadas en \n)
+                int indiceSalto;
+                while ((indiceSalto = bufferEntrada.indexOf("\n")) != -1) {
+                    String lineaCompleta = bufferEntrada.substring(0, indiceSalto).trim();
+
+                    // Remover la línea ya procesada del buffer
+                    bufferEntrada.delete(0, indiceSalto + 1);
+
+                    if (!lineaCompleta.isEmpty()) {
+                        // Enviar la línea completa a la interfaz gráfica
+                        SwingUtilities.invokeLater(() -> {
+                            System.out.println("<< [Radio]: " + lineaCompleta);
+                            ventana.evaluarMensaje(lineaCompleta);
+                        });
+                    }
                 }
             }
         });
     }
-    
 
     /**
      * @return the id

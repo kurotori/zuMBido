@@ -64,7 +64,7 @@ def evaluarComando(comando):
     if(orden=="gr"):
         grupo=datos[1]
         activarRadio(grupo)
-        enviarSerial("m:b:Grupo establecido a " + grupo)
+        enviarSerial("m:b:Grupo radial establecido a " + grupo)
         
 while True:
     
