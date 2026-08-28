@@ -244,39 +244,26 @@ public class InicioBase extends VentanaSerial {
      */
     @Override
     public void evaluarMensaje(String mensaje) {
-//
-//        // --- Intercepción para cerrar el diálogo de espera ---
-//        if (dialogoEspera != null && dialogoEspera.isVisible()) {
-//            if (mensaje.contains("login_ok")) { // Ejemplo Señal A
-//                resultadoEspera = ResultadoEspera.LOGIN_OK;
-//                dialogoEspera.dispose(); // Cierra el diálogo e interrumpe la espera
-//                return;
-//            } else if (mensaje.contains("nombre_repetido")) { // Ejemplo Señal B
-//                resultadoEspera = ResultadoEspera.NOMBRE_REPETIDO;
-//                dialogoEspera.dispose(); // Cierra el diálogo e interrumpe la espera
-//                return;
-//            }
-//        }
 
         String[] cadena = mensaje.split(":");
 
         switch (cadena[0]) {
             // Mensajes y Comandos desde la Red
             case Mensajes.COMANDO_RED:
-
+                System.out.println("Comando de Red");
                 switch (cadena[1]) {
                     case Mensajes.SUBR_NUEVO_LOGIN:
-
+                        System.out.println("Nuevo login");
                         if (placa.getUsuario() != null) {
                             if (placa.getUsuario().getNombre().equals(cadena[2])) {
-                                placa.enviarComando(Mensajes.COMANDO_COMANDO + ":" + Mensajes.SUBR_NOMBRE_REPETIDO);
+                                placa.enviarComando(Mensajes.COMANDO_RED + ":" + Mensajes.SUBR_NOMBRE_REPETIDO);
                             }
                         }
 
                         break;
 
                     case Mensajes.SUBR_NOMBRE_REPETIDO:
-
+                        System.out.println("Nombre repetido");
                         if (placa.getUsuario() == null) {
                             resultadoEspera = ResultadoEspera.NOMBRE_REPETIDO;
                             dialogoEspera.dispose(); // Cierra el diálogo e interrumpe la espera
@@ -437,7 +424,9 @@ public class InicioBase extends VentanaSerial {
      */
     private void iniciarLogin(String nombreUsuario) {
         // Enviar orden por el puerto serie
-        placa.enviarComando("nl:" + nombreUsuario);
+        String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_NUEVO_LOGIN, nombreUsuario);
+        System.out.println(msj);
+        placa.enviarComando(msj);
 
         // Iniciar la espera bloqueante de 3 segundos o respuesta
         ResultadoEspera res = esperarSenialPlaca("login_ok", "nombre_repetido");

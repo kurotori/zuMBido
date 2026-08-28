@@ -97,7 +97,7 @@ while True:
     mensaje_radio = radio.receive()
     if mensaje_radio:
         # Reenvía el mensaje directamente a la PC terminado en un salto de línea
-        uart.write('r:'+mensaje_radio + '\n')
+        uart.write('r'+mensaje_radio + '\n')
 
     # -------------------------------------------------------------
     # 2. SERIAL -> RADIO: Comandos enviados desde la app en Java
