@@ -14,6 +14,9 @@ public class Textos {
     public static final String INICIO_TITULO = "Inicio";
     public static final String INICIO_ET_GRUPO_RADIO = "Grupo Radial:";
     public static final String INICIO_ET_ID_PLACA = "ID de Placa:";
+    public static final String INICIO_ET_NOMBRE_USUARIO = "Nombre de Usuario:";
+    
     public static final String INICIO_ERROR_NO_PLACAS = "No hay placas conectadas";
+    
     
 }

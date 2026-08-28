@@ -3,6 +3,8 @@ Los siguientes archivos han sido diseñados por estos autores:
 
 - [Refresh: por Dave Gandy en Flaticon][l1]
 - [Api: por See Icons en Flaticon][l2]
+- [Login icons por Uniconlabs en Flaticon][l3]
 
 [l1]:https://www.flaticon.com/free-icons/refresh
 [l2]:https://www.flaticon.com/free-icons/api
+[l3]:https://www.flaticon.com/free-icons/login
