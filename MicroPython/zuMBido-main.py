@@ -48,23 +48,36 @@ def parpadear(xLed, yLed, intensidad, tiempo):
     
 
 def evaluarComando(comando):
-    global conexion,tiempoKa, tiempo
+    global conexion,tiempoKa, tiempo, id_placa
     datos=comando.split(':')
     orden = datos[0]
     
-    if(orden=="c"):    
+    if(orden=="c"):   
         if(datos[1]=='c'):
             display.set_pixel(0,0,9)
             enviarSerial("c:bid:"+id_placa)
             enviarSerial("c:gr:"+str(grupoRadial))
             conexion=True
+            
+        if(datos[1]=='bid'):
+            enviarSerial("c:bid:"+id_placa)
+        
+        if(datos[1]=='gr'):
+            if(len(datos)>2):
+                grupo=datos[2]
+                activarRadio(grupo)
+                enviarSerial("m:b:Grupo radial establecido a " + grupo)
+            else:
+                enviarSerial("c:gr:"+str(grupoRadial))
         
         if(datos[1]=='ka'): #Keep Alive - Mantiene la conexión
             conexion=True
-    if(orden=="gr"):
-        grupo=datos[1]
-        activarRadio(grupo)
-        enviarSerial("m:b:Grupo radial establecido a " + grupo)
+    
+    if(orden=="r"):
+       msj = ""
+       for i in range(1,len(datos)):
+           msj = msj+":"+datos[i] 
+       enviarRadio(msj+':'+id_placa)
         
 while True:
     
@@ -84,7 +97,7 @@ while True:
     mensaje_radio = radio.receive()
     if mensaje_radio:
         # Reenvía el mensaje directamente a la PC terminado en un salto de línea
-        uart.write(mensaje_radio + '\n')
+        uart.write('r:'+mensaje_radio + '\n')
 
     # -------------------------------------------------------------
     # 2. SERIAL -> RADIO: Comandos enviados desde la app en Java
@@ -99,10 +112,14 @@ while True:
                 comando = buffer_serial.strip()
                 if comando:
                     # Emitir el comando a la red RF
+                    
+                    # ** PARA PRUEBAS **
                     enviarSerial("recibido:" + comando)
+                    
+                    # Se evalúa el comando recibido
                     evaluarComando(comando)
                     # radio.send(comando)
-                    enviarRadio(comando)
+                    #enviarRadio(comando)
                     buffer_serial = ""
             else:
                 buffer_serial += char

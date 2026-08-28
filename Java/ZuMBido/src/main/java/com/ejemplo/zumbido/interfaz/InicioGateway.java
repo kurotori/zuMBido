@@ -232,20 +232,20 @@ public class InicioGateway extends JFrame {
 
         switch (cadena[0]) {
 
-            case Mensajes.RECIBIDO:
+            case Mensajes.PLACA_RECIBIDO:
                 System.out.println("La placa dice: " + mensaje);
                 break;
 
-            case Mensajes.COMANDO:
+            case Mensajes.COMANDO_COMANDO:
 
                 switch (cadena[1]) {
 
-                    case Mensajes.BOARD_ID:
+                    case Mensajes.SUBC_BOARD_ID:
                         idPlaca = cadena[2];
                         lblEstado.setText(lblEstado.getText() + idPlaca);
                         break;
 
-                    case Mensajes.GRUPO_RADIO:
+                    case Mensajes.SUBC_GRUPO_RADIO:
                         int grupo = elegirGrupoRadio();
                         enviarComando("gr:"+grupo);
                         break;

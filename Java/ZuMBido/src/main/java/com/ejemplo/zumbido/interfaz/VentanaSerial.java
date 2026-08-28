@@ -12,7 +12,11 @@ import javax.swing.JFrame;
  */
 public abstract class VentanaSerial extends JFrame{
     
-    
+     /**
+     * Evalúa los mensajes recibidos en esta ventana
+     *
+     * @param mensaje mensaje a evaluar
+     */
     public abstract void evaluarMensaje(String mensaje);
     
 }

@@ -6,6 +6,7 @@ package com.ejemplo.zumbido;
 
 import com.ejemplo.zumbido.interfaz.InicioBase;
 import com.ejemplo.zumbido.interfaz.VentanaSerial;
+import com.ejemplo.zumbido.sistema.Mensajes;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
@@ -89,15 +90,13 @@ public class Placa {
 
         //Se abre el puerto 
         if (puerto.openPort()) {
-            //txtHistorial.append("Conectado con éxito a " + nombrePuerto + "\n");
 
             //Inicializar la salida de datos hacia el puerto
             salidaSerie = puerto.getOutputStream();
-            if (usuario == null) {
-                enviarComando("c:c");
+            if (getUsuario() == null) {
+                enviarComando( Mensajes.componerMensaje(Mensajes.COMANDO_COMANDO, Mensajes.SUBC_CONECTAR_PLACA) );
             }
 
-            //btnEnviar.setEnabled(true);
             // Iniciar la escucha asíncrona de datos entrantes desde la pasarela
             iniciarEscuchaSerie();
         } else {
@@ -193,5 +192,19 @@ public class Placa {
      */
     public void setPuerto(SerialPort puerto) {
         this.puerto = puerto;
+    }
+
+    /**
+     * @return the usuario
+     */
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    /**
+     * @param usuario the usuario to set
+     */
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
