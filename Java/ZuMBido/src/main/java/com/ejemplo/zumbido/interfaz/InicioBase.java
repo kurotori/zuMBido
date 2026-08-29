@@ -438,6 +438,7 @@ public class InicioBase extends VentanaSerial {
                 JOptionPane.showMessageDialog(this, "¡Conexión exitosa!");
                 Usuario u = new Usuario(nombreUsuario, placa.getId());
                 placa.setUsuario(u);
+                Chat chat  = new Chat(placa);
                 break;
             case NOMBRE_REPETIDO:
                 JOptionPane.showMessageDialog(this, "ERROR: El nombre ingresado ya existe en la red.",
