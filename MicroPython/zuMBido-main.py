@@ -71,7 +71,7 @@ def evaluarComando(comando):
             
             #Si hay más elementos en el comando, la solicitud es de cambio de grupo radial
             if(len(datos)>2):
-                grupo=int(datos[2])
+                grupo=datos[2]
                 activarRadio(grupo)
                 enviarSerial("m:b:Grupo radial establecido a " + grupo)
             

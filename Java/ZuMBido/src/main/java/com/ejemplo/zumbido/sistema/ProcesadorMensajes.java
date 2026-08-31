@@ -50,14 +50,32 @@ public class ProcesadorMensajes {
             System.out.println("Mensaje truncado: " + mensaje);
             return;
         }
+        else{
+            
+        }
 
         String comando = cadena[0];
         String subcomando = cadena[1];
+        String[] datos;
+        
+        if(cadena.length>2){
+            datos = Arrays.copyOfRange(cadena, 2, cadena.length);
+        }
+        else{
+            datos = new String[]{""};
+        }
+        
+        //datos = ?Arrays.copyOfRange(cadena, 2, cadena.length):{"w"}
 
         switch (comando) {
             case Mensajes.COMANDO_SISTEMA:
-                String[] datos = Arrays.copyOfRange(cadena, 2, cadena.length);
+                
                 procesarComandoSistema(subcomando, datos);
+                break;
+            
+            case Mensajes.PLACA_MENSAJE:
+                procesarMensajePlaca(subcomando, datos);
+                
                 break;
             case Mensajes.PLACA_RECIBIDO:
                 System.out.println("->");
@@ -106,19 +124,20 @@ public class ProcesadorMensajes {
                 System.out.println("bid" + cadena.length);
                 String id = cadena[0];
                 placa.setId(id);
+                System.out.println("placa: " + placa.getId());
                 if (oyente != null) {
                     oyente.onBoardIdRecibido(id);
                 }
                 break;
 
             case Mensajes.SUBC_GRUPO_RADIO:
-                if (cadena.length > 2) {
-                    int grupo = Integer.parseInt(cadena[2]);
-                    placa.setGrupoRadial(grupo);
-                    if (oyente != null) {
-                        oyente.onGrupoRadioCambiado(grupo);
-                    }
+
+                int grupo = Integer.parseInt(cadena[0]);
+                placa.setGrupoRadial(grupo);
+                if (oyente != null) {
+                    oyente.onGrupoRadioCambiado(grupo);
                 }
+
                 break;
 
             case Mensajes.SUBC_KEEEP_ALIVE:
@@ -131,12 +150,12 @@ public class ProcesadorMensajes {
     }
 
     private void procesarMensajePlaca(String subcomando, String[] cadena) {
-        if (cadena.length < 3) {
-            return;
-        }
+//        if (cadena.length < 3) {
+//            return;
+//        }
         boolean esError = Mensajes.SUBPL_MENSAJE_ERROR.equals(subcomando);
         if (oyente != null) {
-            oyente.onMensajePlaca(placa.getId(), cadena[2], esError);
+            oyente.onMensajePlaca(placa.getId(), cadena[0], esError);
         }
     }
 

@@ -353,13 +353,18 @@ public class InicioBase extends VentanaSerial implements OyenteMensajes {
      */
     @Override
     public void onBoardIdRecibido(String id) {
+        System.out.println("bid ib: " + id);
         placa.setId(id);
         lblIdPlaca.setText(id);
     }
 
     @Override
     public void onGrupoRadioCambiado(int grupo) {
-
+        
+        cmbGruposRadio.setEnabled(true);
+        btnIniciarLogin.setEnabled(true);
+        txtNombreUsuario.setEnabled(true);
+        cmbGruposRadio.setSelectedIndex(grupo);
     }
 
     @Override
