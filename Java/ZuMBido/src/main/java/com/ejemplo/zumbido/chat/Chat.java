@@ -2,12 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ejemplo.zumbido.interfaz;
+package com.ejemplo.zumbido.chat;
 
 import com.ejemplo.zumbido.Fuentes;
 import com.ejemplo.zumbido.Placa;
+import com.ejemplo.zumbido.interfaz.VentanaSerial;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
@@ -17,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
@@ -27,35 +30,60 @@ public class Chat extends VentanaSerial{
     
     private Placa placa;
     
+    
     private JTextArea txtHistorial;
     private JTextField txtMensaje;
     private JButton btnEnviar;
+    
+    private PanelZonaUsuario pnlLatUsuario;
+    
     private JPanel pnlContenido;
     private JPanel pnlEstado;
     private JLabel lblEstado;
+    private JLabel lblUsuario;
     
     Fuentes fuentes = new Fuentes();
 
     public Chat(Placa placa) {
         this.placa = placa;
+        placa.setVentana(this);
+        configurarVentana();
+        agregarIdPlaca();
+        agregarNombreUsuario();
+    }
+
+    /**
+     * Para pruebas
+     */
+    public Chat() {
         configurarVentana();
     }
     
+    
+    
     private void configurarVentana() {
-        setTitle("Micro:bit Radio Gateway");
-        setSize(640, 480);
+        setTitle("MicroChat");
+        setSize(800, 600);
         setFont(fuentes.VENTANA_NORMAL_A);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.white);
+        
+        pnlLatUsuario = new PanelZonaUsuario(this);
+        add(pnlLatUsuario,BorderLayout.WEST);
 
         // Panel Superior: Selección de Puerto
         JPanel pnlSuperior = new JPanel(new FlowLayout());
         
 
-        JLabel lblP = new JLabel("Puerto:");
-        lblP.setFont(fuentes.VENTANA_NEGRITA_A);
-        pnlSuperior.add(lblP);
+        JLabel lblEtUsuario = new JLabel("Usuario:" );
+        lblEtUsuario.setFont(fuentes.VENTANA_NEGRITA_A);
+        pnlSuperior.add(lblEtUsuario);
+        
+        lblUsuario = new JLabel("---");
+        lblUsuario.setFont(fuentes.VENTANA_NORMAL_A_CH);
+        pnlSuperior.add(lblUsuario);
 
         add(pnlSuperior, BorderLayout.NORTH);
 
@@ -67,6 +95,7 @@ public class Chat extends VentanaSerial{
         txtHistorial = new JTextArea();
         txtHistorial.setEditable(false);
         txtHistorial.setFont(fuentes.CONSOLA);
+        txtHistorial.setBackground(Color.white);
         JScrollPane scrl = new JScrollPane(txtHistorial);
         scrl.setPreferredSize(new Dimension(0, 200));
         pnlContenido.add(scrl, BorderLayout.CENTER);
@@ -75,7 +104,7 @@ public class Chat extends VentanaSerial{
         JPanel pnlInferior = new JPanel(new BorderLayout());
         txtMensaje = new JTextField();
         btnEnviar = new JButton("Enviar");
-        btnEnviar.setEnabled(false);
+        //btnEnviar.setEnabled(false);
 
         btnEnviar.addActionListener(e -> enviarMensaje());
         txtMensaje.addActionListener(e -> enviarMensaje()); // Enviar con Enter
@@ -97,14 +126,32 @@ public class Chat extends VentanaSerial{
     }
     
     private void enviarMensaje(){
-        String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, txtMensaje.getText());
-        placa.enviarComando(msj);
-        txtMensaje.setText("");
+        String m = txtMensaje.getText().trim();
+        if (m.length()>0) {
+            String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
+            placa.enviarComando(msj);
+            txtHistorial.append("[" + placa.getUsuario().getNombre() + "]:" +  m + "\n");
+            txtMensaje.setText("");
+        }
+        
     }
 
     @Override
     public void evaluarMensaje(String mensaje) {
         
+        String[] cadena = mensaje.split(":");
     }
     
+    private void agregarNombreUsuario(){
+        lblUsuario.setText(placa.getUsuario().getNombre());
+    }
+    
+    private void agregarIdPlaca(){
+        lblEstado.setText("Placa: " + placa.getId());
+    }
+    
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Chat::new);
+    }
 }

@@ -52,27 +52,39 @@ def evaluarComando(comando):
     datos=comando.split(':')
     orden = datos[0]
     
+    # C: Comandos de Sistema recibidos de la App
     if(orden=="c"):   
+        
+        # C: Conexión. La App solicita conectarse a la placa
         if(datos[1]=='c'):
             display.set_pixel(0,0,9)
             enviarSerial("c:bid:"+id_placa)
             enviarSerial("c:gr:"+str(grupoRadial))
             conexion=True
-            
+        
+        # BID: ID de Placa: La App solicita la ID de la placa
         if(datos[1]=='bid'):
             enviarSerial("c:bid:"+id_placa)
         
+        # GR: Grupo Radial: La App quiere gestionar el grupo radial de la placa
         if(datos[1]=='gr'):
+            
+            #Si hay más elementos en el comando, la solicitud es de cambio de grupo radial
             if(len(datos)>2):
-                grupo=datos[2]
+                grupo=int(datos[2])
                 activarRadio(grupo)
                 enviarSerial("m:b:Grupo radial establecido a " + grupo)
+            
+            #Si solo se trata del comando 'gr', la App solicita el grupo radial actual
             else:
                 enviarSerial("c:gr:"+str(grupoRadial))
         
-        if(datos[1]=='ka'): #Keep Alive - Mantiene la conexión
+        # KA: KeepAlive: comando para mantener la conexión activa --> EN DESARROLLO, NO IMPLEMENTADO
+        if(datos[1]=='ka'): 
             conexion=True
     
+    # R: Comandos de Red
+    #           NOTA: En general, y por ahora, todo comando 'r' es un mensaje saliente
     if(orden=="r"):
        msj = ""
        for i in range(1,len(datos)):

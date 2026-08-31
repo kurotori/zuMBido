@@ -7,6 +7,7 @@ package com.ejemplo.zumbido;
 import com.ejemplo.zumbido.interfaz.InicioBase;
 import com.ejemplo.zumbido.interfaz.VentanaSerial;
 import com.ejemplo.zumbido.sistema.Mensajes;
+import com.ejemplo.zumbido.sistema.ProcesadorMensajes;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
@@ -21,6 +22,8 @@ import javax.swing.SwingUtilities;
  */
 public class Placa {
 
+    private ProcesadorMensajes procesador;
+    
     public static final int ACTIVA = 0;
     public static final int INACTIVA = 1;
 
@@ -38,6 +41,15 @@ public class Placa {
 
     public Placa(VentanaSerial ventana, SerialPort puerto) {
         this.ventana = ventana;
+        this.id = null;
+        this.grupoRadial = 0;
+        this.estado = INACTIVA;
+        this.puerto = puerto;
+        conectarPuerto();
+    }
+    
+    public Placa(SerialPort puerto) {
+        this.procesador = new ProcesadorMensajes(this);
         this.id = null;
         this.grupoRadial = 0;
         this.estado = INACTIVA;
@@ -94,7 +106,7 @@ public class Placa {
             //Inicializar la salida de datos hacia el puerto
             salidaSerie = puerto.getOutputStream();
             if (getUsuario() == null) {
-                enviarComando( Mensajes.componerMensaje(Mensajes.COMANDO_COMANDO, Mensajes.SUBC_CONECTAR_PLACA) );
+                enviarComando( Mensajes.componerMensaje(Mensajes.COMANDO_SISTEMA, Mensajes.SUBC_CONECTAR_PLACA) );
             }
 
             // Iniciar la escucha asíncrona de datos entrantes desde la pasarela
@@ -143,8 +155,9 @@ public class Placa {
                     if (!lineaCompleta.isEmpty()) {
                         // Enviar la línea completa a la interfaz gráfica
                         SwingUtilities.invokeLater(() -> {
-                            System.out.println("<< [Radio]: " + lineaCompleta);
-                            ventana.evaluarMensaje(lineaCompleta);
+                            System.out.println("[Placa]: " + lineaCompleta);
+                            //getVentana().evaluarMensaje(lineaCompleta);
+                            procesador.analizarMensaje(lineaCompleta);
                         });
                     }
                 }
@@ -206,5 +219,33 @@ public class Placa {
      */
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    /**
+     * @return the ventana
+     */
+    public VentanaSerial getVentana() {
+        return ventana;
+    }
+
+    /**
+     * @param ventana the ventana to set
+     */
+    public void setVentana(VentanaSerial ventana) {
+        this.ventana = ventana;
+    }
+
+    /**
+     * @return the procesador
+     */
+    public ProcesadorMensajes getProcesador() {
+        return procesador;
+    }
+
+    /**
+     * @param procesador the procesador to set
+     */
+    public void setProcesador(ProcesadorMensajes procesador) {
+        this.procesador = procesador;
     }
 }

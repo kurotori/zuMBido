@@ -14,7 +14,7 @@ public class Mensajes {
     
     public static final String COMANDO_ERROR = "e";
     
-    public static final String COMANDO_COMANDO = "c";
+    public static final String COMANDO_SISTEMA = "c";
     
     public static final String COMANDO_RED = "r";
     

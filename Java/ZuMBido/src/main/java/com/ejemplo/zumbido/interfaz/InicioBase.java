@@ -4,6 +4,7 @@
  */
 package com.ejemplo.zumbido.interfaz;
 
+import com.ejemplo.zumbido.chat.Chat;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.ejemplo.zumbido.Colores;
 import com.ejemplo.zumbido.Fuentes;
@@ -11,6 +12,7 @@ import com.ejemplo.zumbido.Placa;
 import com.ejemplo.zumbido.Textos;
 import com.ejemplo.zumbido.Usuario;
 import com.ejemplo.zumbido.sistema.Mensajes;
+import com.ejemplo.zumbido.sistema.OyenteMensajes;
 import com.fazecast.jSerialComm.SerialPort;
 
 import javax.swing.*;
@@ -20,7 +22,7 @@ import java.awt.*;
  *
  * @author sebastian
  */
-public class InicioBase extends VentanaSerial {
+public class InicioBase extends VentanaSerial implements OyenteMensajes {
 
     private JPanel pnlPlacas;
     //private JPanel pnlGrupoRadio;
@@ -223,7 +225,10 @@ public class InicioBase extends VentanaSerial {
      */
     private void conectarAPlaca() {
         String puerto = (String) cmbListaPlacas.getSelectedItem();
-        placa = new Placa(this, SerialPort.getCommPort(puerto));
+        //placa = new Placa(this, SerialPort.getCommPort(puerto));
+        placa = new Placa(SerialPort.getCommPort(puerto));
+
+        placa.getProcesador().setOyente(this);
 
     }
 
@@ -232,16 +237,18 @@ public class InicioBase extends VentanaSerial {
      */
     private void cambiarGrupoRadial() {
         int grupo = cmbGruposRadio.getSelectedIndex();
-        
-        String msj = Mensajes.componerMensaje(Mensajes.COMANDO_COMANDO, Mensajes.SUBC_GRUPO_RADIO, ""+grupo);
+
+        String msj = Mensajes.componerMensaje(Mensajes.COMANDO_SISTEMA, Mensajes.SUBC_GRUPO_RADIO, "" + grupo);
         placa.enviarComando(msj);
     }
 
     /**
      * Evalúa los mensajes recibidos en esta ventana
      *
+     * @deprecated
      * @param mensaje mensaje a evaluar
      */
+    @Deprecated
     @Override
     public void evaluarMensaje(String mensaje) {
 
@@ -293,7 +300,7 @@ public class InicioBase extends VentanaSerial {
 
                 break;
 
-            case Mensajes.COMANDO_COMANDO:
+            case Mensajes.COMANDO_SISTEMA:
 
                 switch (cadena[1]) {
 
@@ -336,6 +343,52 @@ public class InicioBase extends VentanaSerial {
         }
     }
 
+    ///-------
+    /// Estos métodos implementan, para esta ventan, los genéricos de la clase interfaz OyenteMensajes
+    ///     y reemplazan el método evaluarMensaje()
+    
+    /**
+     * Recibe y establece la ID de la placa en la App 
+     * @param id 
+     */
+    @Override
+    public void onBoardIdRecibido(String id) {
+        placa.setId(id);
+        lblIdPlaca.setText(id);
+    }
+
+    @Override
+    public void onGrupoRadioCambiado(int grupo) {
+
+    }
+
+    @Override
+    public void onMensajeGenerico(String comando, String subcomando, String[] parametros) {
+
+    }
+
+    @Override
+    public void onMensajePlaca(String titulo, String texto, boolean esError) {
+        int modo = JOptionPane.INFORMATION_MESSAGE;
+        if (esError) {
+            modo = JOptionPane.ERROR_MESSAGE;
+        }
+        JOptionPane.showMessageDialog(this, texto, placa.getId() + " dice:", modo);
+    }
+
+    @Override
+    public void onNombreRepetido() {
+        System.out.println("Nombre repetido");
+        if (placa.getUsuario() == null) {
+            resultadoEspera = ResultadoEspera.NOMBRE_REPETIDO;
+            dialogoEspera.dispose(); // Cierra el diálogo e interrumpe la espera
+            return;
+        }
+    }
+
+    ///--------
+    
+    
     /**
      * Muestra un diálogo para la selección de grupo radial
      *
@@ -438,7 +491,7 @@ public class InicioBase extends VentanaSerial {
                 JOptionPane.showMessageDialog(this, "¡Conexión exitosa!");
                 Usuario u = new Usuario(nombreUsuario, placa.getId());
                 placa.setUsuario(u);
-                Chat chat  = new Chat(placa);
+                Chat chat = new Chat(placa);
                 break;
             case NOMBRE_REPETIDO:
                 JOptionPane.showMessageDialog(this, "ERROR: El nombre ingresado ya existe en la red.",

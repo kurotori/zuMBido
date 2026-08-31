@@ -236,7 +236,7 @@ public class InicioGateway extends JFrame {
                 System.out.println("La placa dice: " + mensaje);
                 break;
 
-            case Mensajes.COMANDO_COMANDO:
+            case Mensajes.COMANDO_SISTEMA:
 
                 switch (cadena[1]) {
 
