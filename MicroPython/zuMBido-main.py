@@ -10,6 +10,8 @@ tiempoKa=0 #Temporizador para detectar conexión activa
 tempoAnterior=0
 grupoRadial=7
 
+ledsOn = []
+ledsOff = []
 
 conexion=False
 
@@ -38,14 +40,29 @@ def enviarSerial(texto):
     
 def enviarRadio(mensaje):
     radio.send(mensaje)
-    parpadear(4,0,9,100)
+    parpadearLed(4)
+    #parpadear(4,0,9,100)
 
-def parpadear(xLed, yLed, intensidad, tiempo):
-    fin = running_time() + tiempo
-    while(running_time()<fin):
-        display.set_pixel(xLed,yLed,intensidad);
-    display.set_pixel(xLed,yLed,0);
-    
+
+# def parpadear(xLed, yLed, intensidad, tiempo):
+#     fin = running_time() + tiempo
+#     while(running_time()<fin):
+#         display.set_pixel(xLed,yLed,intensidad);
+#     display.set_pixel(xLed,yLed,0);
+
+def parpadearLed(led):
+    ledsOn.append(led)
+
+def parpadear(modo):
+    if(modo=='on'):
+        for i in ledsOn:
+            display.set_pixel(i,0,9)
+            ledsOn.remove(i)
+            ledsOff.append(i)
+    if(modo=='off'):
+        for i in ledsOff:
+            display.set_pixel(i,0,0)
+            ledsOff.remove(i)
 
 def evaluarComando(comando):
     global conexion,tiempoKa, tiempo, id_placa
@@ -93,7 +110,16 @@ def evaluarComando(comando):
         
 while True:
     
-    tiempo = running_time()
+    if button_a.was_pressed():
+        enviarRadio("algo")
+    
+    #
+    if(len(ledsOn)>0):
+        parpadear("on")
+        tiempo=running_time()+200
+    if(running_time() > tiempo):
+        parpadear("off")
+    
     # if(tiempo>=tiempoKa):
     #     enviarSerial("c:ka")
     #     tiempoKa = tiempo + 1000
@@ -110,6 +136,7 @@ while True:
     if mensaje_radio:
         # Reenvía el mensaje directamente a la PC terminado en un salto de línea
         uart.write('r'+mensaje_radio + '\n')
+        parpadearLed(3)
 
     # -------------------------------------------------------------
     # 2. SERIAL -> RADIO: Comandos enviados desde la app en Java
