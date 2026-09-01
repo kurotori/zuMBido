@@ -26,6 +26,7 @@ buffer_serial = ""
 
 # Configuración del canal de radio y tamaño de paquete
 def activarRadio(grupo):
+    global grupoRadial
     grupoRadial=int(grupo)
     radio.config(length=250, group=grupoRadial)
     radio.on()
@@ -55,14 +56,14 @@ def parpadearLed(led):
 
 def parpadear(modo):
     if(modo=='on'):
-        for i in ledsOn:
-            display.set_pixel(i,0,9)
-            ledsOn.remove(i)
-            ledsOff.append(i)
+        while ledsOn:
+            led = ledsOn.pop(0)
+            display.set_pixel(led,0,9)
+            ledsOff.append(led)
     if(modo=='off'):
-        for i in ledsOff:
-            display.set_pixel(i,0,0)
-            ledsOff.remove(i)
+        while ledsOff:
+            led = ledsOff.pop(0)
+            display.set_pixel(led,0,0)
 
 def evaluarComando(comando):
     global conexion,tiempoKa, tiempo, id_placa
