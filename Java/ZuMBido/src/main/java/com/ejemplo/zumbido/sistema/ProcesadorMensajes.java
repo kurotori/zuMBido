@@ -14,6 +14,7 @@ import java.util.Arrays;
 public class ProcesadorMensajes {
 
     private final Placa placa;
+    private final Sistema sistema = new Sistema();
     private OyenteMensajes oyente;
 
     public ProcesadorMensajes(Placa placa) {
@@ -77,6 +78,12 @@ public class ProcesadorMensajes {
                 procesarMensajePlaca(subcomando, datos);
                 
                 break;
+            
+            case Mensajes.COMANDO_RED:
+                procesarComandoRed(subcomando, datos);
+                break;
+       
+            
             case Mensajes.PLACA_RECIBIDO:
                 System.out.println("->");
                 break;
@@ -96,8 +103,9 @@ public class ProcesadorMensajes {
         switch (subcomando) {
             case Mensajes.SUBR_NUEVO_LOGIN:
                 // Lógica de red automática (independiente de la ventana)
-                if (cadena.length > 2 && placa.getUsuario() != null) {
-                    if (placa.getUsuario().getNombre().equals(cadena[2])) {
+                System.out.println("cadena 0:" + cadena[0]);
+                if (placa.getUsuario() != null) {
+                    if (placa.getUsuario().getNombre().equals(cadena[0])) {
                         String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_NOMBRE_REPETIDO);
                         placa.enviarComando(msj);
                     }
@@ -140,8 +148,8 @@ public class ProcesadorMensajes {
 
                 break;
 
-            case Mensajes.SUBC_KEEEP_ALIVE:
-                placa.enviarComando(Mensajes.SUBC_KEEEP_ALIVE);
+            case Mensajes.SUBC_KEEP_ALIVE:
+                placa.enviarComando(Mensajes.SUBC_KEEP_ALIVE);
                 break;
 
             default:

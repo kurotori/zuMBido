@@ -29,7 +29,7 @@ public class Mensajes {
     public static final String SUBC_CONECTAR_PLACA = "c";
     public static final String SUBC_BOARD_ID = "bid";
     public static final String SUBC_GRUPO_RADIO = "gr";
-    public static final String SUBC_KEEEP_ALIVE = "ka";
+    public static final String SUBC_KEEP_ALIVE = "ka";
     
     
     //3 - Sub Comandos de Red

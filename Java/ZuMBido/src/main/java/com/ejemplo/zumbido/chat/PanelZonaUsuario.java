@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
@@ -18,14 +19,14 @@ import javax.swing.JPanel;
  */
 public class PanelZonaUsuario extends JPanel{
 
-    private VentanaSerial ventana;
+    private JFrame ventana;
     
     private JList<String> lstListaUsuarios;
     private JPanel pnlMenuUsuario;
     
     
     
-    public PanelZonaUsuario(VentanaSerial ventana) {
+    public PanelZonaUsuario(JFrame ventana) {
         this.ventana = ventana;
         configurar();
     }

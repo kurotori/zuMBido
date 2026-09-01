@@ -8,12 +8,14 @@ import com.ejemplo.zumbido.Fuentes;
 import com.ejemplo.zumbido.Placa;
 import com.ejemplo.zumbido.interfaz.VentanaSerial;
 import com.ejemplo.zumbido.sistema.Mensajes;
+import com.ejemplo.zumbido.sistema.OyenteMensajes;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,7 +28,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  *
  * @author sebastian
  */
-public class Chat extends VentanaSerial{
+public class Chat extends JFrame implements OyenteMensajes{
     
     private Placa placa;
     
@@ -46,18 +48,18 @@ public class Chat extends VentanaSerial{
 
     public Chat(Placa placa) {
         this.placa = placa;
-        placa.setVentana(this);
+        //placa.setVentana(this);
         configurarVentana();
         agregarIdPlaca();
         agregarNombreUsuario();
     }
 
-    /**
-     * Para pruebas
-     */
-    public Chat() {
+    public Chat(){
         configurarVentana();
     }
+
+
+    
     
     
     
@@ -136,12 +138,29 @@ public class Chat extends VentanaSerial{
         
     }
 
+   // -------
+
     @Override
-    public void evaluarMensaje(String mensaje) {
+    public void onBoardIdRecibido(String id) {
+        OyenteMensajes.super.onBoardIdRecibido(id); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public void onGrupoRadioCambiado(int grupo) {
+        OyenteMensajes.super.onGrupoRadioCambiado(grupo); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    @Override
+    public void onMensajeGenerico(String comando, String subcomando, String[] parametros) {
         
-        String[] cadena = mensaje.split(":");
+    }
+
+    @Override
+    public void onMensajePlaca(String titulo, String texto, boolean esError) {
+        OyenteMensajes.super.onMensajePlaca(titulo, texto, esError); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
     
+   // ------- 
     private void agregarNombreUsuario(){
         lblUsuario.setText(placa.getUsuario().getNombre());
     }

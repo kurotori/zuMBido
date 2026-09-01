@@ -22,7 +22,7 @@ import java.awt.*;
  *
  * @author sebastian
  */
-public class InicioBase extends VentanaSerial implements OyenteMensajes {
+public class InicioBase extends JFrame implements OyenteMensajes {
 
     private JPanel pnlPlacas;
     //private JPanel pnlGrupoRadio;
@@ -249,7 +249,6 @@ public class InicioBase extends VentanaSerial implements OyenteMensajes {
      * @param mensaje mensaje a evaluar
      */
     @Deprecated
-    @Override
     public void evaluarMensaje(String mensaje) {
 
         String[] cadena = mensaje.split(":");
@@ -322,8 +321,8 @@ public class InicioBase extends VentanaSerial implements OyenteMensajes {
                         //enviarComando("gr:"+grupo);
                         break;
 
-                    case Mensajes.SUBC_KEEEP_ALIVE:
-                        placa.enviarComando(Mensajes.SUBC_KEEEP_ALIVE);
+                    case Mensajes.SUBC_KEEP_ALIVE:
+                        placa.enviarComando(Mensajes.SUBC_KEEP_ALIVE);
                         break;
                     default:
                         System.out.println("SubComando no conocido: " + cadena[1]);
@@ -344,7 +343,7 @@ public class InicioBase extends VentanaSerial implements OyenteMensajes {
     }
 
     ///-------
-    /// Estos métodos implementan, para esta ventan, los genéricos de la clase interfaz OyenteMensajes
+    /// Estos métodos implementan, para esta ventana, los genéricos de la clase interfaz OyenteMensajes
     ///     y reemplazan el método evaluarMensaje()
     
     /**
@@ -497,6 +496,8 @@ public class InicioBase extends VentanaSerial implements OyenteMensajes {
                 Usuario u = new Usuario(nombreUsuario, placa.getId());
                 placa.setUsuario(u);
                 Chat chat = new Chat(placa);
+                placa.getProcesador().setOyente(chat);
+                
                 break;
             case NOMBRE_REPETIDO:
                 JOptionPane.showMessageDialog(this, "ERROR: El nombre ingresado ya existe en la red.",
