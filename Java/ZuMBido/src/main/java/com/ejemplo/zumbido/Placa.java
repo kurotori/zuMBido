@@ -13,6 +13,7 @@ import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.SwingUtilities;
 
@@ -38,6 +39,7 @@ public class Placa {
     private OutputStream salidaSerie = null;
 
     private Usuario usuario = null;
+    private ArrayList<Usuario> usuarios = new ArrayList<>();
 
     public Placa(VentanaSerial ventana, SerialPort puerto) {
         this.ventana = ventana;
