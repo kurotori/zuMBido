@@ -1,7 +1,7 @@
 package com.ejemplo.zumbido.interfaz;
 
 import com.ejemplo.zumbido.Fuentes;
-import com.ejemplo.zumbido.Usuario;
+import com.ejemplo.zumbido.sistema.Usuario;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;

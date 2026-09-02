@@ -4,7 +4,6 @@
  */
 package com.ejemplo.zumbido.sistema;
 
-import com.ejemplo.zumbido.Placa;
 import java.util.Arrays;
 
 /**

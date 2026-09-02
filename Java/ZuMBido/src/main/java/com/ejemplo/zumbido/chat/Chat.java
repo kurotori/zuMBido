@@ -5,7 +5,7 @@
 package com.ejemplo.zumbido.chat;
 
 import com.ejemplo.zumbido.Fuentes;
-import com.ejemplo.zumbido.Placa;
+import com.ejemplo.zumbido.sistema.Placa;
 import com.ejemplo.zumbido.interfaz.VentanaSerial;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import com.ejemplo.zumbido.sistema.OyenteMensajes;
@@ -31,7 +31,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class Chat extends JFrame implements OyenteMensajes{
     
     private Placa placa;
-    
+    private JFrame ventanaAnterior;
     
     private JTextArea txtHistorial;
     private JTextField txtMensaje;
@@ -46,9 +46,10 @@ public class Chat extends JFrame implements OyenteMensajes{
     
     Fuentes fuentes = new Fuentes();
 
-    public Chat(Placa placa) {
+    public Chat(Placa placa, JFrame ventanaAnterior) {
         this.placa = placa;
         //placa.setVentana(this);
+        this.ventanaAnterior = ventanaAnterior;
         configurarVentana();
         agregarIdPlaca();
         agregarNombreUsuario();

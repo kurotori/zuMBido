@@ -1,4 +1,4 @@
-package com.ejemplo.zumbido;
+package com.ejemplo.zumbido.sistema;
 
 public class Usuario {
     private String nombre;
