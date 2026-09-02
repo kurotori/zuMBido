@@ -13,6 +13,12 @@ grupoRadial=7
 ledsOn = []
 ledsOff = []
 
+# Cola de salida de mensajes radiales
+mensajes = []
+ultimo_envio = 0
+INTERVALO_ENVIO_MS = 50  # Pausa mínima entre transmisiones por radio
+MAX_COLA = 10
+
 conexion=False
 
 radio.config(length=250, group=grupoRadial)
@@ -26,6 +32,7 @@ buffer_serial = ""
 
 # Configuración del canal de radio y tamaño de paquete
 def activarRadio(grupo):
+    global grupoRadial
     grupoRadial=int(grupo)
     radio.config(length=250, group=grupoRadial)
     radio.on()
@@ -42,6 +49,19 @@ def enviarRadio(mensaje):
     radio.send(mensaje)
     parpadearLed(4)
     #parpadear(4,0,9,100)
+    
+def agregarMensaje(mensaje, prioritario=False):
+    """Agrega un mensaje a la cola de mensajes, estableciendo su prioridad
+
+    Args:
+        mensaje (string): el mensaje a ser enviado
+        prioritario (boolean, optional): Establece si se trata de un mensaje prioritario o no. Defaults to false.
+    """
+    if len(mensajes) < MAX_COLA:
+        if prioritario:
+            mensajes.insert(0,mensaje)
+        else:
+            mensajes.append(mensaje)
 
 
 # def parpadear(xLed, yLed, intensidad, tiempo):
@@ -55,14 +75,14 @@ def parpadearLed(led):
 
 def parpadear(modo):
     if(modo=='on'):
-        for i in ledsOn:
-            display.set_pixel(i,0,9)
-            ledsOn.remove(i)
-            ledsOff.append(i)
+        while ledsOn:
+            led = ledsOn.pop(0)
+            display.set_pixel(led,0,9)
+            ledsOff.append(led)
     if(modo=='off'):
-        for i in ledsOff:
-            display.set_pixel(i,0,0)
-            ledsOff.remove(i)
+        while ledsOff:
+            led = ledsOff.pop(0)
+            display.set_pixel(led,0,0)
 
 def evaluarComando(comando):
     global conexion,tiempoKa, tiempo, id_placa
@@ -103,15 +123,20 @@ def evaluarComando(comando):
     # R: Comandos de Red
     #           NOTA: En general, y por ahora, todo comando 'r' es un mensaje saliente
     if(orden=="r"):
-       msj = ""
-       for i in range(1,len(datos)):
-           msj = msj+":"+datos[i] 
-       enviarRadio(msj+':'+id_placa)
+       cuerpo = ":".join(datos[1:])
+       enviarRadio(cuerpo + ':' + id_placa)
         
 while True:
+    tiempo_actual = running_time()
     
+    # --- PARA PRUEBAS ----
     if button_a.was_pressed():
         enviarRadio("algo")
+    # --- --- --- --- --- --
+    
+    if mensajes and (tiempo_actual - ultimo_envio) >= INTERVALO_ENVIO_MS:
+        
+    
     
     #
     if(len(ledsOn)>0):
@@ -142,25 +167,23 @@ while True:
     # 2. SERIAL -> RADIO: Comandos enviados desde la app en Java
     # -------------------------------------------------------------
     if uart.any():
-        char_bytes = uart.read(1)
-        if char_bytes:
-            char = str(char_bytes, 'utf-8')
-            
-            # Detectar fin de comando (\n o \r)
-            if char == '\n' or char == '\r':
-                comando = buffer_serial.strip()
-                if comando:
-                    # Emitir el comando a la red RF
-                    
-                    # ** PARA PRUEBAS **
-                    enviarSerial("recibido:" + comando)
-                    
-                    # Se evalúa el comando recibido
-                    evaluarComando(comando)
-                    # radio.send(comando)
-                    #enviarRadio(comando)
-                    buffer_serial = ""
-            else:
-                buffer_serial += char
-    
+        bloque = uart.read()
+        if bloque:
+            for char_byte in bloque:
+                char = chr(char_byte)
+                if char == '\n' or char == '\r':
+                    comando = buffer_serial.strip()
+                    if comando:
+                        # Emitir el comando a la red RF
+                        
+                        # ** PARA PRUEBAS **
+                        enviarSerial("recibido:" + comando)
+                        
+                        # Se evalúa el comando recibido
+                        evaluarComando(comando)
+                        # radio.send(comando)
+                        #enviarRadio(comando)
+                        buffer_serial = ""
+                else:
+                    buffer_serial += char
     sleep(10)
