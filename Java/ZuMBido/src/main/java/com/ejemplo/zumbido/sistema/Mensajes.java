@@ -35,6 +35,8 @@ public class Mensajes {
     //3 - Sub Comandos de Red
     public static final String SUBR_NOMBRE_REPETIDO = "nr";
     public static final String SUBR_NUEVO_LOGIN = "nl";
+    public static final String SUBR_KEEP_ALIVE = "ka";
+    public static final String SUBR_HOLA = "hl";
     public static final String SUBR_MENSAJE = "m";
     
     

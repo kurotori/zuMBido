@@ -4,7 +4,6 @@
  */
 package com.ejemplo.zumbido.sistema;
 
-import com.ejemplo.zumbido.Placa;
 import java.util.Arrays;
 
 /**
@@ -14,7 +13,6 @@ import java.util.Arrays;
 public class ProcesadorMensajes {
 
     private final Placa placa;
-    private final Sistema sistema = new Sistema();
     private OyenteMensajes oyente;
 
     public ProcesadorMensajes(Placa placa) {
@@ -101,12 +99,25 @@ public class ProcesadorMensajes {
      */
     private void procesarComandoRed(String subcomando, String[] cadena) {
         switch (subcomando) {
+            
             case Mensajes.SUBR_NUEVO_LOGIN:
                 // Lógica de red automática (independiente de la ventana)
                 System.out.println("cadena 0:" + cadena[0]);
                 if (placa.getUsuario() != null) {
                     if (placa.getUsuario().getNombre().equals(cadena[0])) {
                         String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_NOMBRE_REPETIDO);
+                        placa.enviarComando(msj);
+                    }
+                    else{
+                        System.out.println("cadena 1:" + cadena[1]);
+                        Usuario nuevo = new Usuario(cadena[0], cadena[1]);
+                        placa.getUsuarios().agregarUsuario(nuevo);
+                        oyente.onNuevoLogin(nuevo);
+                        
+                        String msj = Mensajes.componerMensaje(
+                                Mensajes.COMANDO_RED,
+                                Mensajes.SUBR_HOLA,
+                                placa.getUsuario().getNombre());
                         placa.enviarComando(msj);
                     }
                 }
@@ -116,6 +127,17 @@ public class ProcesadorMensajes {
                 if (placa.getUsuario() == null && oyente != null) {
                     oyente.onNombreRepetido();
                 }
+                break;
+                
+            case Mensajes.SUBR_MENSAJE:
+                if(placa.getUsuario()!=null){
+                    oyente.onMensajePublico(cadena[0], cadena[1]);
+                }
+                
+                break;
+            case Mensajes.SUBR_HOLA:
+                Usuario nuevo = new Usuario(cadena[0], cadena[1]);
+                placa.getUsuarios().agregarUsuario(nuevo);
                 break;
         }
     }

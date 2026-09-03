@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ejemplo.zumbido;
+package com.ejemplo.zumbido.sistema;
 
 import com.ejemplo.zumbido.interfaz.InicioBase;
 import com.ejemplo.zumbido.interfaz.VentanaSerial;
@@ -39,8 +39,8 @@ public class Placa {
     private OutputStream salidaSerie = null;
 
     private Usuario usuario = null;
-    private ArrayList<Usuario> usuarios = new ArrayList<>();
-
+    private Usuarios usuarios = new Usuarios();
+    
     public Placa(VentanaSerial ventana, SerialPort puerto) {
         this.ventana = ventana;
         this.id = null;
@@ -249,5 +249,19 @@ public class Placa {
      */
     public void setProcesador(ProcesadorMensajes procesador) {
         this.procesador = procesador;
+    }
+    
+    /**
+     * @return the usuarios
+     */
+    public Usuarios getUsuarios() {
+        return usuarios;
+    }
+
+    /**
+     * @param usuarios the usuarios to set
+     */
+    public void setUsuarios(Usuarios usuarios) {
+        this.usuarios = usuarios;
     }
 }

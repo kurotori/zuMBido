@@ -17,6 +17,7 @@ ledsOff = []
 mensajes = []
 ultimo_envio = 0
 INTERVALO_ENVIO_MS = 50  # Pausa mínima entre transmisiones por radio
+INTERVALO_KEEP_ALIVE = 5000
 MAX_COLA = 10
 
 conexion=False
@@ -131,11 +132,14 @@ while True:
     
     # --- PARA PRUEBAS ----
     if button_a.was_pressed():
-        enviarRadio("algo")
+        enviarRadio("m:algo:"+id_placa)
     # --- --- --- --- --- --
     
+    #Proceso de la cola de mensajes
     if mensajes and (tiempo_actual - ultimo_envio) >= INTERVALO_ENVIO_MS:
-        
+        m = mensajes.pop(0)
+        enviarRadio(m)
+        ultimo_envio = tiempo_actual
     
     
     #
@@ -160,7 +164,7 @@ while True:
     mensaje_radio = radio.receive()
     if mensaje_radio:
         # Reenvía el mensaje directamente a la PC terminado en un salto de línea
-        uart.write('r'+mensaje_radio + '\n')
+        uart.write('r:'+mensaje_radio + '\n')
         parpadearLed(3)
 
     # -------------------------------------------------------------

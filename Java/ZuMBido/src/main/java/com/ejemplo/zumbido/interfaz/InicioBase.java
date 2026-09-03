@@ -6,11 +6,8 @@ package com.ejemplo.zumbido.interfaz;
 
 import com.ejemplo.zumbido.chat.Chat;
 import com.formdev.flatlaf.FlatLightLaf;
-import com.ejemplo.zumbido.Colores;
-import com.ejemplo.zumbido.Fuentes;
-import com.ejemplo.zumbido.Placa;
-import com.ejemplo.zumbido.Textos;
-import com.ejemplo.zumbido.Usuario;
+import com.ejemplo.zumbido.sistema.Placa;
+import com.ejemplo.zumbido.sistema.Usuario;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import com.ejemplo.zumbido.sistema.OyenteMensajes;
 import com.fazecast.jSerialComm.SerialPort;
@@ -495,8 +492,9 @@ public class InicioBase extends JFrame implements OyenteMensajes {
                 JOptionPane.showMessageDialog(this, "¡Conexión exitosa!");
                 Usuario u = new Usuario(nombreUsuario, placa.getId());
                 placa.setUsuario(u);
-                Chat chat = new Chat(placa);
+                Chat chat = new Chat(placa,this);
                 placa.getProcesador().setOyente(chat);
+                this.setVisible(false);
                 
                 break;
             case NOMBRE_REPETIDO:

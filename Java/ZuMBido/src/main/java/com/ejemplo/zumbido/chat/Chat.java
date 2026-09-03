@@ -4,11 +4,12 @@
  */
 package com.ejemplo.zumbido.chat;
 
-import com.ejemplo.zumbido.Fuentes;
-import com.ejemplo.zumbido.Placa;
+import com.ejemplo.zumbido.interfaz.Fuentes;
+import com.ejemplo.zumbido.sistema.Placa;
 import com.ejemplo.zumbido.interfaz.VentanaSerial;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import com.ejemplo.zumbido.sistema.OyenteMensajes;
+import com.ejemplo.zumbido.sistema.Usuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,6 +32,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class Chat extends JFrame implements OyenteMensajes{
     
     private Placa placa;
+    private JFrame ventanaInicio;
     
     
     private JTextArea txtHistorial;
@@ -46,16 +48,19 @@ public class Chat extends JFrame implements OyenteMensajes{
     
     Fuentes fuentes = new Fuentes();
 
-    public Chat(Placa placa) {
+    public Chat(Placa placa, JFrame ventanaInicio) {
         this.placa = placa;
+        this.ventanaInicio = ventanaInicio;
         //placa.setVentana(this);
         configurarVentana();
         agregarIdPlaca();
         agregarNombreUsuario();
+        configurarFunciones();
     }
 
     public Chat(){
         configurarVentana();
+        configurarFunciones();
     }
 
 
@@ -98,8 +103,10 @@ public class Chat extends JFrame implements OyenteMensajes{
         txtHistorial.setEditable(false);
         txtHistorial.setFont(fuentes.CONSOLA);
         txtHistorial.setBackground(Color.white);
+        
         JScrollPane scrl = new JScrollPane(txtHistorial);
         scrl.setPreferredSize(new Dimension(0, 200));
+        
         pnlContenido.add(scrl, BorderLayout.CENTER);
 
         // Panel Inferior: Entrada de Texto y Envío
@@ -120,11 +127,16 @@ public class Chat extends JFrame implements OyenteMensajes{
         lblEstado = new JLabel("Placa: ");
         lblEstado.setFont(fuentes.VENTANA_NEGRITA_A);
         pnlEstado.add(lblEstado, BorderLayout.PAGE_START);
+        
 
         //pnlEstado.setPreferredSize(new Dimension(0,50));
         add(pnlEstado, BorderLayout.SOUTH);
 
         setVisible(true);
+    }
+    
+    private void configurarFunciones(){
+        pnlLatUsuario.actualizarUsuarios(placa.getUsuarios().getListaUsuarios());
     }
     
     private void enviarMensaje(){
@@ -159,6 +171,30 @@ public class Chat extends JFrame implements OyenteMensajes{
     public void onMensajePlaca(String titulo, String texto, boolean esError) {
         OyenteMensajes.super.onMensajePlaca(titulo, texto, esError); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
+
+    @Override
+    public void onMensajePublico(String mensaje, String idPlaca) {
+        
+        
+        
+        txtHistorial.append(mensaje);
+        
+    }
+
+    @Override
+    public void onNuevoLogin(Usuario usuario) {
+        txtHistorial.append("[Se ha conectado " + usuario.getNombre() + " desde la placa " + usuario.getIdPlaca() + "]\n");
+    }
+
+    @Override
+    public void onHola() {
+        pnlLatUsuario.actualizarUsuarios(placa.getUsuarios().getListaUsuarios());
+    }
+    
+    
+    
+    
+    
     
    // ------- 
     private void agregarNombreUsuario(){

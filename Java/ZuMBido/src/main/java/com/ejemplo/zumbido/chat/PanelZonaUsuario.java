@@ -5,13 +5,19 @@
 package com.ejemplo.zumbido.chat;
 
 import com.ejemplo.zumbido.interfaz.VentanaSerial;
+import com.ejemplo.zumbido.sistema.Usuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListModel;
+import javax.swing.event.ListDataListener;
 
 /**
  *
@@ -40,11 +46,23 @@ public class PanelZonaUsuario extends JPanel{
         lstListaUsuarios = new JList<>();
         lstListaUsuarios.setPreferredSize( new Dimension(0, 350) );
         lstListaUsuarios.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.gray));
-        add(lstListaUsuarios, BorderLayout.NORTH);
+        JScrollPane scrlListaUsuarios = new JScrollPane(lstListaUsuarios);
+        scrlListaUsuarios.setPreferredSize( new Dimension(0, 350) );
+        add(scrlListaUsuarios, BorderLayout.NORTH);
     }
     
-    public void actualizarUsuarios(){
+    public void actualizarUsuarios(ArrayList<Usuario> listaUsuarios){
+        lstListaUsuarios.removeAll();
         
+        DefaultListModel<String> modelo = new DefaultListModel<String>();
+        
+        for (Usuario usuario : listaUsuarios) {
+            modelo.addElement(usuario.getNombre());
+        }
+        
+        lstListaUsuarios.setModel(modelo);
     }
+    
+    
     
 }

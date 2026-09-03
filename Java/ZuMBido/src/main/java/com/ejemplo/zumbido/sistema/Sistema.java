@@ -4,7 +4,6 @@
  */
 package com.ejemplo.zumbido.sistema;
 
-import com.ejemplo.zumbido.Usuario;
 import java.util.ArrayList;
 
 /**
