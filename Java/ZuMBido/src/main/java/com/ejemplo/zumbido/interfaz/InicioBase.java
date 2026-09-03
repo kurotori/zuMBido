@@ -221,6 +221,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
      * Permite conectarse a la placa seleccionada
      */
     private void conectarAPlaca() {
+        placa = null;
         String puerto = (String) cmbListaPlacas.getSelectedItem();
         //placa = new Placa(this, SerialPort.getCommPort(puerto));
         placa = new Placa(SerialPort.getCommPort(puerto));

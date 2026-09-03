@@ -52,6 +52,7 @@ public class Chat extends JFrame implements OyenteMensajes{
         this.placa = placa;
         this.ventanaInicio = ventanaInicio;
         //placa.setVentana(this);
+        //this.ventanaAnterior = ventanaAnterior;
         configurarVentana();
         agregarIdPlaca();
         agregarNombreUsuario();
