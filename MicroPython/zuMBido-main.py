@@ -29,7 +29,7 @@ radio.on()
 # Configuración de comunicación serial con la PC
 uart.init(baudrate=115200)
 
-buffer_serial = ""
+buffer_serial = bytearray() #""
 
 # Configuración del canal de radio y tamaño de paquete
 def activarRadio(grupo):
@@ -173,21 +173,45 @@ while True:
     if uart.any():
         bloque = uart.read()
         if bloque:
-            for char_byte in bloque:
-                char = chr(char_byte)
-                if char == '\n' or char == '\r':
-                    comando = buffer_serial.strip()
-                    if comando:
-                        # Emitir el comando a la red RF
+            for b in bloque:
+        # 10 es '\n' y 13 es '\r' en código ASCII/byte
+                if b == 10 or b == 13:
+                    if buffer_serial:
+                        try:
+                            
+                            cadena_raw = bytes(buffer_serial)
+                            comando = str(cadena_raw, 'utf-8').strip()
+                            # Decodificamos la trama COMPLETA a UTF-8 de una sola vez
+                            # comando = buffer_serial.decode('utf-8').strip()
+                            if comando:
+                                evaluarComando(comando)
+                        except UnicodeError:
+                            # Previene cuelgues si llega un byte corrupto por el cable
+                            pass
                         
-                        # ** PARA PRUEBAS **
-                        enviarSerial("recibido:" + comando)
-                        
-                        # Se evalúa el comando recibido
-                        evaluarComando(comando)
-                        # radio.send(comando)
-                        #enviarRadio(comando)
-                        buffer_serial = ""
+                        # Limpiar el buffer de bytes
+                        buffer_serial = bytearray()
                 else:
-                    buffer_serial += char
+                    buffer_serial.append(b)
+    
+    
+    # -->> Sistema de lectura serial anterior
+        # if bloque:
+        #     for char_byte in bloque:
+        #         char = chr(char_byte)
+        #         if char == '\n' or char == '\r':
+        #             comando = buffer_serial.strip()
+        #             if comando:
+        #                 # Emitir el comando a la red RF
+                        
+        #                 # ** PARA PRUEBAS **
+        #                 enviarSerial("recibido:" + comando)
+                        
+        #                 # Se evalúa el comando recibido
+        #                 evaluarComando(comando)
+        #                 # radio.send(comando)
+        #                 #enviarRadio(comando)
+        #                 buffer_serial = ""
+        #         else:
+        #             buffer_serial += char
     sleep(10)

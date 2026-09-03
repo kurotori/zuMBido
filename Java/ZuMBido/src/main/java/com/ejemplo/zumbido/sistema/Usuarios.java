@@ -59,5 +59,12 @@ public class Usuarios {
         return usuarios;
     }
     
+    /**
+     * Devuelve la cantidad de usuarios detectados a la red, incluyendo el usuario local.
+     * @return 
+     */
+    public int getCantUsuarios(){
+        return usuarios.size() + 1;
+    }
     
 }

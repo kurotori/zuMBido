@@ -196,6 +196,10 @@ public class InicioBase extends JFrame implements OyenteMensajes {
                 e -> iniciarLogin(
                         txtNombreUsuario.getText()
                 ));
+        
+        txtNombreUsuario.addActionListener(e -> iniciarLogin(
+                        txtNombreUsuario.getText()
+                ));
     }
 
     /**
@@ -357,7 +361,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
 
     @Override
     public void onGrupoRadioCambiado(int grupo) {
-        
+
         cmbGruposRadio.setEnabled(true);
         btnIniciarLogin.setEnabled(true);
         txtNombreUsuario.setEnabled(true);
@@ -478,35 +482,52 @@ public class InicioBase extends JFrame implements OyenteMensajes {
      * @param nombreUsuario el nombre de usuario
      */
     private void iniciarLogin(String nombreUsuario) {
-        // Enviar orden por el puerto serie
-        String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_NUEVO_LOGIN, nombreUsuario);
-        System.out.println(msj);
-        placa.enviarComando(msj);
+        nombreUsuario = nombreUsuario.trim();
+        nombreUsuario = nombreUsuario.strip();
 
-        // Iniciar la espera bloqueante de 3 segundos o respuesta
-        ResultadoEspera res = esperarSenialPlaca("login_ok", "nombre_repetido");
+        if (nombreUsuario.length() >= 3 && nombreUsuario.length() <= 12) {
 
-        // Evaluar la resolución después de cerrar el diálogo
-        switch (res) {
-            //Login exitoso: No hay otro usuario con el mismo nombre
-            case LOGIN_OK:
-                JOptionPane.showMessageDialog(this, "¡Conexión exitosa!");
-                Usuario u = new Usuario(nombreUsuario, placa.getId());
-                placa.setUsuario(u);
-                Chat chat = new Chat(placa,this);
-                placa.getProcesador().setOyente(chat);
-                this.setVisible(false);
-                
-                break;
-            case NOMBRE_REPETIDO:
-                JOptionPane.showMessageDialog(this, "ERROR: El nombre ingresado ya existe en la red.",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                break;
+            // Enviar orden por el puerto serie
+            String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_NUEVO_LOGIN, nombreUsuario);
+            System.out.println(msj);
+            placa.enviarComando(msj);
+
+            // Iniciar la espera bloqueante de 3 segundos o respuesta
+            ResultadoEspera res = esperarSenialPlaca("login_ok", "nombre_repetido");
+
+            // Evaluar la resolución después de cerrar el diálogo
+            switch (res) {
+                //Login exitoso: No hay otro usuario con el mismo nombre
+                case LOGIN_OK:
+                    JOptionPane.showMessageDialog(this, "¡Conexión exitosa!");
+                    Usuario u = new Usuario(nombreUsuario, placa.getId());
+                    placa.setUsuario(u);
+                    Chat chat = new Chat(placa, this);
+                    placa.getProcesador().setOyente(chat);
+                    this.setVisible(false);
+
+                    break;
+                case NOMBRE_REPETIDO:
+                    JOptionPane.showMessageDialog(this, "ERROR: El nombre ingresado ya existe en la red.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    break;
 //            case TIMEOUT:
 //                JOptionPane.showMessageDialog(this, "No se recibió respuesta de la placa (Tiempo agotado).",
 //                        "Timeout", JOptionPane.WARNING_MESSAGE);
 //                break;
+            }
         }
+        if (nombreUsuario.length() < 3) {
+            JOptionPane.showMessageDialog(this, "Nombre de usuario demasiado corto.\nDebe tener al menos 3 caracteres", "Error", JOptionPane.ERROR_MESSAGE);
+            txtNombreUsuario.setText("");
+            txtNombreUsuario.requestFocus();
+        }
+        if (nombreUsuario.length() > 12) {
+            JOptionPane.showMessageDialog(this, "Nombre de usuario demasiado largo.\nNo puede tener mas de 12 caracteres", "Error", JOptionPane.ERROR_MESSAGE);
+            txtNombreUsuario.setText("");
+            txtNombreUsuario.requestFocus();
+        }
+
     }
 
     /**

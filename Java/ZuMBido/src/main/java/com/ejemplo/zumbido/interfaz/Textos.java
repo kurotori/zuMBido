@@ -19,4 +19,9 @@ public class Textos {
     public static final String INICIO_ERROR_NO_PLACAS = "No hay placas conectadas";
     
     
+    public static final String CHAT_ET_USUARIO = "<html><b>Usuario: </b></html>";
+    public static final String CHAT_ET_PLACA = "<html><b>Placa: </b></html>";
+    public static final String CHAT_ET_USUARIOS_CONECTADOS = "Usuarios Conectados: ";
+    
+    
 }
