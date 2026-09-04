@@ -5,6 +5,7 @@
 package com.ejemplo.zumbido.chat;
 
 import com.ejemplo.zumbido.interfaz.Fuentes;
+import com.ejemplo.zumbido.interfaz.LabelConImagen;
 import com.ejemplo.zumbido.interfaz.Textos;
 import com.ejemplo.zumbido.sistema.Placa;
 import com.ejemplo.zumbido.sistema.Mensajes;
@@ -68,7 +69,7 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     private void configurarVentana() {
         setTitle("MicroChat");
-        setSize(800, 600);
+        setSize(900, 600);
 
         ImageIcon img = new ImageIcon(getClass().getResource("/imagen/icono_chat.png"));
 
@@ -86,6 +87,10 @@ public class Chat extends JFrame implements OyenteMensajes {
         // Panel Superior: Selección de Puerto
         JPanel pnlSuperior = new JPanel(new FlowLayout());
 
+        LabelConImagen lblIcono = new LabelConImagen(64, 64, "/imagen/icono_chat.png");
+        pnlSuperior.add(lblIcono);
+        
+        
         JLabel lblEtUsuario = new JLabel(Textos.CHAT_ET_USUARIO);
         lblEtUsuario.setFont(fuentes.VENTANA_NEGRITA_A);
         pnlSuperior.add(lblEtUsuario);

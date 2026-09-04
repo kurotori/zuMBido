@@ -24,6 +24,9 @@ public class Fuentes {
     public Font VENTANA_NEGRITA_A_CH;
     public Font VENTANA_NEGRITA_B;
     public Font VENTANA_NEGRITA_C;
+    
+    public Font LISTADO_USUARIOS_NOMBRE;
+    public Font LISTADO_USUARIOS_PLACA;
 
     public Fuentes() {
         this.CONSOLA = cargarFuente("/fuentes/Roboto_Mono/RobotoMono-VariableFont_wght.ttf", 18);
@@ -37,6 +40,11 @@ public class Fuentes {
         this.VENTANA_NEGRITA_A = cargarFuente("/fuentes/Lekton/Lekton-Bold.ttf", 18);
         this.VENTANA_NEGRITA_B = cargarFuente("/fuentes/Lekton/Lekton-Bold.ttf", 24);
         this.VENTANA_NEGRITA_C = cargarFuente("/fuentes/Lekton/Lekton-Bold.ttf", 28);
+        
+        this.LISTADO_USUARIOS_NOMBRE = cargarFuente("/fuentes/Lekton/Lekton-Bold.ttf",16);
+        this.LISTADO_USUARIOS_PLACA = cargarFuente("/fuentes/Roboto_Mono/static/RobotoMono-Light.ttf",14);
+        
+        
     }
     
     

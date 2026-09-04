@@ -51,8 +51,19 @@ public class Usuarios {
         return resultado;
     }
     
+    /**
+     * Gestiona el agregado de un usuario nuevo al listado
+     * @param nuevo 
+     */
     public void agregarUsuario(Usuario nuevo){
-        this.usuarios.add(nuevo);
+        Usuario existente = buscarPorId(nuevo.getIdPlaca());
+        
+        if (existente==null) {
+            this.usuarios.add(nuevo);
+        }
+        else{
+            System.out.println("Usuario repetido");
+        }
     }
 
     public ArrayList<Usuario> getListaUsuarios() {

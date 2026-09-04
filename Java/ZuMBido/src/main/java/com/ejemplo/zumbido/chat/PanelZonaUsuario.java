@@ -27,7 +27,9 @@ public class PanelZonaUsuario extends JPanel{
 
     private JFrame ventana;
     
-    private JList<String> lstListaUsuarios;
+    //private JList<String> lstListaUsuarios;
+    private DefaultListModel<Usuario> modeloUsuarios;
+    private JList<Usuario> lstListaUsuarios;
     private JPanel pnlMenuUsuario;
     
     
@@ -43,7 +45,10 @@ public class PanelZonaUsuario extends JPanel{
         setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.gray));
         setBackground(Color.WHITE);
         
-        lstListaUsuarios = new JList<>();
+        modeloUsuarios = new DefaultListModel<>();
+        
+        lstListaUsuarios = new JList<>(modeloUsuarios);
+        lstListaUsuarios.setCellRenderer(new TarjetaUsuario());
         lstListaUsuarios.setPreferredSize( new Dimension(0, 350) );
         lstListaUsuarios.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.gray));
         JScrollPane scrlListaUsuarios = new JScrollPane(lstListaUsuarios);
@@ -52,15 +57,16 @@ public class PanelZonaUsuario extends JPanel{
     }
     
     public void actualizarUsuarios(ArrayList<Usuario> listaUsuarios){
-        lstListaUsuarios.removeAll();
+        modeloUsuarios.removeAllElements();
+        //lstListaUsuarios.removeAll();
         
-        DefaultListModel<String> modelo = new DefaultListModel<String>();
+        //DefaultListModel<String> modelo = new DefaultListModel<String>();
         
         for (Usuario usuario : listaUsuarios) {
-            modelo.addElement(usuario.getNombre());
+            modeloUsuarios.addElement(usuario);//usuario.getNombre() + ":" + usuario.getIdPlaca());
         }
         
-        lstListaUsuarios.setModel(modelo);
+        //lstListaUsuarios.setModel(modelo);
     }
     
     
