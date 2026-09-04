@@ -36,8 +36,12 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     private Placa placa;
     private JFrame ventanaInicio;
-
-    private JTextArea txtHistorial;
+    
+    
+    
+    private AreaChat areaChat;
+    //private JTextArea txtHistorial;
+    
     private JTextField txtMensaje;
     private JButton btnEnviar;
 
@@ -106,15 +110,21 @@ public class Chat extends JFrame implements OyenteMensajes {
         add(pnlContenido, BorderLayout.CENTER);
 
         // Panel Central: Consola / Chat
-        txtHistorial = new JTextArea();
-        txtHistorial.setEditable(false);
-        txtHistorial.setFont(fuentes.CONSOLA);
-        txtHistorial.setBackground(Color.white);
+        
+        areaChat = new AreaChat();
+        pnlContenido.add(areaChat, BorderLayout.CENTER);
+        
+        
+        
+//        txtHistorial = new JTextArea();
+//        txtHistorial.setEditable(false);
+//        txtHistorial.setFont(fuentes.CONSOLA);
+//        txtHistorial.setBackground(Color.white);
+//
+//        JScrollPane scrl = new JScrollPane(txtHistorial);
+//        scrl.setPreferredSize(new Dimension(0, 200));
 
-        JScrollPane scrl = new JScrollPane(txtHistorial);
-        scrl.setPreferredSize(new Dimension(0, 200));
-
-        pnlContenido.add(scrl, BorderLayout.CENTER);
+//        pnlContenido.add(scrl, BorderLayout.CENTER);
 
         // Panel Inferior: Entrada de Texto y Envío
         JPanel pnlInferior = new JPanel(new BorderLayout());
@@ -174,7 +184,8 @@ public class Chat extends JFrame implements OyenteMensajes {
         if (m.length() > 0) {
             String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
             placa.enviarComando(msj);
-            txtHistorial.append("[" + placa.getUsuario().getNombre() + "]:" + m + "\n");
+            areaChat.agregarMensaje(placa.getUsuario(), m, true);
+            //txtHistorial.append("[" + placa.getUsuario().getNombre() + "]:" + m + "\n");
             txtMensaje.setText("");
         }
 
@@ -203,17 +214,19 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     @Override
     public void onMensajePublico(String mensaje, String idPlaca) {
-        String usuario = placa.getUsuarios().buscarPorId(idPlaca).getNombre();
-        String msj = "[" + usuario + "]:"+mensaje+"\n";
+        Usuario usuario = placa.getUsuarios().buscarPorId(idPlaca);
+        //String msj = "[" + usuario + "]:"+mensaje+"\n";
+        areaChat.agregarMensaje(usuario, mensaje, false);
         
-        txtHistorial.append(msj);
+        //txtHistorial.append(msj);
 
     }
 
     @Override
     public void onNuevoLogin(Usuario usuario) {
         actualizarUsuarios();
-        txtHistorial.append("[Se ha conectado " + usuario.getNombre() + " desde la placa " + usuario.getIdPlaca() + "]\n");
+        //areaChat.
+        //txtHistorial.append("[Se ha conectado " + usuario.getNombre() + " desde la placa " + usuario.getIdPlaca() + "]\n");
     }
 
     @Override
