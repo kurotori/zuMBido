@@ -1,0 +1,50 @@
+@startuml Diagrama de Componentes
+
+<style>
+document {
+  BackGroundColor #00375C
+}
+root {
+  FontColor #?black:white
+  LineColor white
+}
+
+
+</style>
+
+component "PC A" as pcA #FD4E47{
+    [Aplicación] as appA
+    }
+
+component "PC B" as pcB #9CFD47 {
+    [Aplicación] as appB
+}
+component "PC C" as pcC #A847FD{
+    [Aplicación] as appC
+}
+
+component "PC D" as pcD #479CFD{
+    [Aplicación] as appD
+}
+
+
+
+
+[Placa A] as plA #FF5C5C
+[Placa B] as plB #5CFF5C
+[Placa C] as plC #FF5CFF
+[Placa D] as plD #8BC1FE
+
+appA <-d-> plA
+plB <-d-> appB
+appC <-r--> plC
+appD <-r-> plD
+
+plA <.d..> plB
+plA <.d..> plC
+plA <.r.> plD
+plB <.r..> plC
+plB <.u..> plD
+plC <.u..> plD
+
+@enduml
