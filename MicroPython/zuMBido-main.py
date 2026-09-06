@@ -33,6 +33,11 @@ buffer_serial = bytearray() #""
 
 # Configuración del canal de radio y tamaño de paquete
 def activarRadio(grupo):
+    """Activa la comunicación radial del sistema y/o cambia el grupo radial.
+
+    Args:
+        grupo (int): numero de grupo radial que se quiere usar con la placa.
+    """
     global grupoRadial
     grupoRadial=int(grupo)
     radio.config(length=250, group=grupoRadial)
@@ -40,13 +45,26 @@ def activarRadio(grupo):
     display.set_pixel(1,0,9)
 
 def desactivarRadio():
+    """Desactiva la comunicación radial y notifica a la red que la placa se desconectó
+    """
+    agregarMensaje('lo:'+id_placa) # Se envía un mensaje de logout ("lo") notificando a la red
     radio.off()
     display.set_pixel(1,0,0)
 
 def enviarSerial(texto):
+    """Envía un mensaje desde la placa a la App mediante la comuniación serial UART
+
+    Args:
+        texto (string): mensaje a ser enviado a la App
+    """
     uart.write(texto + '\r\n')
     
 def enviarRadio(mensaje):
+    """Envía un mensaje por el sistema radial de la placa
+
+    Args:
+        mensaje (string): mensaje a ser enviado. Debe seguir los parámetros de forma de los mensajes
+    """
     radio.send(mensaje)
     parpadearLed(4)
     #parpadear(4,0,9,100)
@@ -87,6 +105,10 @@ def parpadear(modo):
 
 def evaluarComando(comando):
     global conexion,tiempoKa, tiempo, id_placa
+    
+    # Si se recibió un comando, entonces la placa esta presente, por lo que actualizamos su estado
+    tiempoKa = running_time() 
+    
     datos=comando.split(':')
     orden = datos[0]
     
@@ -119,13 +141,14 @@ def evaluarComando(comando):
         
         # KA: KeepAlive: comando para mantener la conexión activa --> EN DESARROLLO, NO IMPLEMENTADO
         if(datos[1]=='ka'): 
-            conexion=True
+            #conexion=True
+            agregarMensaje('ka:' + id_placa, True) #Agregamos el KEEP ALIVE como mensaje prioritario
     
     # R: Comandos de Red
     #           NOTA: En general, y por ahora, todo comando 'r' es un mensaje saliente
     if(orden=="r"):
        cuerpo = ":".join(datos[1:])
-       enviarRadio(cuerpo + ':' + id_placa)
+       agregarMensaje(cuerpo + ':' + id_placa)
         
 while True:
     tiempo_actual = running_time()
@@ -134,6 +157,10 @@ while True:
     if button_a.was_pressed():
         enviarRadio("m:algo:"+id_placa)
     # --- --- --- --- --- --
+    
+    #KEEP ALIVE Local: La placa comprueba que la app este presente, de lo contrario, cierra la comunicación radial
+    if(tiempo_actual - tiempoKa) >= INTERVALO_KEEP_ALIVE:
+        desactivarRadio()
     
     #Proceso de la cola de mensajes
     if mensajes and (tiempo_actual - ultimo_envio) >= INTERVALO_ENVIO_MS:

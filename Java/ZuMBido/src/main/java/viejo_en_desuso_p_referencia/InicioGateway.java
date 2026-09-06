@@ -1,5 +1,6 @@
-package com.ejemplo.zumbido.interfaz;
+package viejo_en_desuso_p_referencia;
 
+import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.sistema.Usuario;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import com.fazecast.jSerialComm.SerialPort;
