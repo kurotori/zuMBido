@@ -64,6 +64,8 @@ El script _flashear.sh_ permite, en un sistema GNU/Linux, flashear el código si
 
 El proyecto de Java incluído se esta desarrollando mediante [Apache Maven][l7] , usando [Apache NetBeans][l8], pero debería ser compatible con cualquier IDE capaz de manejar proyectos de Maven (se ha comprobado en VS Code e IntelliJ iDEa).
 
+De momento lo que se incluye es lo que se ha logrado: un sistema de mensajería simple. Pero el próximo paso consiste en lograr el desarrollo de juegos multijugador.
+
 
 [l1]:https://microbit.org/
 [l2]:https://ceibal.edu.uy/
