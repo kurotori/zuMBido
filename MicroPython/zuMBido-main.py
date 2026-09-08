@@ -1,14 +1,12 @@
 from microbit import *
 import radio
 import machine
-
-#ID de la placa
-id_placa = "".join("{:02x}".format(b) for b in machine.unique_id())
+import gc
 
 tiempo=0
-tiempoKa=0 #Temporizador para detectar conexión activa
+INTERVALO_KEEP_ALIVE = 5000
+tiempoKa=running_time() +  INTERVALO_KEEP_ALIVE#Temporizador para detectar conexión activa
 tempoAnterior=0
-grupoRadial=7
 
 ledsOn = []
 ledsOff = []
@@ -17,13 +15,15 @@ ledsOff = []
 mensajes = []
 ultimo_envio = 0
 INTERVALO_ENVIO_MS = 50  # Pausa mínima entre transmisiones por radio
-INTERVALO_KEEP_ALIVE = 5000
 MAX_COLA = 10
 
 conexion=False
 
+# Configuración inicial de la radio
+grupoRadial=7
 radio.config(length=250, group=grupoRadial)
 radio.on()
+radioAct = True
 
 
 # Configuración de comunicación serial con la PC
@@ -31,8 +31,12 @@ uart.init(baudrate=115200)
 
 buffer_serial = bytearray() #""
 
+ID_PLACA = "".join("{:02x}".format(b) for b in machine.unique_id())
+ 
+
 # Configuración del canal de radio y tamaño de paquete
 def activarRadio(grupo):
+    global radioAct
     """Activa la comunicación radial del sistema y/o cambia el grupo radial.
 
     Args:
@@ -42,14 +46,17 @@ def activarRadio(grupo):
     grupoRadial=int(grupo)
     radio.config(length=250, group=grupoRadial)
     radio.on()
+    radioAct = True
     display.set_pixel(1,0,9)
 
 def desactivarRadio():
+    global radioAct
     """Desactiva la comunicación radial y notifica a la red que la placa se desconectó
     """
-    agregarMensaje('lo:'+id_placa) # Se envía un mensaje de logout ("lo") notificando a la red
+    #agregarMensaje('lo:'+ID_PLACA) # Se envía un mensaje de logout ("lo") notificando a la red
     radio.off()
     display.set_pixel(1,0,0)
+    radioAct = False
 
 def enviarSerial(texto):
     """Envía un mensaje desde la placa a la App mediante la comuniación serial UART
@@ -65,8 +72,13 @@ def enviarRadio(mensaje):
     Args:
         mensaje (string): mensaje a ser enviado. Debe seguir los parámetros de forma de los mensajes
     """
-    radio.send(mensaje)
-    parpadearLed(4)
+    if radioAct:
+        try:
+            radio.send(mensaje)
+            parpadearLed(4)
+
+        except RuntimeError:
+            parpadearLed(2)
     #parpadear(4,0,9,100)
     
 def agregarMensaje(mensaje, prioritario=False):
@@ -76,11 +88,13 @@ def agregarMensaje(mensaje, prioritario=False):
         mensaje (string): el mensaje a ser enviado
         prioritario (boolean, optional): Establece si se trata de un mensaje prioritario o no. Defaults to false.
     """
-    if len(mensajes) < MAX_COLA:
-        if prioritario:
-            mensajes.insert(0,mensaje)
-        else:
-            mensajes.append(mensaje)
+    if radioAct:
+        if len(mensajes) < MAX_COLA:
+            if prioritario:
+                mensajes.insert(0,mensaje)
+            else:
+                mensajes.append(mensaje)
+    
 
 
 # def parpadear(xLed, yLed, intensidad, tiempo):
@@ -102,9 +116,11 @@ def parpadear(modo):
         while ledsOff:
             led = ledsOff.pop(0)
             display.set_pixel(led,0,0)
+            
+            
 
 def evaluarComando(comando):
-    global conexion,tiempoKa, tiempo, id_placa
+    global conexion,tiempoKa, tiempo
     
     # Si se recibió un comando, entonces la placa esta presente, por lo que actualizamos su estado
     tiempoKa = running_time() 
@@ -118,13 +134,13 @@ def evaluarComando(comando):
         # C: Conexión. La App solicita conectarse a la placa
         if(datos[1]=='c'):
             display.set_pixel(0,0,9)
-            enviarSerial("c:bid:"+id_placa)
+            enviarSerial("c:bid:"+ID_PLACA)
             enviarSerial("c:gr:"+str(grupoRadial))
             conexion=True
         
         # BID: ID de Placa: La App solicita la ID de la placa
         if(datos[1]=='bid'):
-            enviarSerial("c:bid:"+id_placa)
+            enviarSerial("c:bid:"+ID_PLACA)
         
         # GR: Grupo Radial: La App quiere gestionar el grupo radial de la placa
         if(datos[1]=='gr'):
@@ -142,31 +158,42 @@ def evaluarComando(comando):
         # KA: KeepAlive: comando para mantener la conexión activa --> EN DESARROLLO, NO IMPLEMENTADO
         if(datos[1]=='ka'): 
             #conexion=True
-            agregarMensaje('ka:' + id_placa, True) #Agregamos el KEEP ALIVE como mensaje prioritario
+            if not radioAct:
+                activarRadio(grupoRadial)
+            agregarMensaje('ka:' + ID_PLACA, True) #Agregamos el KEEP ALIVE como mensaje prioritario
+            
     
     # R: Comandos de Red
     #           NOTA: En general, y por ahora, todo comando 'r' es un mensaje saliente
     if(orden=="r"):
        cuerpo = ":".join(datos[1:])
-       agregarMensaje(cuerpo + ':' + id_placa)
+       agregarMensaje(cuerpo + ':' + ID_PLACA)
+       
+    gc.collect()   
+    
         
+# ### BUCLE PRINCIPAL ###
 while True:
     tiempo_actual = running_time()
     
     # --- PARA PRUEBAS ----
     if button_a.was_pressed():
-        enviarRadio("m:algo:"+id_placa)
+        enviarRadio("m:algo:"+ID_PLACA)
     # --- --- --- --- --- --
     
     #KEEP ALIVE Local: La placa comprueba que la app este presente, de lo contrario, cierra la comunicación radial
     if(tiempo_actual - tiempoKa) >= INTERVALO_KEEP_ALIVE:
-        desactivarRadio()
+       desactivarRadio()
     
     #Proceso de la cola de mensajes
+    
     if mensajes and (tiempo_actual - ultimo_envio) >= INTERVALO_ENVIO_MS:
         m = mensajes.pop(0)
         enviarRadio(m)
         ultimo_envio = tiempo_actual
+        
+    if not mensajes:
+        gc.collect()
     
     
     #
@@ -188,11 +215,12 @@ while True:
     # -------------------------------------------------------------
     # 1. RADIO -> SERIAL: Mensajes recibidos de otros micro:bits
     # -------------------------------------------------------------
-    mensaje_radio = radio.receive()
-    if mensaje_radio:
-        # Reenvía el mensaje directamente a la PC terminado en un salto de línea
-        uart.write('r:'+mensaje_radio + '\n')
-        parpadearLed(3)
+    if radioAct:
+        mensaje_radio = radio.receive()
+        if mensaje_radio:
+            # Reenvía el mensaje directamente a la PC terminado en un salto de línea
+            uart.write('r:'+mensaje_radio + '\n')
+            parpadearLed(3)
 
     # -------------------------------------------------------------
     # 2. SERIAL -> RADIO: Comandos enviados desde la app en Java
@@ -217,7 +245,7 @@ while True:
                             pass
                         
                         # Limpiar el buffer de bytes
-                        buffer_serial = bytearray()
+                        del buffer_serial[:] #buffer_serial = bytearray()
                 else:
                     buffer_serial.append(b)
     
@@ -242,3 +270,4 @@ while True:
         #         else:
         #             buffer_serial += char
     sleep(10)
+    #gc.collect()

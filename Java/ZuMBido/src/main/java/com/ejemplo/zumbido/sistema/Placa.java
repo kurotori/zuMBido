@@ -4,7 +4,6 @@
  */
 package com.ejemplo.zumbido.sistema;
 
-import com.ejemplo.zumbido.interfaz.InicioBase;
 import com.ejemplo.zumbido.interfaz.VentanaSerial;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import com.ejemplo.zumbido.sistema.ProcesadorMensajes;
@@ -13,8 +12,6 @@ import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Scanner;
 import javax.swing.SwingUtilities;
 
 /**
@@ -35,6 +32,7 @@ public class Placa {
     private int estado;
 
     private SerialPort puerto;
+    private GestorKeepAlive keepAlive;
 
     private OutputStream salidaSerie = null;
 
@@ -48,6 +46,9 @@ public class Placa {
         this.estado = INACTIVA;
         this.puerto = puerto;
         conectarPuerto();
+        
+        this.keepAlive = new GestorKeepAlive(this);
+        keepAlive.iniciar();
     }
     
     public Placa(SerialPort puerto) {
@@ -57,6 +58,9 @@ public class Placa {
         this.estado = INACTIVA;
         this.puerto = puerto;
         conectarPuerto();
+        
+        this.keepAlive = new GestorKeepAlive(this);
+        keepAlive.iniciar();
     }
 
     /**

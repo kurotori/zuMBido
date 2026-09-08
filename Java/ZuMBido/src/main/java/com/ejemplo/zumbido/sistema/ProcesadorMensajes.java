@@ -83,10 +83,12 @@ public class ProcesadorMensajes {
        
             
             case Mensajes.PLACA_RECIBIDO:
-                System.out.println("->");
+                System.out.println("->" + mensaje);
                 break;
+                        
             default:
-                throw new AssertionError();
+                System.out.println("Mensaje desconocido: " + mensaje);
+                //throw new AssertionError();
         }
 
     }
@@ -138,6 +140,10 @@ public class ProcesadorMensajes {
             case Mensajes.SUBR_HOLA:
                 Usuario nuevo = new Usuario(cadena[0], cadena[1]);
                 placa.getUsuarios().agregarUsuario(nuevo);
+                break;
+                
+            case Mensajes.SUBR_KEEP_ALIVE:
+                System.out.println("KA");
                 break;
         }
     }

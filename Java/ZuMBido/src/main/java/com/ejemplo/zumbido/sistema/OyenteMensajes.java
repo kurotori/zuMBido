@@ -25,5 +25,7 @@ public interface OyenteMensajes {
     
     default void onHola(){}
     
+    default void onKeepAlive(){}
+    
 }
 
