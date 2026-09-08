@@ -27,5 +27,7 @@ public interface OyenteMensajes {
     
     default void onKeepAlive(){}
     
+    default void onActualizarUsuarios(){}
+    
 }
 

@@ -65,6 +65,10 @@ public class Usuarios {
             System.out.println("Usuario repetido");
         }
     }
+    
+    public void quitarUsuario(Usuario usuario){
+        this.usuarios.remove(usuario);
+    }
 
     public ArrayList<Usuario> getListaUsuarios() {
         return usuarios;

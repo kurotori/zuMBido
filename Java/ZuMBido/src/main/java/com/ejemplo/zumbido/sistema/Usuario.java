@@ -27,14 +27,14 @@ public class Usuario {
     /**
      * @return la marca de tiempo del último mensaje recibido
      */
-    public int getUltimoMsg() {
+    public int getTiempoUltimoMsg() {
         return ultimoMsg;
     }
 
     /**
      * @param ultimoMsg the ultimoMsg to set
      */
-    public void setUltimoMsg(int ultimoMsg) {
+    public void setTiempoUltimoMsg(int ultimoMsg) {
         this.ultimoMsg = ultimoMsg;
     }
 }

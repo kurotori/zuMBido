@@ -1,4 +1,5 @@
 # zuMBido
+![iLogo]
 ## Un protocolo de comunicación de red entre Aplicaciones usando placas micro:bit como pasarela inalámbrica
 
 **zuMBido** es un intento de protocolo de comunicaciones entre aplicaciones y sistemas utilizando el sistema de mensajería radial de las placas [**micro:bit**][l1] como pasarela de datos.
@@ -75,4 +76,6 @@ De momento lo que se incluye es lo que se ha logrado: un sistema de mensajería 
 [l6]:MicroPython/zuMBido-main.py
 [l7]:https://maven.apache.org/
 
+[iLogo]:Imágenes%20Originales/logo_letras.png
 [i1]:out/diagramas/DiagramaDeComponentes/Diagrama%20de%20Componentes.png
+
