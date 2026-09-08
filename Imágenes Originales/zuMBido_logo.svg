@@ -9,7 +9,7 @@
    id="svg1747"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    sodipodi:docname="zuMBido_logo.svg"
-   inkscape:export-filename="../Java/ZuMBido/src/main/resources/imagen/icono.png"
+   inkscape:export-filename="logo_letras.png"
    inkscape:export-xdpi="120.48286"
    inkscape:export-ydpi="120.48286"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -2666,9 +2666,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.16724647"
-     inkscape:cx="2361.7838"
-     inkscape:cy="239.16798"
+     inkscape:zoom="0.47304445"
+     inkscape:cx="796.96527"
+     inkscape:cy="112.04021"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -3432,15 +3432,15 @@
        xml:space="preserve"
        transform="matrix(2.2847299,0,0,2.2847299,-1691.7577,-2006.9268)"
        id="text1111"
-       style="font-size:120px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;white-space:pre;shape-inside:url(#rect1113);fill:#00d400;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.3;stroke-dasharray:none;paint-order:markers fill stroke"
+       style="font-size:120px;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;white-space:pre;shape-inside:url(#rect1113);display:inline;fill:#00d400;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4.3;stroke-dasharray:none;paint-order:markers fill stroke"
        inkscape:label="text1111"
        x="-243.86719"
        y="0"><tspan
          x="889.54883"
          y="1010.5018"
-         id="tspan2009"><tspan
+         id="tspan3178"><tspan
            style="font-family:'Caacupe One';-inkscape-font-specification:'Caacupe One, Normal'"
-           id="tspan2007">zuMBido</tspan></tspan></text>
+           id="tspan3176">zuMBido</tspan></tspan></text>
   </g>
   <style
      type="text/css"
