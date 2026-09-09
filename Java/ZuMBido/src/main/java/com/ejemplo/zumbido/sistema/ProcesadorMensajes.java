@@ -48,47 +48,43 @@ public class ProcesadorMensajes {
         if (cadena.length < 2) {
             System.out.println("Mensaje truncado: " + mensaje);
             return;
-        }
-        else{
-            
+        } else {
+
         }
 
         String comando = cadena[0];
         String subcomando = cadena[1];
         String[] datos;
-        
-        if(cadena.length>2){
+
+        if (cadena.length > 2) {
             datos = Arrays.copyOfRange(cadena, 2, cadena.length);
-        }
-        else{
+        } else {
             datos = new String[]{""};
         }
-        
-        //datos = ?Arrays.copyOfRange(cadena, 2, cadena.length):{"w"}
 
+        //datos = ?Arrays.copyOfRange(cadena, 2, cadena.length):{"w"}
         switch (comando) {
             case Mensajes.COMANDO_SISTEMA:
-                
+
                 procesarComandoSistema(subcomando, datos);
                 break;
-            
+
             case Mensajes.PLACA_MENSAJE:
                 procesarMensajePlaca(subcomando, datos);
-                
+
                 break;
-            
+
             case Mensajes.COMANDO_RED:
                 procesarComandoRed(subcomando, datos);
                 break;
-       
-            
+
             case Mensajes.PLACA_RECIBIDO:
                 System.out.println("->" + mensaje);
                 break;
-                        
+
             default:
                 System.out.println("Mensaje desconocido: " + mensaje);
-                //throw new AssertionError();
+            //throw new AssertionError();
         }
 
     }
@@ -101,21 +97,21 @@ public class ProcesadorMensajes {
      */
     private void procesarComandoRed(String subcomando, String[] cadena) {
         switch (subcomando) {
-            
+
             case Mensajes.SUBR_NUEVO_LOGIN:
                 // Lógica de red automática (independiente de la ventana)
+                
                 System.out.println("cadena 0:" + cadena[0]);
                 if (placa.getUsuario() != null) {
                     if (placa.getUsuario().getNombre().equals(cadena[0])) {
                         String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_NOMBRE_REPETIDO);
                         placa.enviarComando(msj);
-                    }
-                    else{
+                    } else if(cadena.length > 1){
                         System.out.println("cadena 1:" + cadena[1]);
                         Usuario nuevo = new Usuario(cadena[0], cadena[1]);
                         placa.getUsuarios().agregarUsuario(nuevo);
                         oyente.onNuevoLogin(nuevo);
-                        
+
                         String msj = Mensajes.componerMensaje(
                                 Mensajes.COMANDO_RED,
                                 Mensajes.SUBR_HOLA,
@@ -130,20 +126,24 @@ public class ProcesadorMensajes {
                     oyente.onNombreRepetido();
                 }
                 break;
-                
+
             case Mensajes.SUBR_MENSAJE:
-                if(placa.getUsuario()!=null){
+                if (placa.getUsuario() != null) {
+                    Usuario u = placa.getUsuarios().buscarPorId(cadena[1]);
+                    placa.getUsuarios().actualizarTiempoUsuario(u);
                     oyente.onMensajePublico(cadena[0], cadena[1]);
                 }
-                
+
                 break;
             case Mensajes.SUBR_HOLA:
                 Usuario nuevo = new Usuario(cadena[0], cadena[1]);
                 placa.getUsuarios().agregarUsuario(nuevo);
                 break;
-                
+
             case Mensajes.SUBR_KEEP_ALIVE:
                 System.out.println("KA");
+                Usuario u = placa.getUsuarios().buscarPorId(cadena[0]);
+                placa.getUsuarios().actualizarTiempoUsuario(u);
                 break;
         }
     }
@@ -178,6 +178,10 @@ public class ProcesadorMensajes {
 
             case Mensajes.SUBC_KEEP_ALIVE:
                 placa.enviarComando(Mensajes.SUBC_KEEP_ALIVE);
+                break;
+
+            case Mensajes.SUBI_ACTUALIZAR_USUARIOS:
+                oyente.onActualizarUsuarios();
                 break;
 
             default:

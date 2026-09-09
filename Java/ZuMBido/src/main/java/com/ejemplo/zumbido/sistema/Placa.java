@@ -33,6 +33,7 @@ public class Placa {
 
     private SerialPort puerto;
     private GestorKeepAlive keepAlive;
+    private GestorUsuarios gestorUsuarios;
 
     private OutputStream salidaSerie = null;
 
@@ -51,6 +52,7 @@ public class Placa {
         keepAlive.iniciar();
     }
     
+    /***/
     public Placa(SerialPort puerto) {
         this.procesador = new ProcesadorMensajes(this);
         this.id = null;
@@ -61,6 +63,8 @@ public class Placa {
         
         this.keepAlive = new GestorKeepAlive(this);
         keepAlive.iniciar();
+        this.gestorUsuarios = new GestorUsuarios(this);
+        gestorUsuarios.iniciar();
     }
 
     /**
@@ -111,9 +115,9 @@ public class Placa {
 
             //Inicializar la salida de datos hacia el puerto
             salidaSerie = puerto.getOutputStream();
-            if (getUsuario() == null) {
-                enviarComando( Mensajes.componerMensaje(Mensajes.COMANDO_SISTEMA, Mensajes.SUBC_CONECTAR_PLACA) );
-            }
+//            if (getUsuario() == null) {
+//                enviarComando( Mensajes.componerMensaje(Mensajes.COMANDO_SISTEMA, Mensajes.SUBC_CONECTAR_PLACA) );
+//            }
 
             // Iniciar la escucha asíncrona de datos entrantes desde la pasarela
             iniciarEscuchaSerie();
@@ -169,6 +173,18 @@ public class Placa {
                 }
             }
         });
+    }
+    
+    
+    public void solicitarActualizarUsuarios(){
+        SwingUtilities.invokeLater(() -> {
+                            String msj = Mensajes.componerMensaje(
+                                    Mensajes.COMANDO_SISTEMA, 
+                                    Mensajes.SUBI_ACTUALIZAR_USUARIOS);
+                            System.out.println("[INTERNO]: " + msj);
+                            //getVentana().evaluarMensaje(lineaCompleta);
+                            procesador.analizarMensaje(msj);
+                        });
     }
 
     /**

@@ -20,22 +20,21 @@ public class GestorUsuarios {
     public GestorUsuarios(Placa placa) {
         this.placa = placa;
     }
-    
-    public void iniciar(){
+
+    public void iniciar() {
         detener();
-        
+
         planificador = Executors.newSingleThreadScheduledExecutor();
-        
+
         planificador.scheduleAtFixedRate(
-                ()->{
+                () -> {
                     try {
-                        if (placa != null) {
-                            if (placa.getUsuarios().getCantUsuarios() > 0) {
-                                for (Usuario usuario:placa.getUsuarios().getListaUsuarios()) {
-                                    if (usuario.getTiempoUltimoMsg() > 5000) {
-                                        placa.getUsuarios().quitarUsuario(usuario);
-                                        //placa
-                                    }
+                        long tiempo = System.currentTimeMillis();
+                        if (placa != null && placa.getUsuarios().getCantUsuarios() > 0) {
+                            for (Usuario usuario : placa.getUsuarios().getListaUsuarios()) {
+                                if ((tiempo - usuario.getTiempoUltimoMsg()) > 5000) {
+                                    placa.getUsuarios().quitarUsuario(usuario);
+                                    placa.getProcesador().getOyente().onActualizarUsuarios();
                                 }
                             }
                         }
@@ -43,8 +42,10 @@ public class GestorUsuarios {
                     }
                 }, 0, 6000, TimeUnit.MILLISECONDS);
     }
-    
-    public void detener(){
-        
+
+    public void detener() {
+        if (planificador != null && !planificador.isShutdown()) {
+            planificador.shutdownNow();
+        }
     }
 }

@@ -40,6 +40,11 @@ public class Mensajes {
     public static final String SUBR_MENSAJE = "m";
     
     
+    //4 - Sub Comandos internos
+    
+    public static final String SUBI_ACTUALIZAR_USUARIOS = "au";
+    
+    
     /**
      * Compone un mensaje para su uso en el sistema
      * @param comando

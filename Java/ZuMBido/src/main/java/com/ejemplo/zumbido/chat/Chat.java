@@ -244,4 +244,14 @@ public class Chat extends JFrame implements OyenteMensajes {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Chat::new);
     }
+
+    @Override
+    public void onActualizarUsuarios() {
+        SwingUtilities.invokeLater(()->{
+            actualizarUsuarios();
+        });
+    }
+    
+    
+    
 }

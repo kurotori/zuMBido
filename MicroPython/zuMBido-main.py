@@ -245,7 +245,8 @@ while True:
                             pass
                         
                         # Limpiar el buffer de bytes
-                        del buffer_serial[:] #buffer_serial = bytearray()
+                        buffer_serial = bytearray()
+                        gc.collect()
                 else:
                     buffer_serial.append(b)
     
