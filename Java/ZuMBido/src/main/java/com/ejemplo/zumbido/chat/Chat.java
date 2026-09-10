@@ -13,6 +13,7 @@ import com.ejemplo.zumbido.sistema.OyenteMensajes;
 import com.ejemplo.zumbido.sistema.Usuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
@@ -37,6 +39,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     
     
     private AreaChat areaChat;
+    private JPanel pnlHistorial;
     //private JTextArea txtHistorial;
     
     private JTextField txtMensaje;
@@ -65,7 +68,15 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     public Chat() {
         configurarVentana();
+        
+        Usuario u = new Usuario("Pruebas", "12345656");
+        String msj  = "Esto es una prueba";
+        MensajeChat m = new MensajeChat(msj, u);
+        pnlHistorial.add(m);
+        
         configurarFunciones();
+        
+        
     }
 
     private void configurarVentana() {
@@ -108,20 +119,22 @@ public class Chat extends JFrame implements OyenteMensajes {
 
         // Panel Central: Consola / Chat
         
-        areaChat = new AreaChat();
-        pnlContenido.add(areaChat, BorderLayout.CENTER);
+        //areaChat = new AreaChat();
+        //pnlContenido.add(areaChat, BorderLayout.CENTER);
         
         
         
-//        txtHistorial = new JTextArea();
+        
+        pnlHistorial = new JPanel();
+        pnlHistorial.setLayout(new BoxLayout(pnlHistorial, BoxLayout.Y_AXIS));
 //        txtHistorial.setEditable(false);
 //        txtHistorial.setFont(fuentes.CONSOLA);
 //        txtHistorial.setBackground(Color.white);
 //
-//        JScrollPane scrl = new JScrollPane(txtHistorial);
-//        scrl.setPreferredSize(new Dimension(0, 200));
+        JScrollPane scrl = new JScrollPane(pnlHistorial);
+        scrl.setPreferredSize(new Dimension(0, 200));
 
-//        pnlContenido.add(scrl, BorderLayout.CENTER);
+        pnlContenido.add(scrl, BorderLayout.CENTER);
 
         // Panel Inferior: Entrada de Texto y Envío
         JPanel pnlInferior = new JPanel(new BorderLayout());
@@ -213,8 +226,8 @@ public class Chat extends JFrame implements OyenteMensajes {
     public void onMensajePublico(String mensaje, String idPlaca) {
         Usuario usuario = placa.getUsuarios().buscarPorId(idPlaca);
         //String msj = "[" + usuario + "]:"+mensaje+"\n";
-        areaChat.agregarMensaje(usuario, mensaje, false);
-        
+        //areaChat.agregarMensaje(usuario, mensaje, false);
+        MensajeChat pnlMsj = new MensajeChat(mensaje, usuario);
         //txtHistorial.append(msj);
 
     }
@@ -242,7 +255,9 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(Chat::new);
+        SwingUtilities.invokeLater(()->{
+            new Chat();
+        });
     }
 
     @Override
