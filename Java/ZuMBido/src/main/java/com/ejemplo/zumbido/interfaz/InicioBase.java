@@ -196,10 +196,10 @@ public class InicioBase extends JFrame implements OyenteMensajes {
                 e -> iniciarLogin(
                         txtNombreUsuario.getText()
                 ));
-        
+
         txtNombreUsuario.addActionListener(e -> iniciarLogin(
-                        txtNombreUsuario.getText()
-                ));
+                txtNombreUsuario.getText()
+        ));
     }
 
     /**
@@ -227,11 +227,14 @@ public class InicioBase extends JFrame implements OyenteMensajes {
     private void conectarAPlaca() {
         placa = null;
         String puerto = (String) cmbListaPlacas.getSelectedItem();
+        if (puerto == null) {
+            return;
+        }
         //placa = new Placa(this, SerialPort.getCommPort(puerto));
         placa = new Placa(SerialPort.getCommPort(puerto));
 
         placa.getProcesador().setOyente(this);
-
+        placa.enviarComando(Mensajes.componerMensaje(Mensajes.COMANDO_SISTEMA, Mensajes.SUBC_CONECTAR_PLACA));
     }
 
     /**
@@ -239,9 +242,13 @@ public class InicioBase extends JFrame implements OyenteMensajes {
      */
     private void cambiarGrupoRadial() {
         int grupo = cmbGruposRadio.getSelectedIndex();
-
-        String msj = Mensajes.componerMensaje(Mensajes.COMANDO_SISTEMA, Mensajes.SUBC_GRUPO_RADIO, "" + grupo);
-        placa.enviarComando(msj);
+        
+        if (placa != null && placa.getGrupoRadial() != grupo) {
+            String msj = Mensajes.componerMensaje(Mensajes.COMANDO_SISTEMA, Mensajes.SUBC_GRUPO_RADIO, "" + grupo);
+            placa.enviarComando(msj);
+        }
+        
+        
     }
 
     /**
@@ -386,9 +393,14 @@ public class InicioBase extends JFrame implements OyenteMensajes {
     public void onNombreRepetido() {
         System.out.println("Nombre repetido");
         if (placa.getUsuario() == null) {
+
+            if (dialogoEspera != null && dialogoEspera.isVisible()) {
+                dialogoEspera.dispose();
+            }
+
             resultadoEspera = ResultadoEspera.NOMBRE_REPETIDO;
-            dialogoEspera.dispose(); // Cierra el diálogo e interrumpe la espera
-            return;
+            //dialogoEspera.dispose(); // Cierra el diálogo e interrumpe la espera
+            //return;
         }
     }
 

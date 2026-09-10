@@ -12,74 +12,89 @@ import java.util.Optional;
  * @author sebastian
  */
 public class Usuarios {
-    
+
     private ArrayList<Usuario> usuarios = new ArrayList<>();
-    
+
     /**
      * Permite buscar un usuario en el listado mediante la id de su placa
+     *
      * @param idPlaca la id de placa del usuario que se busca
      * @return el <b>Usuario</b> encontrado, o null
      */
-    public Usuario buscarPorId(String idPlaca){
+    public Usuario buscarPorId(String idPlaca) {
+        System.out.println("Buscando un usuario con la placa " + idPlaca);
         Usuario resultado = null;
         Optional<Usuario> busqueda = usuarios.stream()
                 .filter(usuario -> usuario.getIdPlaca().equals(idPlaca))
                 .findFirst();
-        
-        if(busqueda.isPresent()){
+
+        if (busqueda.isPresent()) {
             return busqueda.get();
         }
-        
+
         return resultado;
     }
-    
+
     /**
-     * Permite buscar un usuario en el listado mediante su nombre 
+     * Permite buscar un usuario en el listado mediante su nombre
+     *
      * @param nombre el nombre del usuario que se busca
      * @return el <b>Usuario</b> encontrado, o null
      */
-    public Usuario buscarPorNombre(String nombre){
+    public Usuario buscarPorNombre(String nombre) {
         Usuario resultado = null;
         Optional<Usuario> busqueda = usuarios.stream()
                 .filter(usuario -> usuario.getNombre().equals(nombre))
                 .findFirst();
-        
-        if(busqueda.isPresent()){
+
+        if (busqueda.isPresent()) {
             return busqueda.get();
         }
-        
+
         return resultado;
     }
-    
+
     /**
      * Gestiona el agregado de un usuario nuevo al listado
-     * @param nuevo 
+     *
+     * @param nuevo
      */
-    public void agregarUsuario(Usuario nuevo){
+    public void agregarUsuario(Usuario nuevo) {
         Usuario existente = buscarPorId(nuevo.getIdPlaca());
-        
-        if (existente==null) {
+
+        if (existente == null) {
             this.usuarios.add(nuevo);
-        }
-        else{
+        } else {
             System.out.println("Usuario repetido");
         }
     }
-    
-    public void quitarUsuario(Usuario usuario){
+
+    public void quitarUsuario(Usuario usuario) {
         this.usuarios.remove(usuario);
     }
 
     public ArrayList<Usuario> getListaUsuarios() {
         return usuarios;
     }
-    
+
     /**
-     * Devuelve la cantidad de usuarios detectados a la red, incluyendo el usuario local.
-     * @return 
+     * Devuelve la cantidad de usuarios detectados a la red, incluyendo el
+     * usuario local.
+     *
+     * @return
      */
-    public int getCantUsuarios(){
+    public int getCantUsuarios() {
         return usuarios.size() + 1;
     }
-    
+
+    public void actualizarTiempoUsuario(Usuario usuario) {
+        int pos = usuarios.indexOf(usuario);
+        if (pos >= 0) {
+            long marcaTiempo = System.currentTimeMillis();
+            usuarios.get(pos).setTiempoUltimoMsg(marcaTiempo);
+            System.out.println("Actualizado:" + usuario.getNombre() + ":" + marcaTiempo);
+        }
+
+    }
+
 }

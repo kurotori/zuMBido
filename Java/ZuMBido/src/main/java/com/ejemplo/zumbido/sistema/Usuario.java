@@ -3,7 +3,7 @@ package com.ejemplo.zumbido.sistema;
 public class Usuario {
     private String nombre;
     private String idPlaca;
-    private int ultimoMsg = 0;
+    private long ultimoMsg = 0;
 
     public Usuario(String nombre, String idPlaca) {
         this.nombre = nombre;
@@ -27,14 +27,14 @@ public class Usuario {
     /**
      * @return la marca de tiempo del último mensaje recibido
      */
-    public int getTiempoUltimoMsg() {
+    public long getTiempoUltimoMsg() {
         return ultimoMsg;
     }
 
     /**
      * @param ultimoMsg the ultimoMsg to set
      */
-    public void setTiempoUltimoMsg(int ultimoMsg) {
+    public void setTiempoUltimoMsg(long ultimoMsg) {
         this.ultimoMsg = ultimoMsg;
     }
 }
