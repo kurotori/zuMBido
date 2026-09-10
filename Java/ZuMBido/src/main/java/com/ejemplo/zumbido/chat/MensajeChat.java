@@ -42,12 +42,12 @@ public class MensajeChat extends JPanel {
     private void configurar(){
         setSize(650, 60);
         setPreferredSize(new Dimension(650,60));
-        putClientProperty("FlatLaf.style", "arc: 16; background: #98F1A5;");
+        putClientProperty("FlatLaf.style", "arc: 16; background: #0000FF;");
         setLayout(new BorderLayout());
         
         pnlNombreUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnlNombreUsuario.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
-        pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background: #98F1A5;");
+        pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
         add(pnlNombreUsuario, BorderLayout.WEST);
         
         JLabel lblNombreUsuario = new JLabel(usuario.getNombre());

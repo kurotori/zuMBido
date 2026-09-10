@@ -15,6 +15,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -35,13 +38,11 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     private Placa placa;
     private JFrame ventanaInicio;
-    
-    
-    
+
     private AreaChat areaChat;
-    private JPanel pnlHistorial;
+    private JPanel pnlChat;
     //private JTextArea txtHistorial;
-    
+
     private JTextField txtMensaje;
     private JButton btnEnviar;
 
@@ -52,8 +53,12 @@ public class Chat extends JFrame implements OyenteMensajes {
     private JLabel lblEstado;
     private JLabel lblUsuario;
     private JLabel lblcantUsuarios;
+    private JScrollPane scrl;
+
+    private int cantMensajes = 0;
 
     Fuentes fuentes = new Fuentes();
+    private GridBagConstraints gbc = new GridBagConstraints();
 
     public Chat(Placa placa, JFrame ventanaInicio) {
         this.placa = placa;
@@ -68,15 +73,12 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     public Chat() {
         configurarVentana();
-        
-        Usuario u = new Usuario("Pruebas", "12345656");
-        String msj  = "Esto es una prueba";
-        MensajeChat m = new MensajeChat(msj, u);
-        pnlHistorial.add(m);
-        
         configurarFunciones();
-        
-        
+
+        //MensajeChat m = new MensajeChat(msj, u);
+        //pnlChat.add(m);
+        //agregarMensaje(u, msj, true);
+        //agregarMensaje(u, msj, true);
     }
 
     private void configurarVentana() {
@@ -101,8 +103,7 @@ public class Chat extends JFrame implements OyenteMensajes {
 
         LabelConImagen lblIcono = new LabelConImagen(64, 64, "/imagen/icono_chat.png");
         pnlSuperior.add(lblIcono);
-        
-        
+
         JLabel lblEtUsuario = new JLabel(Textos.CHAT_ET_USUARIO);
         lblEtUsuario.setFont(fuentes.VENTANA_NEGRITA_A);
         pnlSuperior.add(lblEtUsuario);
@@ -115,23 +116,25 @@ public class Chat extends JFrame implements OyenteMensajes {
 
         //Panel de Contenido
         pnlContenido = new JPanel(new BorderLayout());
+        pnlContenido.setBackground(Color.white);
         add(pnlContenido, BorderLayout.CENTER);
 
         // Panel Central: Consola / Chat
-        
         //areaChat = new AreaChat();
         //pnlContenido.add(areaChat, BorderLayout.CENTER);
+        pnlChat = new JPanel();
+        pnlChat.setLayout(new GridBagLayout());
+        pnlChat.setBackground(Color.white);
         
-        
-        
-        
-        pnlHistorial = new JPanel();
-        pnlHistorial.setLayout(new BoxLayout(pnlHistorial, BoxLayout.Y_AXIS));
+        JPanel pnlContenedorChat = new JPanel(new BorderLayout());
+        pnlContenedorChat.add(pnlChat, BorderLayout.NORTH);
 //        txtHistorial.setEditable(false);
 //        txtHistorial.setFont(fuentes.CONSOLA);
 //        txtHistorial.setBackground(Color.white);
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets = new Insets(0, 0, 10, 0);
 //
-        JScrollPane scrl = new JScrollPane(pnlHistorial);
+        scrl = new JScrollPane(pnlContenedorChat);
         scrl.setPreferredSize(new Dimension(0, 200));
 
         pnlContenido.add(scrl, BorderLayout.CENTER);
@@ -142,9 +145,6 @@ public class Chat extends JFrame implements OyenteMensajes {
         btnEnviar = new JButton("Enviar");
         //btnEnviar.setEnabled(false);
 
-        btnEnviar.addActionListener(e -> enviarMensaje());
-        txtMensaje.addActionListener(e -> enviarMensaje()); // Enviar con Enter
-
         pnlInferior.add(txtMensaje, BorderLayout.CENTER);
         pnlInferior.add(btnEnviar, BorderLayout.EAST);
         pnlContenido.add(pnlInferior, BorderLayout.SOUTH);
@@ -152,21 +152,21 @@ public class Chat extends JFrame implements OyenteMensajes {
         //Panel de Estado
         pnlEstado = new JPanel();//new FlowLayout(FlowLayout.CENTER, 10, 2));
         pnlEstado.setLayout(new BoxLayout(pnlEstado, BoxLayout.X_AXIS));
-        
+
         pnlEstado.add(Box.createHorizontalStrut(10));
-        
+
         lblEstado = new JLabel(Textos.CHAT_ET_PLACA);
         lblEstado.setFont(fuentes.VENTANA_NEGRITA_A);
         pnlEstado.add(lblEstado);
 
         pnlEstado.add(Box.createHorizontalGlue());
-        
+
         lblcantUsuarios = new JLabel(Textos.CHAT_ET_USUARIOS_CONECTADOS);
         lblcantUsuarios.setFont(fuentes.VENTANA_NEGRITA_A);
         pnlEstado.add(lblcantUsuarios);
 
         pnlEstado.add(Box.createHorizontalStrut(35));
-        
+
         //pnlEstado.setPreferredSize(new Dimension(0,50));
         add(pnlEstado, BorderLayout.SOUTH);
 
@@ -174,27 +174,88 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     private void configurarFunciones() {
+        btnEnviar.addActionListener(e -> enviarMensaje());
+        txtMensaje.addActionListener(e -> enviarMensaje()); // Enviar con Enter
+        agregarMensajeGeneral("Bienvenido");
+        Usuario u = new Usuario("Pruebas", "12345656");
+        String msj = "Esto es una prueba";
+        agregarMensaje(u, msj, true);
+        agregarMensaje(u, msj, true);
         actualizarUsuarios();
     }
 
+    /**
+     * Inicia el proceso de actualizar el listado de usuarios
+     */
     private void actualizarUsuarios() {
 
         pnlLatUsuario.actualizarUsuarios(placa.getUsuarios().getListaUsuarios());
         SwingUtilities.invokeLater(
-                ()->{
+                () -> {
                     System.out.println(Textos.CHAT_ET_USUARIOS_CONECTADOS + "-->" + placa.getUsuarios().getCantUsuarios());
                     lblcantUsuarios.setText(Textos.CHAT_ET_USUARIOS_CONECTADOS + placa.getUsuarios().getCantUsuarios());
                 }
         );
-        
+
+    }
+
+    /**
+     * Agrega un mensaje al panel de chat
+     *
+     * @param usuario
+     * @param msj
+     * @param mio
+     */
+    private void agregarMensaje(Usuario usuario, String msj, boolean mio) {
+        SwingUtilities.invokeLater(
+                () -> {
+                    MensajeChat pnlMsj = new MensajeChat(msj, usuario);
+                    gbc.gridx = 0;
+                    gbc.gridy = cantMensajes++;
+                    gbc.weightx = 1.0;
+                    gbc.weighty = 0.0;
+                    pnlChat.add(pnlMsj, gbc);
+                    pnlChat.revalidate();
+                    pnlChat.repaint();
+
+                    SwingUtilities.invokeLater(() -> {
+                        scrl.getVerticalScrollBar().setValue(scrl.getVerticalScrollBar().getMaximum());
+                    });
+                }
+        );
+
+    }
+
+    private void agregarMensajeGeneral(String msj) {
+        SwingUtilities.invokeLater(
+                () -> {
+                    JLabel lbl = new JLabel(msj);
+                    gbc.gridx = 0;
+                    gbc.gridy = cantMensajes++;
+                    gbc.weightx = 1.0;
+                    gbc.weighty = 0.0;
+                    pnlChat.add(lbl, gbc);
+                    pnlChat.revalidate();
+                    pnlChat.repaint();
+
+                    SwingUtilities.invokeLater(() -> {
+                        scrl.getVerticalScrollBar().setValue(scrl.getVerticalScrollBar().getMaximum());
+                    });
+                }
+        );
+
     }
 
     private void enviarMensaje() {
+
         String m = txtMensaje.getText().trim();
+        System.out.println("msj: " + m);
         if (m.length() > 0) {
             String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
             placa.enviarComando(msj);
-            areaChat.agregarMensaje(placa.getUsuario(), m, true);
+
+            //areaChat.agregarMensaje(placa.getUsuario(), m, true);
+            agregarMensaje(placa.getUsuario(), m, true);
             //txtHistorial.append("[" + placa.getUsuario().getNombre() + "]:" + m + "\n");
             txtMensaje.setText("");
         }
@@ -228,6 +289,7 @@ public class Chat extends JFrame implements OyenteMensajes {
         //String msj = "[" + usuario + "]:"+mensaje+"\n";
         //areaChat.agregarMensaje(usuario, mensaje, false);
         MensajeChat pnlMsj = new MensajeChat(mensaje, usuario);
+        pnlChat.add(pnlMsj);
         //txtHistorial.append(msj);
 
     }
@@ -255,18 +317,16 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(()->{
+        SwingUtilities.invokeLater(() -> {
             new Chat();
         });
     }
 
     @Override
     public void onActualizarUsuarios() {
-        SwingUtilities.invokeLater(()->{
+        SwingUtilities.invokeLater(() -> {
             actualizarUsuarios();
         });
     }
-    
-    
-    
+
 }
