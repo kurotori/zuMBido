@@ -9,7 +9,7 @@
 ## Objetivos
 Este proyecto procura lograr un sistema de comunicación que permita diseñar sistemas que se comuniquen entre sí intercambiando mensajes mediante las placas micro:bit.
 
-Esto es *a sabiendas* de que existen **muchas** formas más efectivas de lograr exactamente lo mismo. Pero se desarrolla de todas maneras, ya que permite:
+Esto es *a sabiendas* de que existen **muchas** formas más efectivas de lograr _exactamente lo mismo_. Pero se desarrolla de todas maneras, ya que permite:
 
 - Una forma de conectividad que **obliga** a los usuarios a estar viéndose **cara a cara**, dado el escaso rango de la señal radial de las placas, fomentando así la interacción humana.
 - Evitar los peligros inherentes en el uso de sistemas que dependan de redes tradicionales.

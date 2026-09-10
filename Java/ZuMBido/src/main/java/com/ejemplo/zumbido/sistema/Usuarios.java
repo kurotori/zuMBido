@@ -64,6 +64,7 @@ public class Usuarios {
 
         if (existente == null) {
             this.usuarios.add(nuevo);
+            actualizarTiempoUsuario(nuevo); //Hay que marcar su tiempo al agregarlo
         } else {
             System.out.println("Usuario repetido");
         }
