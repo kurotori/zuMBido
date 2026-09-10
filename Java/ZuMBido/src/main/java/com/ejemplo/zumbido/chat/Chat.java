@@ -94,8 +94,8 @@ public class Chat extends JFrame implements OyenteMensajes {
         add(pnlLatUsuario, BorderLayout.WEST);
 
         // Panel Superior: Selección de Puerto
-        JPanel pnlSuperior = new JPanel(new FlowLayout());
-
+        JPanel pnlSuperior = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        pnlSuperior.setBackground(Color.white);
         LabelConImagen lblIcono = new LabelConImagen(64, 64, "/imagen/icono_chat.png");
         pnlSuperior.add(lblIcono);
 
@@ -104,7 +104,7 @@ public class Chat extends JFrame implements OyenteMensajes {
         pnlSuperior.add(lblEtUsuario);
 
         lblUsuario = new JLabel("---");
-        lblUsuario.setFont(fuentes.VENTANA_NORMAL_A_CH);
+        lblUsuario.setFont(fuentes.VENTANA_NEGRITA_B);
         pnlSuperior.add(lblUsuario);
 
         add(pnlSuperior, BorderLayout.NORTH);
@@ -278,6 +278,7 @@ public class Chat extends JFrame implements OyenteMensajes {
         actualizarUsuarios();
         //areaChat.
         //txtHistorial.append("[Se ha conectado " + usuario.getNombre() + " desde la placa " + usuario.getIdPlaca() + "]\n");
+        agregarMensajeGeneral("<html><i>Se ha conectado <b>"+usuario.getNombre()+"</b></i></html>");
     }
 
     @Override
@@ -292,7 +293,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     private void agregarIdPlaca() {
-        lblEstado.setText("Placa: " + placa.getId());
+        lblEstado.setText("Placa: " + placa.getId() + " en " + placa.getPuerto().getSystemPortName());
     }
 
     public static void main(String[] args) {

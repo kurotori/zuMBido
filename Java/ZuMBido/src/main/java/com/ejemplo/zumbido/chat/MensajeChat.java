@@ -4,6 +4,7 @@
  */
 package com.ejemplo.zumbido.chat;
 
+import com.ejemplo.zumbido.interfaz.Colores;
 import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.sistema.Usuario;
 import java.awt.BorderLayout;
@@ -43,35 +44,47 @@ public class MensajeChat extends JPanel {
     
     private void configurar(){
         setSize(650, 60);
-        setPreferredSize(new Dimension(650,60));
+        setPreferredSize(new Dimension(700,60));
         putClientProperty("FlatLaf.style", "arc: 16; background: #FFFFFF;");
         setLayout(new BorderLayout());
         
         pnlNombreUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
+        pnlNombreUsuario.setPreferredSize(new Dimension(150, 0));
+        
+        String colorUsuario = Colores.extraerColorDeId(usuario.getIdPlaca());
+        String colorFuenteUsuario = Colores.obtenerColorTextoHex(colorUsuario);
+        System.out.println("CU: "+colorUsuario + " CFU: "+colorFuenteUsuario);
+        
+        pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background:"+colorUsuario+";");
         if (mio) {
-            pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
             add(pnlNombreUsuario, BorderLayout.EAST);
         }
         else{
-            pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
             add(pnlNombreUsuario, BorderLayout.WEST);
         }
         
-        pnlMensaje = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
+        pnlMensaje = new JPanel();
+        pnlMensaje.setPreferredSize(new Dimension(540,0));
+        
         if (mio) {
-            pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
+            pnlMensaje.setLayout(new FlowLayout(FlowLayout.RIGHT));
+            pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #5FFC67;");
             add(pnlMensaje, BorderLayout.WEST);
         }
         else{
-            pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
+            pnlMensaje.setLayout(new FlowLayout(FlowLayout.LEFT));
+            pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #E8ECFD;");
             add(pnlMensaje, BorderLayout.EAST);
         }
         
         JLabel lblNombreUsuario = new JLabel(usuario.getNombre());
         lblNombreUsuario.setFont(fuentes.VENTANA_NEGRITA_A_CH);
+        lblNombreUsuario.setForeground(Color.decode(colorFuenteUsuario));
         pnlNombreUsuario.add(lblNombreUsuario);
+        
+        JLabel lblMensaje = new JLabel(mensaje);
+        lblMensaje.setFont(fuentes.VENTANA_NORMAL_A_CH);
+        pnlMensaje.add(lblMensaje);
     }
     
 }

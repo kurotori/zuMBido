@@ -372,6 +372,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
         cmbGruposRadio.setEnabled(true);
         btnIniciarLogin.setEnabled(true);
         txtNombreUsuario.setEnabled(true);
+        txtNombreUsuario.requestFocus();
         cmbGruposRadio.setSelectedIndex(grupo);
     }
 
