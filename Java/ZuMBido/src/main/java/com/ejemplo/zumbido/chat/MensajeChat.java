@@ -29,12 +29,14 @@ public class MensajeChat extends JPanel {
     
     private JPanel pnlNombreUsuario;
     private JPanel pnlMensaje;
+    private boolean mio;
     
     Fuentes fuentes = new Fuentes();
 
-    public MensajeChat(String mensaje, Usuario usuario) {
+    public MensajeChat(String mensaje, Usuario usuario, boolean mio) {
         this.mensaje = mensaje;
         this.usuario = usuario;
+        this.mio = mio;
         this.marcaDeTiempo = LocalDateTime.now();
         configurar();
     }
@@ -42,13 +44,30 @@ public class MensajeChat extends JPanel {
     private void configurar(){
         setSize(650, 60);
         setPreferredSize(new Dimension(650,60));
-        putClientProperty("FlatLaf.style", "arc: 16; background: #0000FF;");
+        putClientProperty("FlatLaf.style", "arc: 16; background: #FFFFFF;");
         setLayout(new BorderLayout());
         
         pnlNombreUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        pnlNombreUsuario.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
         pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
-        add(pnlNombreUsuario, BorderLayout.WEST);
+        if (mio) {
+            pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
+            add(pnlNombreUsuario, BorderLayout.EAST);
+        }
+        else{
+            pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
+            add(pnlNombreUsuario, BorderLayout.WEST);
+        }
+        
+        pnlMensaje = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
+        if (mio) {
+            pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
+            add(pnlMensaje, BorderLayout.WEST);
+        }
+        else{
+            pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #00FFFF;");
+            add(pnlMensaje, BorderLayout.EAST);
+        }
         
         JLabel lblNombreUsuario = new JLabel(usuario.getNombre());
         lblNombreUsuario.setFont(fuentes.VENTANA_NEGRITA_A_CH);

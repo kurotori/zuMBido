@@ -63,8 +63,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     public Chat(Placa placa, JFrame ventanaInicio) {
         this.placa = placa;
         this.ventanaInicio = ventanaInicio;
-        //placa.setVentana(this);
-        //this.ventanaAnterior = ventanaAnterior;
+
         configurarVentana();
         agregarIdPlaca();
         agregarNombreUsuario();
@@ -75,10 +74,6 @@ public class Chat extends JFrame implements OyenteMensajes {
         configurarVentana();
         configurarFunciones();
 
-        //MensajeChat m = new MensajeChat(msj, u);
-        //pnlChat.add(m);
-        //agregarMensaje(u, msj, true);
-        //agregarMensaje(u, msj, true);
     }
 
     private void configurarVentana() {
@@ -169,12 +164,8 @@ public class Chat extends JFrame implements OyenteMensajes {
     private void configurarFunciones() {
         btnEnviar.addActionListener(e -> enviarMensaje());
         txtMensaje.addActionListener(e -> enviarMensaje()); // Enviar con Enter
-        agregarMensajeGeneral("Bienvenido");
-        Usuario u = new Usuario("Pruebas", "12345656");
-        String msj = "Esto es una prueba";
-        agregarMensaje(u, msj, true);
-        agregarMensaje(u, msj, true);
         actualizarUsuarios();
+        agregarMensajeGeneral("Te conectaste a la red zuMBido-MicroChat");
     }
 
     /**
@@ -202,7 +193,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     private void agregarMensaje(Usuario usuario, String msj, boolean mio) {
         SwingUtilities.invokeLater(
                 () -> {
-                    MensajeChat pnlMsj = new MensajeChat(msj, usuario);
+                    MensajeChat pnlMsj = new MensajeChat(msj, usuario, mio);
                     gbc.gridx = 0;
                     gbc.gridy = cantMensajes++;
                     gbc.weightx = 1.0;
@@ -279,12 +270,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     @Override
     public void onMensajePublico(String mensaje, String idPlaca) {
         Usuario usuario = placa.getUsuarios().buscarPorId(idPlaca);
-        //String msj = "[" + usuario + "]:"+mensaje+"\n";
-        //areaChat.agregarMensaje(usuario, mensaje, false);
-        MensajeChat pnlMsj = new MensajeChat(mensaje, usuario);
-        pnlChat.add(pnlMsj);
-        //txtHistorial.append(msj);
-
+        agregarMensaje(usuario, mensaje, false);
     }
 
     @Override
