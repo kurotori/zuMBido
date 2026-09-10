@@ -3,6 +3,8 @@ import radio
 import machine
 import gc
 
+VERSION="0.1.3"
+
 tiempo=0
 INTERVALO_KEEP_ALIVE = 5000
 tiempoKa=running_time() +  INTERVALO_KEEP_ALIVE#Temporizador para detectar conexión activa
@@ -130,6 +132,10 @@ def evaluarComando(comando):
     
     # C: Comandos de Sistema recibidos de la App
     if(orden=="c"):   
+        
+        # V: Versión. La app solicita la versión actual del script en la placa
+        if(datos[1]=='v'):
+            enviarSerial('c:v:'+VERSION)
         
         # C: Conexión. La App solicita conectarse a la placa
         if(datos[1]=='c'):
