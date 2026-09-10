@@ -120,17 +120,12 @@ public class Chat extends JFrame implements OyenteMensajes {
         add(pnlContenido, BorderLayout.CENTER);
 
         // Panel Central: Consola / Chat
-        //areaChat = new AreaChat();
-        //pnlContenido.add(areaChat, BorderLayout.CENTER);
         pnlChat = new JPanel();
         pnlChat.setLayout(new GridBagLayout());
         pnlChat.setBackground(Color.white);
         
         JPanel pnlContenedorChat = new JPanel(new BorderLayout());
         pnlContenedorChat.add(pnlChat, BorderLayout.NORTH);
-//        txtHistorial.setEditable(false);
-//        txtHistorial.setFont(fuentes.CONSOLA);
-//        txtHistorial.setBackground(Color.white);
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(0, 0, 10, 0);
 //
@@ -143,7 +138,6 @@ public class Chat extends JFrame implements OyenteMensajes {
         JPanel pnlInferior = new JPanel(new BorderLayout());
         txtMensaje = new JTextField();
         btnEnviar = new JButton("Enviar");
-        //btnEnviar.setEnabled(false);
 
         pnlInferior.add(txtMensaje, BorderLayout.CENTER);
         pnlInferior.add(btnEnviar, BorderLayout.EAST);
@@ -167,7 +161,6 @@ public class Chat extends JFrame implements OyenteMensajes {
 
         pnlEstado.add(Box.createHorizontalStrut(35));
 
-        //pnlEstado.setPreferredSize(new Dimension(0,50));
         add(pnlEstado, BorderLayout.SOUTH);
 
         setVisible(true);
