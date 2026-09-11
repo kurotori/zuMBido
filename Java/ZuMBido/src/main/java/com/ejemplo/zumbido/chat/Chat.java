@@ -5,6 +5,7 @@
 package com.ejemplo.zumbido.chat;
 
 import com.ejemplo.zumbido.interfaz.Fuentes;
+import com.ejemplo.zumbido.interfaz.Iconos;
 import com.ejemplo.zumbido.interfaz.LabelConImagen;
 import com.ejemplo.zumbido.interfaz.Textos;
 import com.ejemplo.zumbido.sistema.Placa;
@@ -24,10 +25,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
@@ -36,10 +39,12 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class Chat extends JFrame implements OyenteMensajes {
 
+    public static final int LONGITUD_MAXIMA_MENSAJES = 229;
+    
     private Placa placa;
     private JFrame ventanaInicio;
 
-    private AreaChat areaChat;
+    //private AreaChat areaChat;
     private JPanel pnlChat;
     //private JTextArea txtHistorial;
 
@@ -58,6 +63,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     private int cantMensajes = 0;
 
     Fuentes fuentes = new Fuentes();
+    Iconos iconos = new Iconos();
     private GridBagConstraints gbc = new GridBagConstraints();
 
     public Chat(Placa placa, JFrame ventanaInicio) {
@@ -77,6 +83,8 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     private void configurarVentana() {
+        UIManager.put("OptionPane.background", Color.WHITE);
+        
         setTitle("MicroChat");
         setSize(900, 600);
 
@@ -214,6 +222,7 @@ public class Chat extends JFrame implements OyenteMensajes {
         SwingUtilities.invokeLater(
                 () -> {
                     JLabel lbl = new JLabel(msj);
+                    lbl.setFont(fuentes.VENTANA_NORMAL_A_CH);
                     gbc.gridx = 0;
                     gbc.gridy = cantMensajes++;
                     gbc.weightx = 1.0;
@@ -233,15 +242,26 @@ public class Chat extends JFrame implements OyenteMensajes {
     private void enviarMensaje() {
 
         String m = txtMensaje.getText().trim();
-        System.out.println("msj: " + m);
         if (m.length() > 0) {
-            String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
-            placa.enviarComando(msj);
-
-            //areaChat.agregarMensaje(placa.getUsuario(), m, true);
-            agregarMensaje(placa.getUsuario(), m, true);
-            //txtHistorial.append("[" + placa.getUsuario().getNombre() + "]:" + m + "\n");
-            txtMensaje.setText("");
+            
+            if (m.length() > LONGITUD_MAXIMA_MENSAJES) {
+                JOptionPane.showMessageDialog(
+                        this, 
+                        "No puedo enviar un mensaje \n con más de " + LONGITUD_MAXIMA_MENSAJES + " caracteres.", 
+                        placa.getId() + " dice:", 
+                        JOptionPane.PLAIN_MESSAGE,
+                        iconos.ICONO_ERROR_96);
+                txtMensaje.requestFocus();
+                txtMensaje.selectAll();
+            }
+            else{
+                String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
+                placa.enviarComando(msj);
+                agregarMensaje(placa.getUsuario(), m, true);
+                txtMensaje.setText("");
+            }
+            
+            
         }
 
     }

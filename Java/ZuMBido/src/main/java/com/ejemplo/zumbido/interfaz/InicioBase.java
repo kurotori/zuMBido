@@ -41,6 +41,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
     GridBagConstraints gbc = new GridBagConstraints();
 
     private Fuentes fuentes = new Fuentes();
+    private Iconos iconos = new Iconos();
 
     public enum ResultadoEspera {
         //TIMEOUT,
@@ -400,8 +401,6 @@ public class InicioBase extends JFrame implements OyenteMensajes {
             }
 
             resultadoEspera = ResultadoEspera.NOMBRE_REPETIDO;
-            //dialogoEspera.dispose(); // Cierra el diálogo e interrumpe la espera
-            //return;
         }
     }
 
@@ -521,8 +520,13 @@ public class InicioBase extends JFrame implements OyenteMensajes {
 
                     break;
                 case NOMBRE_REPETIDO:
-                    JOptionPane.showMessageDialog(this, "ERROR: El nombre ingresado ya existe en la red.",
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(
+                            this, 
+                            "ERROR: Ese nombre de usuario ya esta en uso en la red."+
+                                    "\nPrueba con otro nombre",
+                            "Error"            ,
+                            JOptionPane.PLAIN_MESSAGE,
+                            iconos.ICONO_ERROR_96);
                     break;
 //            case TIMEOUT:
 //                JOptionPane.showMessageDialog(this, "No se recibió respuesta de la placa (Tiempo agotado).",

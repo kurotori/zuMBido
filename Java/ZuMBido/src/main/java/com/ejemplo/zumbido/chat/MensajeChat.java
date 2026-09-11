@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -82,9 +83,13 @@ public class MensajeChat extends JPanel {
         lblNombreUsuario.setForeground(Color.decode(colorFuenteUsuario));
         pnlNombreUsuario.add(lblNombreUsuario);
         
-        JLabel lblMensaje = new JLabel(mensaje);
-        lblMensaje.setFont(fuentes.VENTANA_NORMAL_A_CH);
-        pnlMensaje.add(lblMensaje);
+        JTextArea txtaMensaje = new JTextArea(mensaje);
+        txtaMensaje.setLineWrap(true);
+        txtaMensaje.setEditable(false);
+        txtaMensaje.setOpaque(false);
+        txtaMensaje.setFont(fuentes.VENTANA_NORMAL_A_CH);
+        txtaMensaje.setColumns(58);
+        pnlMensaje.add(txtaMensaje);
     }
     
 }

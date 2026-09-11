@@ -4,7 +4,6 @@
  */
 package com.ejemplo.zumbido.chat;
 
-import com.ejemplo.zumbido.interfaz.VentanaSerial;
 import com.ejemplo.zumbido.sistema.Usuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,8 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
-import javax.swing.event.ListDataListener;
 
 /**
  *
@@ -27,7 +24,6 @@ public class PanelZonaUsuario extends JPanel{
 
     private JFrame ventana;
     
-    //private JList<String> lstListaUsuarios;
     private DefaultListModel<Usuario> modeloUsuarios;
     private JList<Usuario> lstListaUsuarios;
     private JPanel pnlMenuUsuario;
@@ -58,15 +54,11 @@ public class PanelZonaUsuario extends JPanel{
     
     public void actualizarUsuarios(ArrayList<Usuario> listaUsuarios){
         modeloUsuarios.removeAllElements();
-        //lstListaUsuarios.removeAll();
-        
-        //DefaultListModel<String> modelo = new DefaultListModel<String>();
-        
+
         for (Usuario usuario : listaUsuarios) {
-            modeloUsuarios.addElement(usuario);//usuario.getNombre() + ":" + usuario.getIdPlaca());
+            modeloUsuarios.addElement(usuario);
         }
-        
-        //lstListaUsuarios.setModel(modelo);
+
     }
     
     
