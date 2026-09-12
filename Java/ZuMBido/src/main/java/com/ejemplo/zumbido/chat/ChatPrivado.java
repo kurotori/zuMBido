@@ -19,7 +19,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -38,9 +37,9 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  *
  * @author sebastian
  */
-public class Chat extends JFrame implements OyenteMensajes {
+public class ChatPrivado extends JFrame implements OyenteMensajes {
 
-    public static final int LONGITUD_MAXIMA_MENSAJES = 229;
+    
     
     private Placa placa;
     private JFrame ventanaInicio;
@@ -67,7 +66,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     Iconos iconos = new Iconos();
     private GridBagConstraints gbc = new GridBagConstraints();
 
-    public Chat(Placa placa, JFrame ventanaInicio) {
+    public ChatPrivado(Placa placa, JFrame ventanaInicio) {
         this.placa = placa;
         this.ventanaInicio = ventanaInicio;
 
@@ -77,23 +76,17 @@ public class Chat extends JFrame implements OyenteMensajes {
         configurarFunciones();
     }
 
-    /**
-     * Método constructor para pruebas
-     */
-    public Chat() {
+    public ChatPrivado() {
         configurarVentana();
         configurarFunciones();
 
     }
 
-    
-    
     private void configurarVentana() {
         UIManager.put("OptionPane.background", Color.WHITE);
         
         setTitle("MicroChat");
         setSize(900, 600);
-        
 
         ImageIcon img = new ImageIcon(getClass().getResource("/imagen/icono_chat.png"));
 
@@ -134,18 +127,13 @@ public class Chat extends JFrame implements OyenteMensajes {
         pnlChat.setLayout(new GridBagLayout());
         pnlChat.setBackground(Color.white);
         
-        // Contenedores del chat
         JPanel pnlContenedorChat = new JPanel(new BorderLayout());
         pnlContenedorChat.add(pnlChat, BorderLayout.NORTH);
-        pnlContenedorChat.setBackground(Color.white);
-        pnlContenedorChat.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-        
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(0, 0, 10, 0);
 //
         scrl = new JScrollPane(pnlContenedorChat);
-        //scrl.setPreferredSize(new Dimension(0, 200));
-        
+        scrl.setPreferredSize(new Dimension(0, 200));
 
         pnlContenido.add(scrl, BorderLayout.CENTER);
 
@@ -185,7 +173,7 @@ public class Chat extends JFrame implements OyenteMensajes {
         btnEnviar.addActionListener(e -> enviarMensaje());
         txtMensaje.addActionListener(e -> enviarMensaje()); // Enviar con Enter
         actualizarUsuarios();
-        agregarMensajeGeneral("<html>Hola <b>"+placa.getUsuario().getNombre()+"</b>. Te conectaste a la red <b>zuMBido-MicroChat</b></html>");
+        agregarMensajeGeneral("Te conectaste a la red zuMBido-MicroChat");
     }
 
     /**
@@ -233,15 +221,13 @@ public class Chat extends JFrame implements OyenteMensajes {
     private void agregarMensajeGeneral(String msj) {
         SwingUtilities.invokeLater(
                 () -> {
-                    //JLabel lbl = new JLabel(msj);
-                    //lbl.setFont(fuentes.VENTANA_NORMAL_A_CH);
-                    MensajeChat pnlMsj = new MensajeChat(msj);
+                    JLabel lbl = new JLabel(msj);
+                    lbl.setFont(fuentes.VENTANA_NORMAL_A_CH);
                     gbc.gridx = 0;
                     gbc.gridy = cantMensajes++;
                     gbc.weightx = 1.0;
                     gbc.weighty = 0.0;
-                    //pnlChat.add(lbl, gbc);
-                    pnlChat.add(pnlMsj, gbc);
+                    pnlChat.add(lbl, gbc);
                     pnlChat.revalidate();
                     pnlChat.repaint();
 
@@ -258,10 +244,10 @@ public class Chat extends JFrame implements OyenteMensajes {
         String m = txtMensaje.getText().trim();
         if (m.length() > 0) {
             
-            if (m.length() > LONGITUD_MAXIMA_MENSAJES) {
+            if (m.length() > placa.LONGITUD_MAXIMA_MENSAJES) {
                 JOptionPane.showMessageDialog(
                         this, 
-                        "No puedo enviar un mensaje \n con más de " + LONGITUD_MAXIMA_MENSAJES + " caracteres.", 
+                        "No puedo enviar un mensaje \n con más de " + placa.LONGITUD_MAXIMA_MENSAJES + " caracteres.", 
                         placa.getId() + " dice:", 
                         JOptionPane.PLAIN_MESSAGE,
                         iconos.ICONO_ERROR_96);
@@ -332,7 +318,7 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new Chat();
+            new ChatPrivado();
         });
     }
 
@@ -342,19 +328,5 @@ public class Chat extends JFrame implements OyenteMensajes {
             actualizarUsuarios();
         });
     }
-
-    @Override
-    public void onUsuarioDesconectado(Usuario usuario) {
-        SwingUtilities.invokeLater(
-                ()->{
-                    agregarMensajeGeneral(
-                            "<html><b>"+usuario.getNombre()+
-                            "</b> se ha desconectado</html>"
-                    );
-                }
-        );
-    }
-    
-    
 
 }

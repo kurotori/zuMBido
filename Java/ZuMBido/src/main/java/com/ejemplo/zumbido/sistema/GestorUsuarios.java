@@ -33,8 +33,10 @@ public class GestorUsuarios {
                         if (placa != null && placa.getUsuarios().getCantUsuarios() > 0) {
                             for (Usuario usuario : placa.getUsuarios().getListaUsuarios()) {
                                 if ((tiempo - usuario.getTiempoUltimoMsg()) > 5000) {
+                                    
                                     placa.getUsuarios().quitarUsuario(usuario);
                                     placa.getProcesador().getOyente().onActualizarUsuarios();
+                                    placa.getProcesador().getOyente().onUsuarioDesconectado(usuario);
                                 }
                             }
                         }

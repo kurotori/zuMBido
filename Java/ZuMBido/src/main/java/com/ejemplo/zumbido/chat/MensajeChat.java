@@ -14,9 +14,12 @@ import java.awt.FlowLayout;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -27,7 +30,8 @@ public class MensajeChat extends JPanel {
     private String mensaje;
     private Usuario usuario;
     private LocalDateTime marcaDeTiempo;
-    private DateTimeFormatter formatoTiempo = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private DateTimeFormatter formatoTiempoA = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private DateTimeFormatter formatoTiempoB = DateTimeFormatter.ofPattern("HH:mm:ss");
     
     private JPanel pnlNombreUsuario;
     private JPanel pnlMensaje;
@@ -42,19 +46,31 @@ public class MensajeChat extends JPanel {
         this.marcaDeTiempo = LocalDateTime.now();
         configurar();
     }
+
+    public MensajeChat(String mensajeSistema) {
+        this.mensaje = mensajeSistema;
+        
+        this.usuario = null;
+        this.mio = false;
+        this.marcaDeTiempo = LocalDateTime.now();
+        
+        configurarMsgSistema();
+    }
+    
+    
     
     private void configurar(){
-        setSize(650, 60);
-        setPreferredSize(new Dimension(700,60));
+        //setSize(650, 60);
+        setPreferredSize(new Dimension(650,60));
         putClientProperty("FlatLaf.style", "arc: 16; background: #FFFFFF;");
         setLayout(new BorderLayout());
         
-        pnlNombreUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        pnlNombreUsuario = new JPanel();//new FlowLayout(FlowLayout.CENTER));
+        pnlNombreUsuario.setLayout(new BoxLayout(pnlNombreUsuario, BoxLayout.Y_AXIS));
         pnlNombreUsuario.setPreferredSize(new Dimension(150, 0));
         
         String colorUsuario = Colores.extraerColorDeId(usuario.getIdPlaca());
         String colorFuenteUsuario = Colores.obtenerColorTextoHex(colorUsuario);
-        System.out.println("CU: "+colorUsuario + " CFU: "+colorFuenteUsuario);
         
         pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background:"+colorUsuario+";");
         if (mio) {
@@ -65,7 +81,7 @@ public class MensajeChat extends JPanel {
         }
         
         pnlMensaje = new JPanel();
-        pnlMensaje.setPreferredSize(new Dimension(540,0));
+        pnlMensaje.setPreferredSize(new Dimension(500,0));
         
         if (mio) {
             pnlMensaje.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -78,18 +94,47 @@ public class MensajeChat extends JPanel {
             add(pnlMensaje, BorderLayout.EAST);
         }
         
+        pnlNombreUsuario.add(Box.createVerticalStrut(5));
+        
         JLabel lblNombreUsuario = new JLabel(usuario.getNombre());
         lblNombreUsuario.setFont(fuentes.VENTANA_NEGRITA_A_CH);
+        lblNombreUsuario.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNombreUsuario.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
         lblNombreUsuario.setForeground(Color.decode(colorFuenteUsuario));
         pnlNombreUsuario.add(lblNombreUsuario);
+        
+        pnlNombreUsuario.add(Box.createVerticalStrut(5));
+        
+        
+        JLabel lblMarcaTiempo = new JLabel();
+        lblMarcaTiempo.setText(
+                "<html>"+ marcaDeTiempo.format(formatoTiempoA) +"<br>"+
+                        marcaDeTiempo.format(formatoTiempoB) + "</html>"
+        );
+        lblMarcaTiempo.setFont(fuentes.VENTANA_NORMAL_A_XCH);
+        lblMarcaTiempo.setForeground(Color.decode(colorFuenteUsuario));
+        lblNombreUsuario.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+        pnlNombreUsuario.add(lblMarcaTiempo);
         
         JTextArea txtaMensaje = new JTextArea(mensaje);
         txtaMensaje.setLineWrap(true);
         txtaMensaje.setEditable(false);
         txtaMensaje.setOpaque(false);
         txtaMensaje.setFont(fuentes.VENTANA_NORMAL_A_CH);
-        txtaMensaje.setColumns(58);
+        txtaMensaje.setColumns(52);
         pnlMensaje.add(txtaMensaje);
+    }
+    
+    private void configurarMsgSistema(){
+        setPreferredSize(new Dimension(650,30));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
+        putClientProperty("FlatLaf.style", "arc: 16; background: #FEE6F5;");
+        
+        JLabel lblMsj = new JLabel(mensaje);
+        lblMsj.setFont(fuentes.VENTANA_NORMAL_A_CH);
+        lblMsj.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        add(lblMsj);
     }
     
 }
