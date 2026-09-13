@@ -5,9 +5,9 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up JDK 25
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '25'
           distribution: 'temurin'
@@ -15,7 +15,7 @@ jobs:
         run: mvn clean package
       - name: Create EXE with jpackage
         run: |
-          jpackage --name "ZuMBido" --input jdeploy-bundle/ --main-jar ZuMBido-0.1-ALPHA-jar-with-dependencies.jar --main-class com.ejemplo.zumbido.interfaz.InicioBase --type exe
+          jpackage --name "ZuMBido" --input Java/Zumbido --main-jar ZuMBido-0.1-ALPHA-jar-with-dependencies.jar --main-class com.ejemplo.zumbido.interfaz.InicioBase --type exe
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
