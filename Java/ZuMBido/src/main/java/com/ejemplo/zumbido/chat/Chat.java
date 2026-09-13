@@ -14,11 +14,11 @@ import com.ejemplo.zumbido.sistema.OyenteMensajes;
 import com.ejemplo.zumbido.sistema.Usuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -41,6 +41,8 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 public class Chat extends JFrame implements OyenteMensajes {
 
     public static final int LONGITUD_MAXIMA_MENSAJES = 229;
+    public static final int LONGITUD_MAXIMA_MENSAJES_PRIV = 212;
+    public static final int CANT_MAX_MENSAJES = 50;
     
     private Placa placa;
     private JFrame ventanaInicio;
@@ -60,6 +62,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     private JScrollPane scrl;
 
     private int cantMensajes = 0;
+    private ArrayList<JPanel> mensajesRegistrados = new ArrayList<>();
 
     Fuentes fuentes = new Fuentes();
     Iconos iconos = new Iconos();
@@ -142,6 +145,8 @@ public class Chat extends JFrame implements OyenteMensajes {
         gbc.insets = new Insets(0, 0, 10, 0);
 //
         scrl = new JScrollPane(pnlContenedorChat);
+        scrl.getVerticalScrollBar().setUnitIncrement(20);
+
         //scrl.setPreferredSize(new Dimension(0, 200));
         
 
@@ -184,6 +189,7 @@ public class Chat extends JFrame implements OyenteMensajes {
         txtMensaje.addActionListener(e -> enviarMensaje()); // Enviar con Enter
         actualizarUsuarios();
         agregarMensajeGeneral("<html>Hola <b>"+placa.getUsuario().getNombre()+"</b>. Te conectaste a la red <b>zuMBido-MicroChat</b></html>");
+        txtMensaje.requestFocus();
     }
 
     /**
@@ -219,7 +225,10 @@ public class Chat extends JFrame implements OyenteMensajes {
                     pnlChat.add(pnlMsj, gbc);
                     pnlChat.revalidate();
                     pnlChat.repaint();
-
+                    
+                    mensajesRegistrados.add(pnlMsj);
+                    purgarMensajes();
+                    
                     SwingUtilities.invokeLater(() -> {
                         scrl.getVerticalScrollBar().setValue(scrl.getVerticalScrollBar().getMaximum());
                     });
@@ -228,20 +237,25 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     }
 
+    /**
+     * Agrega un mensaje general del sistema al panel del chat
+     * @param msj 
+     */
     private void agregarMensajeGeneral(String msj) {
         SwingUtilities.invokeLater(
                 () -> {
-                    //JLabel lbl = new JLabel(msj);
-                    //lbl.setFont(fuentes.VENTANA_NORMAL_A_CH);
                     MensajeChat pnlMsj = new MensajeChat(msj);
+                    
                     gbc.gridx = 0;
                     gbc.gridy = cantMensajes++;
                     gbc.weightx = 1.0;
                     gbc.weighty = 0.0;
-                    //pnlChat.add(lbl, gbc);
                     pnlChat.add(pnlMsj, gbc);
                     pnlChat.revalidate();
                     pnlChat.repaint();
+                    
+                    mensajesRegistrados.add(pnlMsj);
+                    purgarMensajes();
 
                     SwingUtilities.invokeLater(() -> {
                         scrl.getVerticalScrollBar().setValue(scrl.getVerticalScrollBar().getMaximum());
@@ -276,6 +290,18 @@ public class Chat extends JFrame implements OyenteMensajes {
             
         }
 
+    }
+    
+    
+    private void purgarMensajes(){
+        if (mensajesRegistrados.size() > CANT_MAX_MENSAJES) {
+            JPanel pnl = mensajesRegistrados.get(0);
+            pnlChat.remove(pnl);
+            pnlChat.revalidate();
+            pnlChat.repaint();
+            mensajesRegistrados.remove(pnl);
+            
+        }
     }
 
     // -------

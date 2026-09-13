@@ -42,7 +42,7 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
     
     
     private Placa placa;
-    private JFrame ventanaInicio;
+    private Chat ventanaChat;
 
     private JPanel pnlChat;
 
@@ -64,9 +64,9 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
     Iconos iconos = new Iconos();
     private GridBagConstraints gbc = new GridBagConstraints();
 
-    public ChatPrivado(Placa placa, JFrame ventanaInicio) {
+    public ChatPrivado(Placa placa, Chat ventanaChat) {
         this.placa = placa;
-        this.ventanaInicio = ventanaInicio;
+        this.ventanaChat = ventanaChat;
 
         configurarVentana();
         agregarIdPlaca();
