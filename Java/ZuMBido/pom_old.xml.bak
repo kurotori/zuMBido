@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.ejemplo</groupId>
+    <artifactId>ZuMBido</artifactId>
+    <version>0.1 ALPHA</version>
+    <packaging>jar</packaging>
+    <build>
+        <directory>
+            ${project.basedir}/${project.version}
+        </directory>
+    </build>
+    
+    <configuration>
+        <archive>
+            <manifest>
+                <addClasspath>true</addClasspath>
+                
+                <mainClass>com.ejemplo.zumbido.interfaz.InicioBase</mainClass>
+            </manifest>
+        </archive>
+    </configuration>
+    
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>25</maven.compiler.release>
+        <exec.mainClass>com.ejemplo.zumbido.ZuMBido</exec.mainClass>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.fazecast</groupId>
+            <artifactId>jSerialComm</artifactId>
+            <version>2.11.4</version>
+        </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/com.formdev/flatlaf -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.7.1</version>
+        </dependency>
+    </dependencies>
+    
+</project>
