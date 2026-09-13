@@ -45,9 +45,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     private Placa placa;
     private JFrame ventanaInicio;
 
-    //private AreaChat areaChat;
     private JPanel pnlChat;
-    //private JTextArea txtHistorial;
 
     private JTextField txtMensaje;
     private JButton btnEnviar;
