@@ -15,7 +15,7 @@ jobs:
         run: mvn clean package
       - name: Create EXE with jpackage
         run: |
-          jpackage --name "ZuMBido" --input target/ --main-jar ZuMBido-0.1-ALPHA-jar-with-dependencies.jar --main-class com.ejemplo.zumbido.interfaz.InicioBase --type exe
+          jpackage --name "ZuMBido" --input jdeploy-bundle/ --main-jar ZuMBido-0.1-ALPHA-jar-with-dependencies.jar --main-class com.ejemplo.zumbido.interfaz.InicioBase --type exe
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
