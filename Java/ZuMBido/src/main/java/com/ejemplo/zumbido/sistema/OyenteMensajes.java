@@ -29,5 +29,7 @@ public interface OyenteMensajes {
     
     default void onActualizarUsuarios(){}
     
+    default void onUsuarioDesconectado(Usuario usuario){}
+    
 }
 

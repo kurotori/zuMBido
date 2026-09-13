@@ -37,9 +37,11 @@ public class AreaChat extends JScrollPane {
                     String alineacion = mio ? "right" : "left";
 
                     String html = String.format(
-                            "<div align='%s' style='margin: 4px;'>"
+                            "<div align='%s' style='margin: 4px; width:85%%; border:1px solid black; border-radius:10px;'>"
                             + "  <b style='color:%s;'>%s:</b> "
-                            + "  <span style='background-color:" + fondo + "; padding:4px;'>%s</span>"
+                            + "  <span style='background-color:" + fondo
+                            + ""
+                            + "; padding:4px;'>%s</span>"
                             + "</div>", alineacion, "#202655", usuario.getNombre(), mensaje
                     );
 

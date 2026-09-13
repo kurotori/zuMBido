@@ -16,6 +16,9 @@ public class Mensajes {
     
     public static final String COMANDO_SISTEMA = "c";
     
+    /**
+     * r
+     */
     public static final String COMANDO_RED = "r";
     
     // 1.1 - Mensajes de la Placa

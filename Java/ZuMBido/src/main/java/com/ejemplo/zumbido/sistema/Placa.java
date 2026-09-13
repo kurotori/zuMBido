@@ -24,7 +24,8 @@ public class Placa {
     
     public static final int ACTIVA = 0;
     public static final int INACTIVA = 1;
-
+    public static final int LONGITUD_MAXIMA_MENSAJES = 229;
+    
     private VentanaSerial ventana;
 
     private String id;
