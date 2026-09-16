@@ -7,7 +7,7 @@ VERSION="0.1.3"
 
 tiempo=0
 INTERVALO_KEEP_ALIVE = 5000
-tiempoKa=running_time() +  INTERVALO_KEEP_ALIVE#Temporizador para detectar conexión activa
+tiempoKa=running_time() +  INTERVALO_KEEP_ALIVE #Temporizador para detectar conexión activa
 tempoAnterior=0
 
 ledsOn = []
@@ -55,7 +55,6 @@ def desactivarRadio():
     global radioAct
     """Desactiva la comunicación radial y notifica a la red que la placa se desconectó
     """
-    #agregarMensaje('lo:'+ID_PLACA) # Se envía un mensaje de logout ("lo") notificando a la red
     radio.off()
     display.set_pixel(1,0,0)
     radioAct = False
@@ -81,7 +80,6 @@ def enviarRadio(mensaje):
 
         except RuntimeError:
             parpadearLed(2)
-    #parpadear(4,0,9,100)
     
 def agregarMensaje(mensaje, prioritario=False):
     """Agrega un mensaje a la cola de mensajes, estableciendo su prioridad
@@ -97,13 +95,6 @@ def agregarMensaje(mensaje, prioritario=False):
             else:
                 mensajes.append(mensaje)
     
-
-
-# def parpadear(xLed, yLed, intensidad, tiempo):
-#     fin = running_time() + tiempo
-#     while(running_time()<fin):
-#         display.set_pixel(xLed,yLed,intensidad);
-#     display.set_pixel(xLed,yLed,0);
 
 def parpadearLed(led):
     ledsOn.append(led)
@@ -209,20 +200,18 @@ while True:
     if(running_time() > tiempo):
         parpadear("off")
     
-    # if(tiempo>=tiempoKa):
-    #     enviarSerial("c:ka")
-    #     tiempoKa = tiempo + 1000
-    # if(tiempo>=(tiempoKa-100)):
-    #     conexion=False
-    # if(conexion==True):
-    #     
-    # else:
-    #     display.set_pixel(0,0,0)
+
     # -------------------------------------------------------------
     # 1. RADIO -> SERIAL: Mensajes recibidos de otros micro:bits
+    #
+    #   NOTA: A futuro se planea que este sistema use la función radio.receive_full() a fin
+    #       de obtener información de la fuerza de la señal del mensaje entrante, para usarla
+    #       en la interfáz de usuario.
     # -------------------------------------------------------------
     if radioAct:
+        
         mensaje_radio = radio.receive()
+        
         if mensaje_radio:
             # Reenvía el mensaje directamente a la PC terminado en un salto de línea
             uart.write('r:'+mensaje_radio + '\n')
@@ -255,26 +244,4 @@ while True:
                         gc.collect()
                 else:
                     buffer_serial.append(b)
-    
-    
-    # -->> Sistema de lectura serial anterior
-        # if bloque:
-        #     for char_byte in bloque:
-        #         char = chr(char_byte)
-        #         if char == '\n' or char == '\r':
-        #             comando = buffer_serial.strip()
-        #             if comando:
-        #                 # Emitir el comando a la red RF
-                        
-        #                 # ** PARA PRUEBAS **
-        #                 enviarSerial("recibido:" + comando)
-                        
-        #                 # Se evalúa el comando recibido
-        #                 evaluarComando(comando)
-        #                 # radio.send(comando)
-        #                 #enviarRadio(comando)
-        #                 buffer_serial = ""
-        #         else:
-        #             buffer_serial += char
     sleep(10)
-    #gc.collect()
