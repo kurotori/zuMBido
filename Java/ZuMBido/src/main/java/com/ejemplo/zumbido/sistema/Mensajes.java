@@ -41,6 +41,7 @@ public class Mensajes {
     public static final String SUBR_KEEP_ALIVE = "ka";
     public static final String SUBR_HOLA = "hl";
     public static final String SUBR_MENSAJE = "m";
+    public static final String SUBR_MENSAJE_PRIVADO = "p";
     
     
     //4 - Sub Comandos internos

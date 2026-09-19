@@ -59,4 +59,14 @@ La aplicación solicita la identificación de la placa. La placa responde con un
 
 `c:ka`
 
-La aplicación notifica a la placa que esta presente para mantener la conexión activa. Se emite cada 5 segundos desde la aplicación. La placa no responde a la aplicación, pero actualiza la marca de tiempo correspondiente (variable `tiempoKa`), y emite un [mensaje radial de conexión activa].  
+La aplicación notifica a la placa que esta presente para mantener la conexión activa. Se emite cada 5 segundos desde la aplicación. La placa no responde a la aplicación, pero actualiza la marca de tiempo correspondiente (variable `tiempoKa`), y emite un [mensaje radial de conexión activa].
+
+### 2.2- De Placa a Aplicación
+
+### 2.3- De Placa a Placa
+
+Todos estos mensajes son **radiales**.
+
+#### m - Mensajes Públicos
+
+#### p - Mensajes Privados (de usuario a usuario)

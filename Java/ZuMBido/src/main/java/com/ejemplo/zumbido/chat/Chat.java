@@ -44,6 +44,8 @@ public class Chat extends JFrame implements OyenteMensajes {
     public static final int LONGITUD_MAXIMA_MENSAJES_PRIV = 212;
     public static final int CANT_MAX_MENSAJES = 50;
     
+    
+    
     private Placa placa;
     private JFrame ventanaInicio;
 
@@ -63,6 +65,8 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     private int cantMensajes = 0;
     private ArrayList<JPanel> mensajesRegistrados = new ArrayList<>();
+    
+    private ArrayList<ChatPrivado> chatsPrivados = new ArrayList<>();
 
     Fuentes fuentes = new Fuentes();
     Iconos iconos = new Iconos();
@@ -188,7 +192,7 @@ public class Chat extends JFrame implements OyenteMensajes {
         btnEnviar.addActionListener(e -> enviarMensaje());
         txtMensaje.addActionListener(e -> enviarMensaje()); // Enviar con Enter
         actualizarUsuarios();
-        agregarMensajeGeneral("<html>Hola <b>"+placa.getUsuario().getNombre()+"</b>. Te conectaste a la red <b>zuMBido-MicroChat</b></html>");
+        agregarMensajeGeneral("<html>Hola <b>"+getPlaca().getUsuario().getNombre()+"</b>. Te conectaste a la red <b>zuMBido-MicroChat</b></html>");
         txtMensaje.requestFocus();
     }
 
@@ -197,11 +201,10 @@ public class Chat extends JFrame implements OyenteMensajes {
      */
     private void actualizarUsuarios() {
 
-        pnlLatUsuario.actualizarUsuarios(placa.getUsuarios().getListaUsuarios());
-        SwingUtilities.invokeLater(
-                () -> {
-                    System.out.println(Textos.CHAT_ET_USUARIOS_CONECTADOS + "-->" + placa.getUsuarios().getCantUsuarios());
-                    lblcantUsuarios.setText(Textos.CHAT_ET_USUARIOS_CONECTADOS + placa.getUsuarios().getCantUsuarios());
+        pnlLatUsuario.actualizarUsuarios(getPlaca().getUsuarios().getListaUsuarios());
+        SwingUtilities.invokeLater(() -> {
+                    System.out.println(Textos.CHAT_ET_USUARIOS_CONECTADOS + "-->" + getPlaca().getUsuarios().getCantUsuarios());
+                    lblcantUsuarios.setText(Textos.CHAT_ET_USUARIOS_CONECTADOS + getPlaca().getUsuarios().getCantUsuarios());
                 }
         );
 
@@ -265,16 +268,19 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     }
 
+    
+    /**
+     * Envía un mensaje al chat general obteniendo los datos de la ventana
+     */
     private void enviarMensaje() {
 
         String m = txtMensaje.getText().trim();
         if (m.length() > 0) {
             
             if (m.length() > LONGITUD_MAXIMA_MENSAJES) {
-                JOptionPane.showMessageDialog(
-                        this, 
+                JOptionPane.showMessageDialog(this, 
                         "No puedo enviar un mensaje \n con más de " + LONGITUD_MAXIMA_MENSAJES + " caracteres.", 
-                        placa.getId() + " dice:", 
+                        getPlaca().getId() + " dice:", 
                         JOptionPane.PLAIN_MESSAGE,
                         iconos.ICONO_ERROR_96);
                 txtMensaje.requestFocus();
@@ -282,17 +288,29 @@ public class Chat extends JFrame implements OyenteMensajes {
             }
             else{
                 String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
-                placa.enviarComando(msj);
-                agregarMensaje(placa.getUsuario(), m, true);
+                getPlaca().enviarComando(msj);
+                agregarMensaje(getPlaca().getUsuario(), m, true);
                 txtMensaje.setText("");
-            }
-            
-            
+            }            
         }
-
     }
     
     
+    public void abrirChatPrivado(Usuario usuario){
+        ChatPrivado cp = new ChatPrivado(this, usuario);
+        
+        for (ChatPrivado chatP: chatsPrivados ) {
+            if(chatP.getOtroUsuario().getIdPlaca().equals(usuario.getIdPlaca())){
+                chatP.
+            }
+        }
+        
+    }
+    
+    
+    /**
+     * Limpia los mensajes del historial cuando superan el límite establecido
+     */
     private void purgarMensajes(){
         if (mensajesRegistrados.size() > CANT_MAX_MENSAJES) {
             JPanel pnl = mensajesRegistrados.get(0);
@@ -327,9 +345,16 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     @Override
     public void onMensajePublico(String mensaje, String idPlaca) {
-        Usuario usuario = placa.getUsuarios().buscarPorId(idPlaca);
+        Usuario usuario = getPlaca().getUsuarios().buscarPorId(idPlaca);
         agregarMensaje(usuario, mensaje, false);
     }
+
+    @Override
+    public void onMensajePrivado(String mensaje, String idPlaca) {
+        
+    }
+    
+    
 
     @Override
     public void onNuevoLogin(Usuario usuario) {
@@ -347,18 +372,13 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     // ------- 
     private void agregarNombreUsuario() {
-        lblUsuario.setText(placa.getUsuario().getNombre());
+        lblUsuario.setText(getPlaca().getUsuario().getNombre());
     }
 
     private void agregarIdPlaca() {
-        lblEstado.setText("Placa: " + placa.getId() + " en " + placa.getPuerto().getSystemPortName());
+        lblEstado.setText("Placa: " + getPlaca().getId() + " en " + getPlaca().getPuerto().getSystemPortName());
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new Chat();
-        });
-    }
 
     @Override
     public void onActualizarUsuarios() {
@@ -378,7 +398,24 @@ public class Chat extends JFrame implements OyenteMensajes {
                 }
         );
     }
+
+    /**
+     * @return the placa
+     */
+    public Placa getPlaca() {
+        return placa;
+    }
     
     
+    
+    /**
+     * Método para pruebas
+     * @param args 
+     */
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new Chat();
+        });
+    }
 
 }

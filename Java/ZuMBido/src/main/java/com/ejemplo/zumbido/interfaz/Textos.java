@@ -23,5 +23,8 @@ public class Textos {
     public static final String CHAT_ET_PLACA = "<html><b>Placa: </b></html>";
     public static final String CHAT_ET_USUARIOS_CONECTADOS = "Usuarios Conectados: ";
     
+    public static final String CHAT_PRIVADO_ET_CHATEANDO_CON = "<html><b>Hablando con </b></html>";
+    
+    
     
 }

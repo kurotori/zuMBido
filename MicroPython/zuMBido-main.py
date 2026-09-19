@@ -66,6 +66,7 @@ def enviarSerial(texto):
         texto (string): mensaje a ser enviado a la App
     """
     uart.write(texto + '\r\n')
+    gc.collect()
     
 def enviarRadio(mensaje):
     """Envía un mensaje por el sistema radial de la placa
@@ -214,7 +215,12 @@ while True:
         
         if mensaje_radio:
             # Reenvía el mensaje directamente a la PC terminado en un salto de línea
-            uart.write('r:'+mensaje_radio + '\n')
+            if(mensaje_radio[0] == 'p'):
+                datos=mensaje_radio.split(':')
+                if(datos[len(datos) - 1] == ID_PLACA):
+                    enviarSerial('r:'+mensaje_radio)
+            else:        
+                enviarSerial('r:'+mensaje_radio)
             parpadearLed(3)
 
     # -------------------------------------------------------------

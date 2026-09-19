@@ -37,12 +37,10 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  *
  * @author sebastian
  */
-public class ChatPrivado extends JFrame implements OyenteMensajes {
+public class ChatPrivado extends JFrame{
 
-    
-    
-    private Placa placa;
     private Chat ventanaChat;
+    private Usuario otroUsuario;
 
     private JPanel pnlChat;
 
@@ -64,12 +62,13 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
     Iconos iconos = new Iconos();
     private GridBagConstraints gbc = new GridBagConstraints();
 
-    public ChatPrivado(Placa placa, Chat ventanaChat) {
-        this.placa = placa;
+    public ChatPrivado(Chat ventanaChat, Usuario usuario) {
+   
         this.ventanaChat = ventanaChat;
-
+        this.otroUsuario = usuario;
+        
         configurarVentana();
-        agregarIdPlaca();
+        //agregarIdPlaca();
         agregarNombreUsuario();
         configurarFunciones();
     }
@@ -77,14 +76,17 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
     public ChatPrivado() {
         configurarVentana();
         configurarFunciones();
-
+        
+        Usuario pruebas = new Usuario("Fulano", "abcdefgh12345");
+        //this.
     }
 
     private void configurarVentana() {
         UIManager.put("OptionPane.background", Color.WHITE);
         
         setTitle("MicroChat");
-        setSize(900, 600);
+        setSize(700, 500);
+        setResizable(false);
 
         ImageIcon img = new ImageIcon(getClass().getResource("/imagen/icono_chat.png"));
 
@@ -96,8 +98,8 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
         setLayout(new BorderLayout());
         getContentPane().setBackground(Color.white);
 
-        pnlLatUsuario = new PanelZonaUsuario(this);
-        add(pnlLatUsuario, BorderLayout.WEST);
+        //pnlLatUsuario = new PanelZonaUsuario(this);
+        //add(pnlLatUsuario, BorderLayout.WEST);
 
         // Panel Superior: Selección de Puerto
         JPanel pnlSuperior = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -105,7 +107,7 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
         LabelConImagen lblIcono = new LabelConImagen(64, 64, "/imagen/icono_chat.png");
         pnlSuperior.add(lblIcono);
 
-        JLabel lblEtUsuario = new JLabel(Textos.CHAT_ET_USUARIO);
+        JLabel lblEtUsuario = new JLabel(Textos.CHAT_PRIVADO_ET_CHATEANDO_CON);
         lblEtUsuario.setFont(fuentes.VENTANA_NEGRITA_A);
         pnlSuperior.add(lblEtUsuario);
 
@@ -150,15 +152,15 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
 
         pnlEstado.add(Box.createHorizontalStrut(10));
 
-        lblEstado = new JLabel(Textos.CHAT_ET_PLACA);
-        lblEstado.setFont(fuentes.VENTANA_NEGRITA_A);
-        pnlEstado.add(lblEstado);
+//        lblEstado = new JLabel(Textos.CHAT_ET_PLACA);
+//        lblEstado.setFont(fuentes.VENTANA_NEGRITA_A);
+//        pnlEstado.add(lblEstado);
 
         pnlEstado.add(Box.createHorizontalGlue());
 
-        lblcantUsuarios = new JLabel(Textos.CHAT_ET_USUARIOS_CONECTADOS);
-        lblcantUsuarios.setFont(fuentes.VENTANA_NEGRITA_A);
-        pnlEstado.add(lblcantUsuarios);
+//        lblcantUsuarios = new JLabel(Textos.CHAT_ET_USUARIOS_CONECTADOS);
+//        lblcantUsuarios.setFont(fuentes.VENTANA_NEGRITA_A);
+//        pnlEstado.add(lblcantUsuarios);
 
         pnlEstado.add(Box.createHorizontalStrut(35));
 
@@ -170,24 +172,13 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
     private void configurarFunciones() {
         btnEnviar.addActionListener(e -> enviarMensaje());
         txtMensaje.addActionListener(e -> enviarMensaje()); // Enviar con Enter
-        actualizarUsuarios();
-        agregarMensajeGeneral("Te conectaste a la red zuMBido-MicroChat");
+        agregarMensajeGeneral("Estas hablando con " + getOtroUsuario().getNombre());
+    }
+    
+    private void agregarNombreUsuario() {
+        lblUsuario.setText(getOtroUsuario().getNombre());
     }
 
-    /**
-     * Inicia el proceso de actualizar el listado de usuarios
-     */
-    private void actualizarUsuarios() {
-
-        pnlLatUsuario.actualizarUsuarios(placa.getUsuarios().getListaUsuarios());
-        SwingUtilities.invokeLater(
-                () -> {
-                    System.out.println(Textos.CHAT_ET_USUARIOS_CONECTADOS + "-->" + placa.getUsuarios().getCantUsuarios());
-                    lblcantUsuarios.setText(Textos.CHAT_ET_USUARIOS_CONECTADOS + placa.getUsuarios().getCantUsuarios());
-                }
-        );
-
-    }
 
     /**
      * Agrega un mensaje al panel de chat
@@ -242,11 +233,11 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
         String m = txtMensaje.getText().trim();
         if (m.length() > 0) {
             
-            if (m.length() > placa.LONGITUD_MAXIMA_MENSAJES) {
+            if (m.length() > ventanaChat.LONGITUD_MAXIMA_MENSAJES_PRIV) {
                 JOptionPane.showMessageDialog(
                         this, 
-                        "No puedo enviar un mensaje \n con más de " + placa.LONGITUD_MAXIMA_MENSAJES + " caracteres.", 
-                        placa.getId() + " dice:", 
+                        "No puedo enviar un mensaje privada \n con más de " + ventanaChat.LONGITUD_MAXIMA_MENSAJES_PRIV + " caracteres.", 
+                        ventanaChat.getPlaca().getId() + " dice:", 
                         JOptionPane.PLAIN_MESSAGE,
                         iconos.ICONO_ERROR_96);
                 txtMensaje.requestFocus();
@@ -254,8 +245,8 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
             }
             else{
                 String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
-                placa.enviarComando(msj);
-                agregarMensaje(placa.getUsuario(), m, true);
+                //placa.enviarComando(msj);
+                //agregarMensaje(placa.getUsuario(), m, true);
                 txtMensaje.setText("");
             }
             
@@ -264,67 +255,22 @@ public class ChatPrivado extends JFrame implements OyenteMensajes {
 
     }
 
-    // -------
-    @Override
-    public void onBoardIdRecibido(String id) {
-        OyenteMensajes.super.onBoardIdRecibido(id); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
 
-    @Override
-    public void onGrupoRadioCambiado(int grupo) {
-        OyenteMensajes.super.onGrupoRadioCambiado(grupo); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public void onMensajeGenerico(String comando, String subcomando, String[] parametros) {
-
-    }
-
-    @Override
-    public void onMensajePlaca(String titulo, String texto, boolean esError) {
-        OyenteMensajes.super.onMensajePlaca(titulo, texto, esError); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public void onMensajePublico(String mensaje, String idPlaca) {
-        Usuario usuario = placa.getUsuarios().buscarPorId(idPlaca);
-        agregarMensaje(usuario, mensaje, false);
-    }
-
-    @Override
-    public void onNuevoLogin(Usuario usuario) {
-        actualizarUsuarios();
-        //areaChat.
-        //txtHistorial.append("[Se ha conectado " + usuario.getNombre() + " desde la placa " + usuario.getIdPlaca() + "]\n");
-        agregarMensajeGeneral("<html><i>Se ha conectado <b>"+usuario.getNombre()+"</b></i></html>");
-    }
-
-    @Override
-    public void onHola() {
-        //pnlLatUsuario.actualizarUsuarios(placa.getUsuarios().getListaUsuarios());
-        actualizarUsuarios();
-    }
-
-    // ------- 
-    private void agregarNombreUsuario() {
-        lblUsuario.setText(placa.getUsuario().getNombre());
-    }
-
-    private void agregarIdPlaca() {
-        lblEstado.setText("Placa: " + placa.getId() + " en " + placa.getPuerto().getSystemPortName());
-    }
+   
 
     public static void main(String[] args) {
+        
         SwingUtilities.invokeLater(() -> {
             new ChatPrivado();
         });
     }
 
-    @Override
-    public void onActualizarUsuarios() {
-        SwingUtilities.invokeLater(() -> {
-            actualizarUsuarios();
-        });
+    /**
+     * @return the otroUsuario
+     */
+    public Usuario getOtroUsuario() {
+        return otroUsuario;
     }
+
 
 }

@@ -120,13 +120,15 @@ public class ProcesadorMensajes {
                     }
                 }
                 break;
-
+                
+            //Automático, independiente de ventana
             case Mensajes.SUBR_NOMBRE_REPETIDO:
                 if (placa.getUsuario() == null && oyente != null) {
                     oyente.onNombreRepetido();
                 }
                 break;
-
+            
+            //Recepción de mensajes públicos
             case Mensajes.SUBR_MENSAJE:
                 if (placa.getUsuario() != null) {
                     Usuario u = placa.getUsuarios().buscarPorId(cadena[1]);
@@ -135,16 +137,26 @@ public class ProcesadorMensajes {
                 }
 
                 break;
+            
+            //Registro de un usuario conectado al entrar a la red.
             case Mensajes.SUBR_HOLA:
                 Usuario nuevo = new Usuario(cadena[0], cadena[1]);
                 placa.getUsuarios().agregarUsuario(nuevo);
                 placa.solicitarActualizarUsuarios();
                 break;
 
+            //Actualiza el registro de un usuario al recibir su señal "keep alive"
             case Mensajes.SUBR_KEEP_ALIVE:
-                System.out.println("KA");
+
                 Usuario u = placa.getUsuarios().buscarPorId(cadena[0]);
                 placa.getUsuarios().actualizarTiempoUsuario(u);
+                break;
+                
+            // Maneja la llegada de un mensaje privado
+            case Mensajes.SUBR_MENSAJE_PRIVADO:
+                Usuario e = placa.getUsuarios().buscarPorId(cadena[0]);
+                placa.getUsuarios().actualizarTiempoUsuario(e);
+                oyente.onMensajePublico(cadena[0], cadena[1]);
                 break;
         }
     }

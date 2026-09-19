@@ -18,6 +18,8 @@ public interface OyenteMensajes {
     default void onMensajePlaca(String titulo, String texto, boolean esError) {}
     
     default void onMensajePublico(String mensaje, String idPlaca){};
+    
+    default void onMensajePrivado(String mensaje, String idPlaca){};
 
     default void onMensajeGenerico(String comando, String subcomando, String[] parametros) {}
     
