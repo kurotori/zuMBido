@@ -4,7 +4,6 @@
  */
 package com.ejemplo.zumbido.chat;
 
-import com.ejemplo.zumbido.interfaz.Colores;
 import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.sistema.Usuario;
 import java.awt.BorderLayout;
@@ -13,30 +12,33 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 /**
  *
  * @author sebastian
  */
 public class MensajeChat extends JPanel {
-    
+
     private String mensaje;
     private Usuario usuario;
     private LocalDateTime marcaDeTiempo;
     private DateTimeFormatter formatoTiempoA = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private DateTimeFormatter formatoTiempoB = DateTimeFormatter.ofPattern("HH:mm:ss");
-    
+
     private JPanel pnlNombreUsuario;
     private JPanel pnlMensaje;
     private boolean mio;
-    
+
     Fuentes fuentes = new Fuentes();
 
     public MensajeChat(String mensaje, Usuario usuario, boolean mio) {
@@ -49,92 +51,111 @@ public class MensajeChat extends JPanel {
 
     public MensajeChat(String mensajeSistema) {
         this.mensaje = mensajeSistema;
-        
+
         this.usuario = null;
         this.mio = false;
         this.marcaDeTiempo = LocalDateTime.now();
-        
+
         configurarMsgSistema();
     }
-    
-    
-    
-    private void configurar(){
+
+    private void configurar() {
         //setSize(650, 60);
-        setPreferredSize(new Dimension(650,60));
+        setPreferredSize(new Dimension(650, 60));
         putClientProperty("FlatLaf.style", "arc: 16; background: #FFFFFF;");
         setLayout(new BorderLayout());
-        
+
         pnlNombreUsuario = new JPanel();//new FlowLayout(FlowLayout.CENTER));
         pnlNombreUsuario.setLayout(new BoxLayout(pnlNombreUsuario, BoxLayout.Y_AXIS));
         pnlNombreUsuario.setPreferredSize(new Dimension(150, 0));
-        
-        String colorUsuario = Colores.extraerColorDeId(usuario.getIdPlaca());
-        String colorFuenteUsuario = Colores.obtenerColorTextoHex(colorUsuario);
-        
-        pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background:"+colorUsuario+";");
+
+        String colorUsuario = usuario.colorFondo();//Colores.extraerColorDeId(usuario.getIdPlaca());
+        String colorFuenteUsuario = usuario.colorTexto();//Colores.obtenerColorTextoHex(colorUsuario);
+
+        pnlNombreUsuario.putClientProperty("FlatLaf.style", "arc: 16; background:" + colorUsuario + ";");
         if (mio) {
             add(pnlNombreUsuario, BorderLayout.EAST);
-        }
-        else{
+        } else {
             add(pnlNombreUsuario, BorderLayout.WEST);
         }
-        
+
         pnlMensaje = new JPanel();
-        pnlMensaje.setPreferredSize(new Dimension(500,0));
-        
+        pnlMensaje.setPreferredSize(new Dimension(500, 0));
+
         if (mio) {
             pnlMensaje.setLayout(new FlowLayout(FlowLayout.RIGHT));
-            pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #5FFC67;");
+            pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #B9FEBC;");
             add(pnlMensaje, BorderLayout.WEST);
-        }
-        else{
+        } else {
             pnlMensaje.setLayout(new FlowLayout(FlowLayout.LEFT));
             pnlMensaje.putClientProperty("FlatLaf.style", "arc: 16; background: #E8ECFD;");
             add(pnlMensaje, BorderLayout.EAST);
         }
-        
+
         pnlNombreUsuario.add(Box.createVerticalStrut(5));
-        
+
         JLabel lblNombreUsuario = new JLabel(usuario.getNombre());
         lblNombreUsuario.setFont(fuentes.VENTANA_NEGRITA_A_CH);
         lblNombreUsuario.setHorizontalAlignment(SwingConstants.CENTER);
         lblNombreUsuario.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
         lblNombreUsuario.setForeground(Color.decode(colorFuenteUsuario));
         pnlNombreUsuario.add(lblNombreUsuario);
-        
+
         pnlNombreUsuario.add(Box.createVerticalStrut(5));
-        
-        
+
         JLabel lblMarcaTiempo = new JLabel();
         lblMarcaTiempo.setText(
-                "<html>"+ marcaDeTiempo.format(formatoTiempoA) +"<br>"+
-                        marcaDeTiempo.format(formatoTiempoB) + "</html>"
+                "<html>" + marcaDeTiempo.format(formatoTiempoA) + "<br>"
+                + marcaDeTiempo.format(formatoTiempoB) + "</html>"
         );
         lblMarcaTiempo.setFont(fuentes.VENTANA_NORMAL_A_XCH);
         lblMarcaTiempo.setForeground(Color.decode(colorFuenteUsuario));
         lblNombreUsuario.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
         pnlNombreUsuario.add(lblMarcaTiempo);
+
+//        JTextArea txtaMensaje = new JTextArea(mensaje);
+//        txtaMensaje.setLineWrap(true);
+//        txtaMensaje.setEditable(false);
+//        txtaMensaje.setOpaque(false);
+//        txtaMensaje.setFont(fuentes.VENTANA_NORMAL_A_CH);
+//        txtaMensaje.setColumns(52);
+//        pnlMensaje.add(txtaMensaje);
+
+        //Inicializado del panel de texto
+        JTextPane txtpMensaje = new JTextPane() {
+            @Override
+            public boolean getScrollableTracksViewportWidth() {
+                return true;
+            }
+        };
+
+        txtpMensaje.setText(mensaje);
+        txtpMensaje.setEditable(false);
+        txtpMensaje.setOpaque(false);
+        txtpMensaje.setFont(fuentes.VENTANA_NORMAL_A_CH);
+        txtpMensaje.setPreferredSize(new Dimension(480, 40));
         
-        JTextArea txtaMensaje = new JTextArea(mensaje);
-        txtaMensaje.setLineWrap(true);
-        txtaMensaje.setEditable(false);
-        txtaMensaje.setOpaque(false);
-        txtaMensaje.setFont(fuentes.VENTANA_NORMAL_A_CH);
-        txtaMensaje.setColumns(52);
-        pnlMensaje.add(txtaMensaje);
+        StyledDocument estilo = txtpMensaje.getStyledDocument();
+        SimpleAttributeSet alineacion = new SimpleAttributeSet();
+        
+        //Aplicación de formato según origen del mensaje mediante un if empotrado
+        StyleConstants.setAlignment(alineacion, (mio ? StyleConstants.ALIGN_RIGHT : StyleConstants.ALIGN_LEFT) );
+        
+        estilo.setParagraphAttributes(0, estilo.getLength(), alineacion, false);
+        pnlMensaje.add(txtpMensaje);
+
     }
-    
-    private void configurarMsgSistema(){
-        setPreferredSize(new Dimension(650,30));
+
+    private void configurarMsgSistema() {
+        setPreferredSize(new Dimension(650, 30));
         setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
         putClientProperty("FlatLaf.style", "arc: 16; background: #FEE6F5;");
-        
+
         JLabel lblMsj = new JLabel(mensaje);
         lblMsj.setFont(fuentes.VENTANA_NORMAL_A_CH);
         lblMsj.setHorizontalAlignment(SwingConstants.CENTER);
-        
+
         add(lblMsj);
     }
-    
+
 }

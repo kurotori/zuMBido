@@ -511,7 +511,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
             switch (res) {
                 //Login exitoso: No hay otro usuario con el mismo nombre
                 case LOGIN_OK:
-                    JOptionPane.showMessageDialog(this, "¡Conexión exitosa!");
+                    //JOptionPane.showMessageDialog(this, "¡Conexión exitosa!");
                     Usuario u = new Usuario(nombreUsuario, placa.getId());
                     placa.setUsuario(u);
                     Chat chat = new Chat(placa, this);

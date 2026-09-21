@@ -19,6 +19,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -93,9 +94,11 @@ public class ChatPrivado extends JFrame{
         setIconImage(img.getImage());
 
         setFont(fuentes.VENTANA_NORMAL_A);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+        
+        
         getContentPane().setBackground(Color.white);
 
         //pnlLatUsuario = new PanelZonaUsuario(this);
@@ -128,7 +131,10 @@ public class ChatPrivado extends JFrame{
         pnlChat.setBackground(Color.white);
         
         JPanel pnlContenedorChat = new JPanel(new BorderLayout());
+        pnlContenedorChat.setBackground(Color.white);
         pnlContenedorChat.add(pnlChat, BorderLayout.NORTH);
+         pnlContenedorChat.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+        
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(0, 0, 10, 0);
 //
@@ -210,13 +216,14 @@ public class ChatPrivado extends JFrame{
     private void agregarMensajeGeneral(String msj) {
         SwingUtilities.invokeLater(
                 () -> {
-                    JLabel lbl = new JLabel(msj);
-                    lbl.setFont(fuentes.VENTANA_NORMAL_A_CH);
+                    MensajeChat pnlMsj = new MensajeChat(msj);
+                    //JLabel lbl = new JLabel(msj);
+                    ///lbl.setFont(fuentes.VENTANA_NORMAL_A_CH);
                     gbc.gridx = 0;
                     gbc.gridy = cantMensajes++;
                     gbc.weightx = 1.0;
                     gbc.weighty = 0.0;
-                    pnlChat.add(lbl, gbc);
+                    pnlChat.add(pnlMsj, gbc);
                     pnlChat.revalidate();
                     pnlChat.repaint();
 
@@ -246,7 +253,7 @@ public class ChatPrivado extends JFrame{
             else{
                 String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
                 //placa.enviarComando(msj);
-                //agregarMensaje(placa.getUsuario(), m, true);
+                agregarMensaje(ventanaChat.getPlaca().getUsuario(), m, true);
                 txtMensaje.setText("");
             }
             

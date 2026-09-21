@@ -2,122 +2,83 @@ from microbit import *
 import radio
 import machine
 import gc
-
-VERSION="0.1.3"
+VER="0.1.4"
+IKA = 5000
+IEM = 50
+MMSG = 10
+IDP = "".join("{:02x}".format(b) for b in machine.unique_id())
 
 tiempo=0
-INTERVALO_KEEP_ALIVE = 5000
-tiempoKa=running_time() +  INTERVALO_KEEP_ALIVE #Temporizador para detectar conexión activa
-tempoAnterior=0
 
-ledsOn = []
-ledsOff = []
+tka=running_time() +  IKA #Temporizador para detectar conexión activa
+lOn = []
+lOff = []
+msgs = []
+uMsg = 0
+grpR=7
+rOn = True
+bfSr = bytearray()
 
-# Cola de salida de mensajes radiales
-mensajes = []
-ultimo_envio = 0
-INTERVALO_ENVIO_MS = 50  # Pausa mínima entre transmisiones por radio
-MAX_COLA = 10
-
-conexion=False
-
-# Configuración inicial de la radio
-grupoRadial=7
-radio.config(length=250, group=grupoRadial)
+radio.config(length=250, group=grpR)
 radio.on()
-radioAct = True
-
-
-# Configuración de comunicación serial con la PC
 uart.init(baudrate=115200)
 
-buffer_serial = bytearray() #""
-
-ID_PLACA = "".join("{:02x}".format(b) for b in machine.unique_id())
- 
-
-# Configuración del canal de radio y tamaño de paquete
-def activarRadio(grupo):
-    global radioAct
-    """Activa la comunicación radial del sistema y/o cambia el grupo radial.
-
-    Args:
-        grupo (int): numero de grupo radial que se quiere usar con la placa.
-    """
-    global grupoRadial
-    grupoRadial=int(grupo)
-    radio.config(length=250, group=grupoRadial)
+def radioOn(g):
+    global rOn,grpR
+    grpR=int(g)
+    radio.config(length=250, group=grpR)
     radio.on()
-    radioAct = True
+    rOn = True
     display.set_pixel(1,0,9)
 
-def desactivarRadio():
-    global radioAct
-    """Desactiva la comunicación radial y notifica a la red que la placa se desconectó
-    """
+def radioOff():
+    global rOn
     radio.off()
     display.set_pixel(1,0,0)
-    radioAct = False
+    rOn = False
 
-def enviarSerial(texto):
-    """Envía un mensaje desde la placa a la App mediante la comuniación serial UART
-
-    Args:
-        texto (string): mensaje a ser enviado a la App
-    """
-    uart.write(texto + '\r\n')
+def enviarS(t):
+    uart.write(t + '\r\n')
     gc.collect()
     
-def enviarRadio(mensaje):
-    """Envía un mensaje por el sistema radial de la placa
-
-    Args:
-        mensaje (string): mensaje a ser enviado. Debe seguir los parámetros de forma de los mensajes
-    """
-    if radioAct:
+def enviarR(t):
+    if rOn:
         try:
-            radio.send(mensaje)
-            parpadearLed(4)
+            radio.send(t)
+            pLed(4)
 
         except RuntimeError:
-            parpadearLed(2)
+            pLed(2)
     
-def agregarMensaje(mensaje, prioritario=False):
-    """Agrega un mensaje a la cola de mensajes, estableciendo su prioridad
-
-    Args:
-        mensaje (string): el mensaje a ser enviado
-        prioritario (boolean, optional): Establece si se trata de un mensaje prioritario o no. Defaults to false.
-    """
-    if radioAct:
-        if len(mensajes) < MAX_COLA:
-            if prioritario:
-                mensajes.insert(0,mensaje)
+def agrMsg(m, p=False):
+    if rOn:
+        if len(msgs) < MMSG:
+            if p:
+                msgs.insert(0,m)
             else:
-                mensajes.append(mensaje)
-    
+                msgs.append(m)
 
-def parpadearLed(led):
-    ledsOn.append(led)
+def pLed(l):
+    lOn.append(l)
 
 def parpadear(modo):
     if(modo=='on'):
-        while ledsOn:
-            led = ledsOn.pop(0)
+        while lOn:
+            led = lOn.pop(0)
             display.set_pixel(led,0,9)
-            ledsOff.append(led)
+            lOff.append(led)
     if(modo=='off'):
-        while ledsOff:
-            led = ledsOff.pop(0)
+        while lOff:
+            led = lOff.pop(0)
             display.set_pixel(led,0,0)
             
             
 
 def evaluarComando(comando):
-    global conexion,tiempoKa, tiempo
+    global tka, tiempo
     
     # Si se recibió un comando, entonces la placa esta presente, por lo que actualizamos su estado
-    tiempoKa = running_time() 
+    tka = running_time() 
     
     datos=comando.split(':')
     orden = datos[0]
@@ -127,18 +88,17 @@ def evaluarComando(comando):
         
         # V: Versión. La app solicita la versión actual del script en la placa
         if(datos[1]=='v'):
-            enviarSerial('c:v:'+VERSION)
+            enviarS('c:v:'+VER)
         
         # C: Conexión. La App solicita conectarse a la placa
         if(datos[1]=='c'):
             display.set_pixel(0,0,9)
-            enviarSerial("c:bid:"+ID_PLACA)
-            enviarSerial("c:gr:"+str(grupoRadial))
-            conexion=True
+            enviarS("c:bid:"+IDP)
+            enviarS("c:gr:"+str(grpR))
         
         # BID: ID de Placa: La App solicita la ID de la placa
         if(datos[1]=='bid'):
-            enviarSerial("c:bid:"+ID_PLACA)
+            enviarS("c:bid:"+IDP)
         
         # GR: Grupo Radial: La App quiere gestionar el grupo radial de la placa
         if(datos[1]=='gr'):
@@ -146,26 +106,25 @@ def evaluarComando(comando):
             #Si hay más elementos en el comando, la solicitud es de cambio de grupo radial
             if(len(datos)>2):
                 grupo=datos[2]
-                activarRadio(grupo)
-                enviarSerial("m:b:Grupo radial establecido a " + grupo)
+                radioOn(grupo)
+                enviarS("m:b:Grupo radial establecido a " + grupo)
             
             #Si solo se trata del comando 'gr', la App solicita el grupo radial actual
             else:
-                enviarSerial("c:gr:"+str(grupoRadial))
+                enviarS("c:gr:"+str(grpR))
         
         # KA: KeepAlive: comando para mantener la conexión activa --> EN DESARROLLO, NO IMPLEMENTADO
         if(datos[1]=='ka'): 
-            #conexion=True
-            if not radioAct:
-                activarRadio(grupoRadial)
-            agregarMensaje('ka:' + ID_PLACA, True) #Agregamos el KEEP ALIVE como mensaje prioritario
+            if not rOn:
+                radioOn(grpR)
+            agrMsg('ka:' + IDP, True) #Agregamos el KEEP ALIVE como mensaje prioritario
             
     
     # R: Comandos de Red
     #           NOTA: En general, y por ahora, todo comando 'r' es un mensaje saliente
     if(orden=="r"):
        cuerpo = ":".join(datos[1:])
-       agregarMensaje(cuerpo + ':' + ID_PLACA)
+       agrMsg(cuerpo + ':' + IDP)
        
     gc.collect()   
     
@@ -176,52 +135,43 @@ while True:
     
     # --- PARA PRUEBAS ----
     if button_a.was_pressed():
-        enviarRadio("m:algo:"+ID_PLACA)
+        enviarR("m:algo:"+IDP)
     # --- --- --- --- --- --
     
     #KEEP ALIVE Local: La placa comprueba que la app este presente, de lo contrario, cierra la comunicación radial
-    if(tiempo_actual - tiempoKa) >= INTERVALO_KEEP_ALIVE:
-       desactivarRadio()
+    if(tiempo_actual - tka) >= IKA:
+       radioOff()
     
     #Proceso de la cola de mensajes
     
-    if mensajes and (tiempo_actual - ultimo_envio) >= INTERVALO_ENVIO_MS:
-        m = mensajes.pop(0)
-        enviarRadio(m)
-        ultimo_envio = tiempo_actual
+    if msgs and (tiempo_actual - uMsg) >= IEM:
+        m = msgs.pop(0)
+        enviarR(m)
+        uMsg = tiempo_actual
         
-    if not mensajes:
+    if not msgs:
         gc.collect()
     
     
     #
-    if(len(ledsOn)>0):
+    if lOn:
         parpadear("on")
         tiempo=running_time()+200
     if(running_time() > tiempo):
         parpadear("off")
-    
-
-    # -------------------------------------------------------------
+        
     # 1. RADIO -> SERIAL: Mensajes recibidos de otros micro:bits
-    #
-    #   NOTA: A futuro se planea que este sistema use la función radio.receive_full() a fin
-    #       de obtener información de la fuerza de la señal del mensaje entrante, para usarla
-    #       en la interfáz de usuario.
-    # -------------------------------------------------------------
-    if radioAct:
-        
+
+    if rOn:
         mensaje_radio = radio.receive()
-        
         if mensaje_radio:
-            # Reenvía el mensaje directamente a la PC terminado en un salto de línea
             if(mensaje_radio[0] == 'p'):
                 datos=mensaje_radio.split(':')
-                if(datos[len(datos) - 1] == ID_PLACA):
-                    enviarSerial('r:'+mensaje_radio)
+                if(datos[len(datos) - 1] == IDP):
+                    enviarS('r:'+mensaje_radio)
             else:        
-                enviarSerial('r:'+mensaje_radio)
-            parpadearLed(3)
+                enviarS('r:'+mensaje_radio)
+            pLed(3)
 
     # -------------------------------------------------------------
     # 2. SERIAL -> RADIO: Comandos enviados desde la app en Java
@@ -232,13 +182,12 @@ while True:
             for b in bloque:
         # 10 es '\n' y 13 es '\r' en código ASCII/byte
                 if b == 10 or b == 13:
-                    if buffer_serial:
+                    if bfSr:
                         try:
                             
-                            cadena_raw = bytes(buffer_serial)
+                            cadena_raw = bytes(bfSr)
                             comando = str(cadena_raw, 'utf-8').strip()
                             # Decodificamos la trama COMPLETA a UTF-8 de una sola vez
-                            # comando = buffer_serial.decode('utf-8').strip()
                             if comando:
                                 evaluarComando(comando)
                         except UnicodeError:
@@ -246,8 +195,8 @@ while True:
                             pass
                         
                         # Limpiar el buffer de bytes
-                        buffer_serial = bytearray()
+                        bfSr = bytearray()
                         gc.collect()
                 else:
-                    buffer_serial.append(b)
+                    bfSr.append(b)
     sleep(10)

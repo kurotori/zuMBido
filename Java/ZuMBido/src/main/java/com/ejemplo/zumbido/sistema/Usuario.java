@@ -1,6 +1,9 @@
 package com.ejemplo.zumbido.sistema;
 
+import com.ejemplo.zumbido.interfaz.Colores;
+
 public class Usuario {
+
     private String nombre;
     private String idPlaca;
     private long ultimoMsg = 0;
@@ -9,8 +12,6 @@ public class Usuario {
         this.nombre = nombre;
         this.idPlaca = idPlaca;
     }
-    
-    
 
     public String getNombre() {
         return nombre;
@@ -20,7 +21,7 @@ public class Usuario {
         return idPlaca;
     }
 
-    public String getDatosCompletos(){
+    public String getDatosCompletos() {
         return "Usuario:" + nombre + " ,en " + idPlaca;
     }
 
@@ -37,4 +38,15 @@ public class Usuario {
     public void setTiempoUltimoMsg(long ultimoMsg) {
         this.ultimoMsg = ultimoMsg;
     }
+    
+    
+
+    public String colorFondo() {
+        return Colores.extraerColorDeId(idPlaca);
+    }
+    
+    public String colorTexto(){
+        return Colores.obtenerColorTextoHex(colorFondo());
+    }
+
 }

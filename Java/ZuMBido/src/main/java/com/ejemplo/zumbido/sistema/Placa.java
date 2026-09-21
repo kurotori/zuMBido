@@ -4,9 +4,6 @@
  */
 package com.ejemplo.zumbido.sistema;
 
-import com.ejemplo.zumbido.interfaz.VentanaSerial;
-import com.ejemplo.zumbido.sistema.Mensajes;
-import com.ejemplo.zumbido.sistema.ProcesadorMensajes;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
@@ -26,7 +23,7 @@ public class Placa {
     public static final int INACTIVA = 1;
     public static final int LONGITUD_MAXIMA_MENSAJES = 229;
     
-    private VentanaSerial ventana;
+    //private VentanaSerial ventana;
 
     private String id;
     private int grupoRadial;
@@ -41,17 +38,17 @@ public class Placa {
     private Usuario usuario = null;
     private Usuarios usuarios = new Usuarios();
     
-    public Placa(VentanaSerial ventana, SerialPort puerto) {
-        this.ventana = ventana;
-        this.id = null;
-        this.grupoRadial = 0;
-        this.estado = INACTIVA;
-        this.puerto = puerto;
-        conectarPuerto();
-        
-        this.keepAlive = new GestorKeepAlive(this);
-        keepAlive.iniciar();
-    }
+//    public Placa(VentanaSerial ventana, SerialPort puerto) {
+//        this.ventana = ventana;
+//        this.id = null;
+//        this.grupoRadial = 0;
+//        this.estado = INACTIVA;
+//        this.puerto = puerto;
+//        conectarPuerto();
+//        
+//        this.keepAlive = new GestorKeepAlive(this);
+//        keepAlive.iniciar();
+//    }
     
     /***/
     public Placa(SerialPort puerto) {
@@ -244,19 +241,6 @@ public class Placa {
         this.usuario = usuario;
     }
 
-    /**
-     * @return the ventana
-     */
-    public VentanaSerial getVentana() {
-        return ventana;
-    }
-
-    /**
-     * @param ventana the ventana to set
-     */
-    public void setVentana(VentanaSerial ventana) {
-        this.ventana = ventana;
-    }
 
     /**
      * @return the procesador
