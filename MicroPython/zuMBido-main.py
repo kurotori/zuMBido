@@ -1,12 +1,13 @@
 from microbit import *
+from micropython import const
 import radio
 import machine
 import gc
 VER="0.1.4"
-IKA = 5000
-IEM = 50
-MMSG = 10
-IDP = "".join("{:02x}".format(b) for b in machine.unique_id())
+IKA=const(5000)
+IEM=const(50)
+MMSG=const(10)
+IDP="".join("{:02x}".format(b) for b in machine.unique_id())
 
 tiempo=0
 
@@ -61,18 +62,16 @@ def agrMsg(m, p=False):
 def pLed(l):
     lOn.append(l)
 
-def parpadear(modo):
-    if(modo=='on'):
+def piscar(m):
+    if(m):
         while lOn:
-            led = lOn.pop(0)
-            display.set_pixel(led,0,9)
-            lOff.append(led)
-    if(modo=='off'):
+            l = lOn.pop(0)
+            display.set_pixel(l,0,9)
+            lOff.append(l)
+    else:
         while lOff:
-            led = lOff.pop(0)
-            display.set_pixel(led,0,0)
-            
-            
+            l = lOff.pop(0)
+            display.set_pixel(l,0,0)
 
 def evaluarComando(comando):
     global tka, tiempo
@@ -155,10 +154,10 @@ while True:
     
     #
     if lOn:
-        parpadear("on")
+        piscar(True)
         tiempo=running_time()+200
     if(running_time() > tiempo):
-        parpadear("off")
+        piscar(False)
         
     # 1. RADIO -> SERIAL: Mensajes recibidos de otros micro:bits
 

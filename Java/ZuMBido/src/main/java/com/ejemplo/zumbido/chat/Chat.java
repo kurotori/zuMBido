@@ -43,8 +43,8 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class Chat extends JFrame implements OyenteMensajes {
 
-    public static final int LONGITUD_MAXIMA_MENSAJES = 229;
-    public static final int LONGITUD_MAXIMA_MENSAJES_PRIV = 212; 
+    public static final int LONGITUD_MAXIMA_MENSAJES = 140;//229;
+    public static final int LONGITUD_MAXIMA_MENSAJES_PRIV = 140; //212; 
     
 //NOTA: La longitud máxima de los mensajes privados puede ser 214, pero se mantiene en 212 por precaución
 

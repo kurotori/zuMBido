@@ -61,7 +61,7 @@ public class MensajeChat extends JPanel {
 
     private void configurar() {
         //setSize(650, 60);
-        setPreferredSize(new Dimension(650, 60));
+        setPreferredSize(new Dimension(650, 80));
         putClientProperty("FlatLaf.style", "arc: 16; background: #FFFFFF;");
         setLayout(new BorderLayout());
 
@@ -133,7 +133,7 @@ public class MensajeChat extends JPanel {
         txtpMensaje.setEditable(false);
         txtpMensaje.setOpaque(false);
         txtpMensaje.setFont(fuentes.VENTANA_NORMAL_A_CH);
-        txtpMensaje.setPreferredSize(new Dimension(480, 40));
+        txtpMensaje.setPreferredSize(new Dimension(480, 70));
         
         StyledDocument estilo = txtpMensaje.getStyledDocument();
         SimpleAttributeSet alineacion = new SimpleAttributeSet();

@@ -37,18 +37,7 @@ public class Placa {
 
     private Usuario usuario = null;
     private Usuarios usuarios = new Usuarios();
-    
-//    public Placa(VentanaSerial ventana, SerialPort puerto) {
-//        this.ventana = ventana;
-//        this.id = null;
-//        this.grupoRadial = 0;
-//        this.estado = INACTIVA;
-//        this.puerto = puerto;
-//        conectarPuerto();
-//        
-//        this.keepAlive = new GestorKeepAlive(this);
-//        keepAlive.iniciar();
-//    }
+
     
     /***/
     public Placa(SerialPort puerto) {
@@ -77,12 +66,8 @@ public class Placa {
                 // Se envía el texto con un salto de línea \n como delimitador
                 salidaSerie.write((texto + "\n").getBytes(StandardCharsets.UTF_8));
                 salidaSerie.flush();
-
-                //txtHistorial.append(">> [PC]: " + texto + "\n");
-                //txtMensaje.setText("");
             } catch (Exception ex) {
                 System.err.println("Error al enviar mensaje: " + ex.getMessage());
-                //txtHistorial.append("Error al enviar mensaje: " + ex.getMessage() + "\n");
             }
         }
     }
@@ -113,10 +98,6 @@ public class Placa {
 
             //Inicializar la salida de datos hacia el puerto
             salidaSerie = puerto.getOutputStream();
-//            if (getUsuario() == null) {
-//                enviarComando( Mensajes.componerMensaje(Mensajes.COMANDO_SISTEMA, Mensajes.SUBC_CONECTAR_PLACA) );
-//            }
-
             // Iniciar la escucha asíncrona de datos entrantes desde la pasarela
             iniciarEscuchaSerie();
         } else {
@@ -164,7 +145,6 @@ public class Placa {
                         // Enviar la línea completa a la interfaz gráfica
                         SwingUtilities.invokeLater(() -> {
                             System.out.println("[Placa]: " + lineaCompleta);
-                            //getVentana().evaluarMensaje(lineaCompleta);
                             procesador.analizarMensaje(lineaCompleta);
                         });
                     }

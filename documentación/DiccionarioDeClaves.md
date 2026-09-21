@@ -41,4 +41,7 @@
 - **pLed(l)** : Agrega un LED a la lista de encendido (*lOn*).
     - l (int): Número del LED a encender, entre 0 y 4. 
     > NOTA: Solo se consideran los LEDs de la primera fila de la matríz de LEDs de la micro:bit
+- **piscar(m)** : Procesa las colas de parpadeo de los LEDs.
+    - m (Boolean): El modo del parpadeo. Si es `True`, se procesa la cola de encendido. Si es `False`, se procesa la cola de apagado.
+
 
