@@ -12,6 +12,7 @@ import com.ejemplo.zumbido.sistema.Placa;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import com.ejemplo.zumbido.sistema.OyenteMensajes;
 import com.ejemplo.zumbido.sistema.Usuario;
+import com.ejemplo.zumbido.sistema.Usuarios;
 import com.ejemplo.zumbido.sistema.Ventanas;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -45,9 +46,8 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     public static final int LONGITUD_MAXIMA_MENSAJES = 140;//229;
     public static final int LONGITUD_MAXIMA_MENSAJES_PRIV = 140; //212; 
-    
-//NOTA: La longitud máxima de los mensajes privados puede ser 214, pero se mantiene en 212 por precaución
 
+//NOTA: La longitud máxima de los mensajes privados puede ser 214, pero se mantiene en 212 por precaución
     public static final int CANT_MAX_MENSAJES = 50;
 
     private Placa placa;
@@ -70,7 +70,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     private int cantMensajes = 0;
     private ArrayList<JPanel> mensajesRegistrados = new ArrayList<>();
 
-    private Map<String, JFrame> chatsPrivados = new HashMap<>();
+    private Map<String, ChatPrivado> chatsPrivados = new HashMap<>();
     //private ArrayList<ChatPrivado> chatsPrivados = new ArrayList<>();
 
     Fuentes fuentes = new Fuentes();
@@ -124,7 +124,6 @@ public class Chat extends JFrame implements OyenteMensajes {
 //        JLabel lblEtUsuario = new JLabel(Textos.CHAT_ET_USUARIO);
 //        lblEtUsuario.setFont(fuentes.VENTANA_NEGRITA_A);
 //        pnlSuperior.add(lblEtUsuario);
-
         lblUsuario = new JLabel("---");
         lblUsuario.setFont(fuentes.VENTANA_NEGRITA_B);
         pnlSuperior.add(lblUsuario);
@@ -297,36 +296,48 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     /**
      * Abre o Enfoca una ventana de chat privado con el usuario seleccionado
-     * @param usuario 
+     *
+     * @param usuario
      */
     public void abrirChatPrivado(Usuario usuario) {
         String idPlaca = usuario.getIdPlaca();
 
         if (chatsPrivados.containsKey(idPlaca)) {
             // La ventana ya existe: la traemos al frente y le damos el foco
-            JFrame chat = chatsPrivados.get(idPlaca);
+            ChatPrivado chat = chatsPrivados.get(idPlaca);
             Ventanas.enfocarVentana(chat);
-        }
-        else{
+        } else {
             // No existe: creamos la ventana privada y la guardamos en el Map
-            ChatPrivado nuevoChat = new ChatPrivado(this, usuario);
-            chatsPrivados.put(idPlaca, nuevoChat);
-
-        // Al cerrar la ventana privada, la eliminamos del mapa
-            nuevoChat.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
-                    chatsPrivados.remove(idPlaca);
-                }
-            });
-
-        nuevoChat.setVisible(true);
+            crearVentanaChatPrivado(usuario);
         }
 
     }
+
     
-    public void enviarMensajePrivado(String mensaje, Usuario destinatario){
-        
+    /**
+     * Crea una ventana de chat privado con el usuario indicado
+     * @param usuario 
+     */
+    private void crearVentanaChatPrivado(Usuario usuario) {
+        String idPlaca = usuario.getIdPlaca();
+        ChatPrivado nuevoChat = new ChatPrivado(this, usuario);
+        chatsPrivados.put(idPlaca, nuevoChat);
+
+        // Al cerrar la ventana privada, la eliminamos del mapa
+        nuevoChat.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                chatsPrivados.remove(idPlaca);
+            }
+        });
+
+        nuevoChat.setVisible(true);
+    }
+
+    public void enviarMensajePrivado(String mensaje, Usuario destinatario) {
+        String[] datos = {mensaje, destinatario.getIdPlaca()};
+        String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE_PRIVADO,datos);
+        placa.enviarComando(msj);
     }
 
     /**
@@ -372,7 +383,16 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     @Override
     public void onMensajePrivado(String mensaje, String idPlaca) {
-
+        Usuario usuario = getPlaca().getUsuarios().buscarPorId(idPlaca);
+        abrirChatPrivado(usuario);
+        
+        if (chatsPrivados.containsKey(idPlaca)) {
+            // La ventana ya existe: la traemos al frente y le damos el foco
+            ChatPrivado chat = chatsPrivados.get(idPlaca);
+            chat.agregarMensaje(usuario, mensaje, false);
+            //Ventanas.enfocarVentana(chat);
+        }
+        
     }
 
     @Override

@@ -193,7 +193,7 @@ public class ChatPrivado extends JFrame{
      * @param msj
      * @param mio
      */
-    private void agregarMensaje(Usuario usuario, String msj, boolean mio) {
+    public void agregarMensaje(Usuario usuario, String msj, boolean mio) {
         SwingUtilities.invokeLater(
                 () -> {
                     MensajeChat pnlMsj = new MensajeChat(msj, usuario, mio);
@@ -251,7 +251,8 @@ public class ChatPrivado extends JFrame{
                 txtMensaje.selectAll();
             }
             else{
-                String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
+                ventanaChat.enviarMensajePrivado(m, otroUsuario);
+                //String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
                 //placa.enviarComando(msj);
                 agregarMensaje(ventanaChat.getPlaca().getUsuario(), m, true);
                 txtMensaje.setText("");

@@ -154,9 +154,9 @@ public class ProcesadorMensajes {
                 
             // Maneja la llegada de un mensaje privado
             case Mensajes.SUBR_MENSAJE_PRIVADO:
-                Usuario e = placa.getUsuarios().buscarPorId(cadena[0]);
+                Usuario e = placa.getUsuarios().buscarPorId(cadena[2]);
                 placa.getUsuarios().actualizarTiempoUsuario(e);
-                oyente.onMensajePublico(cadena[0], cadena[1]);
+                oyente.onMensajePrivado(cadena[0], cadena[2]);
                 break;
         }
     }

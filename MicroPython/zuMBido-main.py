@@ -167,9 +167,11 @@ while True:
         mensaje_radio = radio.receive()
         if mensaje_radio:
             if(mensaje_radio[0] == 'p'):
+                display.set_pixel(1,1,9)
                 datos=mensaje_radio.split(':')
-                if(datos[len(datos) - 1] == IDP):
+                if(datos[2] == IDP):
                     enviarS('r:'+mensaje_radio)
+                display.set_pixel(1,1,0)
             else:        
                 enviarS('r:'+mensaje_radio)
             pLed(3)
