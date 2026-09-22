@@ -94,6 +94,8 @@ def evaluarComando(comando):
             display.set_pixel(0,0,9)
             enviarS("c:bid:"+IDP)
             enviarS("c:gr:"+str(grpR))
+            tka = running_time()
+            radioOn(grpR)
         
         # BID: ID de Placa: La App solicita la ID de la placa
         if(datos[1]=='bid'):

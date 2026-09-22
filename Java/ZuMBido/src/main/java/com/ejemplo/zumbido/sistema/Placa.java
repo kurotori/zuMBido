@@ -32,6 +32,7 @@ public class Placa {
     private SerialPort puerto;
     private GestorKeepAlive keepAlive;
     private GestorUsuarios gestorUsuarios;
+    private GestorMensajeria mensajero;
 
     private OutputStream salidaSerie = null;
 
@@ -52,6 +53,8 @@ public class Placa {
         keepAlive.iniciar();
         this.gestorUsuarios = new GestorUsuarios(this);
         gestorUsuarios.iniciar();
+        this.mensajero = new GestorMensajeria(this);
+        mensajero.iniciar();
     }
 
     /**
@@ -59,7 +62,7 @@ public class Placa {
      *
      * @param texto
      */
-    public void enviarComando(String texto) {
+    public void enviarSerial(String texto) {
         texto = texto.trim();
         if (!texto.isEmpty() && salidaSerie != null) {
             try {
@@ -70,6 +73,10 @@ public class Placa {
                 System.err.println("Error al enviar mensaje: " + ex.getMessage());
             }
         }
+    }
+    
+    public void enviarComando(String msj){
+        mensajero.agregarMensaje(msj, false);
     }
 
     /**
@@ -249,4 +256,13 @@ public class Placa {
     public void setUsuarios(Usuarios usuarios) {
         this.usuarios = usuarios;
     }
+
+    /**
+     * @return the mensajero
+     */
+    public GestorMensajeria getMensajero() {
+        return mensajero;
+    }
+    
+    
 }

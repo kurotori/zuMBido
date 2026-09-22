@@ -147,3 +147,105 @@ public class inicio_old extends JFrame{
     }
     
 }
+
+
+/**
+     * Evalúa los mensajes recibidos en esta ventana
+     *
+     * @deprecated
+     * @param mensaje mensaje a evaluar
+     */
+    @Deprecated
+    public void evaluarMensaje(String mensaje) {
+
+        String[] cadena = mensaje.split(":");
+
+        switch (cadena[0]) {
+            // Mensajes y Comandos desde la Red
+            case Mensajes.COMANDO_RED:
+                System.out.println("Comando de Red");
+                switch (cadena[1]) {
+                    case Mensajes.SUBR_NUEVO_LOGIN:
+                        System.out.println("Nuevo login");
+                        if (placa.getUsuario() != null) {
+                            if (placa.getUsuario().getNombre().equals(cadena[2])) {
+                                placa.enviarComando(Mensajes.COMANDO_RED + ":" + Mensajes.SUBR_NOMBRE_REPETIDO);
+                            }
+                        }
+
+                        break;
+
+                    case Mensajes.SUBR_NOMBRE_REPETIDO:
+                        System.out.println("Nombre repetido");
+                        if (placa.getUsuario() == null) {
+                            resultadoEspera = ResultadoEspera.NOMBRE_REPETIDO;
+                            dialogoEspera.dispose(); // Cierra el diálogo e interrumpe la espera
+                            return;
+                        }
+
+                        break;
+
+                    default:
+                        throw new AssertionError();
+                }
+
+                break;
+
+            case Mensajes.PLACA_MENSAJE:
+
+                switch (cadena[1]) {
+                    case Mensajes.SUBPL_MENSAJE_PLACA:
+                        JOptionPane.showMessageDialog(this, cadena[2], placa.getId() + " dice:", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    case Mensajes.SUBPL_MENSAJE_ERROR:
+                        JOptionPane.showMessageDialog(this, cadena[2], placa.getId() + " ERROR:", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+
+                break;
+
+            case Mensajes.COMANDO_SISTEMA:
+
+                switch (cadena[1]) {
+
+                    case Mensajes.SUBC_BOARD_ID:
+                        placa.setId(cadena[2]);
+                        lblIdPlaca.setText(cadena[2]);
+                        break;
+
+                    case Mensajes.SUBC_GRUPO_RADIO:
+                        if (cadena.length > 2) {
+                            int gr = Integer.parseInt(cadena[2]);
+                            placa.setGrupoRadial(gr);
+                            cmbGruposRadio.setEnabled(true);
+                            btnIniciarLogin.setEnabled(true);
+                            txtNombreUsuario.setEnabled(true);
+                            cmbGruposRadio.setSelectedIndex(gr);
+                        }
+                        //int grupo = elegirGrupoRadio();
+                        //enviarComando("gr:"+grupo);
+                        break;
+
+                    case Mensajes.SUBC_KEEP_ALIVE:
+                        placa.enviarComando(Mensajes.SUBC_KEEP_ALIVE);
+                        break;
+                    default:
+                        System.out.println("SubComando no conocido: " + cadena[1]);
+                    //throw new AssertionError();
+                }
+
+                break;
+
+            // Mensajes de la Placa
+            case Mensajes.PLACA_RECIBIDO:
+                System.out.println("La placa dice->> " + mensaje);
+                break;
+
+            default:
+                System.out.println("ERROR: Mensaje desconocido: " + mensaje);
+            //throw new AssertionError();
+        }
+    }
+

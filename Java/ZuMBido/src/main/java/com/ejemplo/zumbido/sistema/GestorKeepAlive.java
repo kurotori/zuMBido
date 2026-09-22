@@ -33,7 +33,8 @@ public class GestorKeepAlive {
                         if (placa != null) {
                             String msj = Mensajes.componerMensaje
                                 (Mensajes.COMANDO_SISTEMA, Mensajes.SUBC_KEEP_ALIVE);
-                            placa.enviarComando(msj);
+                            //placa.enviarComando(msj);
+                            placa.getMensajero().agregarMensaje(msj, true);
                         }
                     } catch (Exception e) {
                     }

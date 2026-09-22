@@ -31,11 +31,14 @@ public class GestorMensajeria {
                 () -> {
                     try {
                         if (! mensajes.isEmpty()) {
-                            placa.enviarComando( mensajes.removeFirst() );
+                            String msj = mensajes.removeFirst();
+                            System.out.println("[Mensajero]: Enviando: " + msj);
+                            placa.enviarSerial(msj);
                         }
                     } catch (Exception e) {
+                        System.err.println("[Mensajero]: Error: " + e.getMessage());
                     }
-                }, 0, 100, TimeUnit.MILLISECONDS);
+                }, 0, 200, TimeUnit.MILLISECONDS);
     }
 
     public void detener() {
@@ -56,7 +59,9 @@ public class GestorMensajeria {
             mensajes.addFirst(mensaje);
         }
         else{
-            mensajes.addLast(mensaje);
+            mensajes.add(mensaje);
+            System.out.println("[Mensajero]: Mensaje común añadido: " + mensaje);
         }
+        //System.out.println("[Mensajero]: Mensaje añadido. Hay " + mensajes.size() + " mensajes");
     }
 }

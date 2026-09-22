@@ -288,6 +288,7 @@ public class Chat extends JFrame implements OyenteMensajes {
             } else {
                 String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
                 getPlaca().enviarComando(msj);
+                //getPlaca().getMensajero().agregarMensaje(msj, false);
                 agregarMensaje(getPlaca().getUsuario(), m, true);
                 txtMensaje.setText("");
             }

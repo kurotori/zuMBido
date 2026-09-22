@@ -170,7 +170,6 @@ public class ProcesadorMensajes {
     private void procesarComandoSistema(String subcomando, String[] cadena) {
         switch (subcomando) {
             case Mensajes.SUBC_BOARD_ID:
-                System.out.println("bid" + cadena.length);
                 String id = cadena[0];
                 placa.setId(id);
                 System.out.println("placa: " + placa.getId());
