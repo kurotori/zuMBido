@@ -313,10 +313,10 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     }
 
-    
     /**
      * Crea una ventana de chat privado con el usuario indicado
-     * @param usuario 
+     *
+     * @param usuario
      */
     private void crearVentanaChatPrivado(Usuario usuario) {
         String idPlaca = usuario.getIdPlaca();
@@ -336,7 +336,7 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     public void enviarMensajePrivado(String mensaje, Usuario destinatario) {
         String[] datos = {mensaje, destinatario.getIdPlaca()};
-        String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE_PRIVADO,datos);
+        String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE_PRIVADO, datos);
         placa.enviarComando(msj);
     }
 
@@ -385,14 +385,14 @@ public class Chat extends JFrame implements OyenteMensajes {
     public void onMensajePrivado(String mensaje, String idPlaca) {
         Usuario usuario = getPlaca().getUsuarios().buscarPorId(idPlaca);
         abrirChatPrivado(usuario);
-        
+
         if (chatsPrivados.containsKey(idPlaca)) {
             // La ventana ya existe: la traemos al frente y le damos el foco
             ChatPrivado chat = chatsPrivados.get(idPlaca);
             chat.agregarMensaje(usuario, mensaje, false);
             //Ventanas.enfocarVentana(chat);
         }
-        
+
     }
 
     @Override
@@ -427,12 +427,20 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     @Override
     public void onUsuarioDesconectado(Usuario usuario) {
+        String msj = "<html><i><b>" + usuario.getNombre()
+                      + "</b> se ha desconectado</i></html>";
         SwingUtilities.invokeLater(
                 () -> {
-                    agregarMensajeGeneral(
-                            "<html><b>" + usuario.getNombre()
-                            + "</b> se ha desconectado</html>"
-                    );
+                    agregarMensajeGeneral(msj);
+
+                    if (chatsPrivados.containsKey(usuario.getIdPlaca())) {
+                        abrirChatPrivado(usuario);
+                        // La ventana ya existe: la traemos al frente y le damos el foco
+                        ChatPrivado chat = chatsPrivados.get(usuario.getIdPlaca());
+                        chat.agregarMensajeGeneral(msj);
+                        chat.estado(false);
+                    }
+
                 }
         );
     }

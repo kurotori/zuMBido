@@ -48,13 +48,9 @@ public class ChatPrivado extends JFrame{
     private JTextField txtMensaje;
     private JButton btnEnviar;
 
-    private PanelZonaUsuario pnlLatUsuario;
-
     private JPanel pnlContenido;
     private JPanel pnlEstado;
-    private JLabel lblEstado;
     private JLabel lblUsuario;
-    private JLabel lblcantUsuarios;
     private JScrollPane scrl;
 
     private int cantMensajes = 0;
@@ -153,20 +149,12 @@ public class ChatPrivado extends JFrame{
         pnlContenido.add(pnlInferior, BorderLayout.SOUTH);
 
         //Panel de Estado
-        pnlEstado = new JPanel();//new FlowLayout(FlowLayout.CENTER, 10, 2));
+        pnlEstado = new JPanel();
         pnlEstado.setLayout(new BoxLayout(pnlEstado, BoxLayout.X_AXIS));
 
         pnlEstado.add(Box.createHorizontalStrut(10));
 
-//        lblEstado = new JLabel(Textos.CHAT_ET_PLACA);
-//        lblEstado.setFont(fuentes.VENTANA_NEGRITA_A);
-//        pnlEstado.add(lblEstado);
-
         pnlEstado.add(Box.createHorizontalGlue());
-
-//        lblcantUsuarios = new JLabel(Textos.CHAT_ET_USUARIOS_CONECTADOS);
-//        lblcantUsuarios.setFont(fuentes.VENTANA_NEGRITA_A);
-//        pnlEstado.add(lblcantUsuarios);
 
         pnlEstado.add(Box.createHorizontalStrut(35));
 
@@ -213,7 +201,7 @@ public class ChatPrivado extends JFrame{
 
     }
 
-    private void agregarMensajeGeneral(String msj) {
+    public void agregarMensajeGeneral(String msj) {
         SwingUtilities.invokeLater(
                 () -> {
                     MensajeChat pnlMsj = new MensajeChat(msj);
@@ -261,6 +249,11 @@ public class ChatPrivado extends JFrame{
             
         }
 
+    }
+    
+    public void estado(boolean estado){
+        txtMensaje.setEnabled(estado);
+        btnEnviar.setEnabled(estado);
     }
 
 
