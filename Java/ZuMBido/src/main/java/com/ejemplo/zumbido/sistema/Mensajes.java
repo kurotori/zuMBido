@@ -25,6 +25,7 @@ public class Mensajes {
     public static final String PLACA_RECIBIDO = "recibido";
     public static final String PLACA_MENSAJE = "m";
     
+    
     public static final String SUBPL_MENSAJE_PLACA = "b";
     public static final String SUBPL_MENSAJE_ERROR = "err";
     
@@ -33,6 +34,7 @@ public class Mensajes {
     public static final String SUBC_BOARD_ID = "bid";
     public static final String SUBC_GRUPO_RADIO = "gr";
     public static final String SUBC_KEEP_ALIVE = "ka";
+    public static final String SUBC_PLACA_VERSION = "v";
     
     
     //3 - Sub Comandos de Red

@@ -93,6 +93,7 @@ def evaluarComando(comando):
         if(datos[1]=='c'):
             display.set_pixel(0,0,9)
             enviarS("c:bid:"+IDP)
+            enviarS("c:v:"+VER)
             enviarS("c:gr:"+str(grpR))
             tka = running_time()
             radioOn(grpR)

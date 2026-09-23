@@ -216,7 +216,8 @@ public class InicioBase extends JFrame implements OyenteMensajes {
             btnConectarPlaca.setEnabled(false);
         } else {
             for (SerialPort p : puertos) {
-                cmbListaPlacas.addItem(p.getSystemPortName());
+                cmbListaPlacas.addItem(p.getDescriptivePortName()+ "//" +p.getSystemPortName());
+                
             }
             btnConectarPlaca.setEnabled(true);
         }
@@ -228,6 +229,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
     private void conectarAPlaca() {
         placa = null;
         String puerto = (String) cmbListaPlacas.getSelectedItem();
+        puerto = puerto.split("//")[1];
         if (puerto == null) {
             return;
         }
@@ -448,6 +450,13 @@ public class InicioBase extends JFrame implements OyenteMensajes {
         }
 
     }
+
+    @Override
+    public void onVersionPlaca(String version) {
+        lblIdPlaca.setText(placa.getId() + " v:" + version);
+    }
+    
+    
 
     /**
      * Inicia la ventana

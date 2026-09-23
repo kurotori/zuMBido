@@ -196,6 +196,10 @@ public class ProcesadorMensajes {
                 oyente.onActualizarUsuarios();
                 break;
 
+            case Mensajes.SUBC_PLACA_VERSION:
+                System.out.println("ZuMBido v: " + cadena[0]);
+                oyente.onVersionPlaca(cadena[0]);
+                break;
             default:
                 System.out.println("SubComando no conocido: " + subcomando);
         }

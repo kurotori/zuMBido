@@ -33,5 +33,7 @@ public interface OyenteMensajes {
     
     default void onUsuarioDesconectado(Usuario usuario){}
     
+    default void onVersionPlaca(String version){}
+    
 }
 
