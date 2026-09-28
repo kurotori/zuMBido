@@ -24,6 +24,7 @@ public class Mensajes {
     // 1.1 - Mensajes de la Placa
     public static final String PLACA_RECIBIDO = "recibido";
     public static final String PLACA_MENSAJE = "m";
+    public static final String PLACA_DISPONIBLE = "pd";
     
     
     public static final String SUBPL_MENSAJE_PLACA = "b";

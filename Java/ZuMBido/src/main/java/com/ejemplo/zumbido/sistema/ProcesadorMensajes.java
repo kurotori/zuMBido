@@ -200,6 +200,11 @@ public class ProcesadorMensajes {
                 System.out.println("ZuMBido v: " + cadena[0]);
                 oyente.onVersionPlaca(cadena[0]);
                 break;
+            
+            case Mensajes.PLACA_DISPONIBLE:
+                oyente.onPlacaDisponible();
+                break;
+            
             default:
                 System.out.println("SubComando no conocido: " + subcomando);
         }

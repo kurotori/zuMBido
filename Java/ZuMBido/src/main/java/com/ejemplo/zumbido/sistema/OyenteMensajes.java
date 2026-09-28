@@ -35,5 +35,7 @@ public interface OyenteMensajes {
     
     default void onVersionPlaca(String version){}
     
+    default void onPlacaDisponible(){}
+    
 }
 

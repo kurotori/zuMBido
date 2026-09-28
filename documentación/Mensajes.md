@@ -63,6 +63,12 @@ La aplicación notifica a la placa que esta presente para mantener la conexión 
 
 ### 2.2- De Placa a Aplicación
 
+#### pd - Placa Disponible
+
+`c:pd`
+
+La placa notifica a la aplicación que esta disponible para recibir otra orden.
+
 ### 2.3- De Placa a Placa
 
 >**Nota:** Todos estos mensajes son **radiales** e incluyen la **id de la placa** donde se origina el mensaje.

@@ -203,4 +203,6 @@ while True:
                         gc.collect()
                 else:
                     bfSr.append(b)
+            sleep(20)
+            enviarS("c:pd")
     sleep(10)

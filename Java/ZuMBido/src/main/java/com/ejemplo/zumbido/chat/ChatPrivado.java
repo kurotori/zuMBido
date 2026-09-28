@@ -74,14 +74,14 @@ public class ChatPrivado extends JFrame{
         configurarVentana();
         configurarFunciones();
         
-        Usuario pruebas = new Usuario("Fulano", "abcdefgh12345");
+        Usuario pruebas = new Usuario("Fulano", "abcdef012345");
         //this.
     }
 
     private void configurarVentana() {
         UIManager.put("OptionPane.background", Color.WHITE);
         
-        setTitle("MicroChat");
+        setTitle(otroUsuario.getNombre() + ":Chat Privado");
         setSize(700, 500);
         setResizable(false);
 
@@ -91,7 +91,8 @@ public class ChatPrivado extends JFrame{
 
         setFont(fuentes.VENTANA_NORMAL_A);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(ventanaChat);
+        setLocation(this.getX()+ 30, this.getY() +30);
         setLayout(new BorderLayout());
         
         

@@ -290,6 +290,8 @@ public class Chat extends JFrame implements OyenteMensajes {
                 //getPlaca().getMensajero().agregarMensaje(msj, false);
                 agregarMensaje(getPlaca().getUsuario(), m, true);
                 txtMensaje.setText("");
+                txtMensaje.setEnabled(false);
+                btnEnviar.setEnabled(false);
             }
         }
     }
@@ -445,6 +447,24 @@ public class Chat extends JFrame implements OyenteMensajes {
         );
     }
 
+    @Override
+    public void onPlacaDisponible() {
+        txtMensaje.setEnabled(true);
+        btnEnviar.setEnabled(true);
+        if(isActive()){
+            System.out.println("activa");
+            txtMensaje.requestFocus();
+        }
+        else{
+            System.out.println("no activa");
+        }
+    }
+
+    
+    
+    
+    
+    
     /**
      * @return the placa
      */

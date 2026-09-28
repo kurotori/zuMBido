@@ -77,8 +77,8 @@ public class TarjetaUsuario extends JPanel implements ListCellRenderer<Usuario> 
             lblIdPlaca.setForeground(list.getSelectionForeground());
         } else {
             //setBackground(list.getBackground());
-            pnlZonaDatos.setBackground(Color.WHITE);
-            lblNombreUsuario.setForeground(list.getForeground());
+            pnlZonaDatos.setBackground(Color.decode(usuario.colorFondo()));
+            lblNombreUsuario.setForeground(Color.decode(usuario.colorTexto()));
             lblIdPlaca.setForeground(list.getForeground());
         }
 
