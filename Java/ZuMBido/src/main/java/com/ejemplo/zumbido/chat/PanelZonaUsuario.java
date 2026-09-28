@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -64,9 +63,8 @@ public class PanelZonaUsuario extends JPanel {
                     int index = lstListaUsuarios.locationToIndex(e.getPoint());
                     if (index != -1 && lstListaUsuarios.getCellBounds(index, index).contains(e.getPoint())) {
                         Usuario usuarioSeleccionado = lstListaUsuarios.getModel().getElementAt(index);
-                        System.out.println("u:" + usuarioSeleccionado.getNombre());
+                        
                         ventana.abrirChatPrivado(usuarioSeleccionado);
-//                        abrirChatPrivado(usuarioSeleccionado);
                     }
                 }
             }

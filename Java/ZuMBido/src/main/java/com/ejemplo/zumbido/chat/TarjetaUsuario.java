@@ -47,7 +47,7 @@ public class TarjetaUsuario extends JPanel implements ListCellRenderer<Usuario> 
         
         pnlZonaDatos = new JPanel( new BorderLayout(10, 10) );
         pnlZonaDatos.setBorder(BorderFactory.createEmptyBorder(5,5, 5, 5));
-        pnlZonaDatos.setBackground(Color.WHITE);
+        pnlZonaDatos.setBackground(Color.RED);
         add(pnlZonaDatos, BorderLayout.CENTER);
         
         lblNombreUsuario = new JLabel("---");
