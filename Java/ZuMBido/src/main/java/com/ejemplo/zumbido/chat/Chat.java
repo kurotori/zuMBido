@@ -71,6 +71,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     private ArrayList<JPanel> mensajesRegistrados = new ArrayList<>();
 
     private boolean placaDisp = true;
+    
     private Map<String, ChatPrivado> chatsPrivados = new HashMap<>();
 
     Fuentes fuentes = new Fuentes();
@@ -272,9 +273,12 @@ public class Chat extends JFrame implements OyenteMensajes {
      * Envía un mensaje al chat general obteniendo los datos de la ventana
      */
     private void enviarMensaje() {
-
+        if(!placaDisp){
+            return;
+        }
+        
         String m = txtMensaje.getText().trim();
-        if (placaDisp & m.length() > 0) {
+        if (m.length() > 0) {
 
             if (m.length() > LONGITUD_MAXIMA_MENSAJES) {
                 JOptionPane.showMessageDialog(this,
