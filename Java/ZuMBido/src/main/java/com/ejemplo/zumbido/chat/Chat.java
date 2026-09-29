@@ -35,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
@@ -52,6 +53,8 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     private Placa placa;
     private JFrame ventanaInicio;
+    
+    private Timer temporizadorMensaje;
 
     private JPanel pnlChat;
 
@@ -122,9 +125,6 @@ public class Chat extends JFrame implements OyenteMensajes {
         LabelConImagen lblIcono = new LabelConImagen(64, 64, "/imagen/icono_chat.png");
         pnlSuperior.add(lblIcono);
 
-//        JLabel lblEtUsuario = new JLabel(Textos.CHAT_ET_USUARIO);
-//        lblEtUsuario.setFont(fuentes.VENTANA_NEGRITA_A);
-//        pnlSuperior.add(lblEtUsuario);
         lblUsuario = new JLabel("---");
         lblUsuario.setFont(fuentes.VENTANA_NEGRITA_B);
         pnlSuperior.add(lblUsuario);
@@ -189,6 +189,17 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     private void configurarFunciones() {
+        
+        //Configuración del temporizador anti-spam
+        temporizadorMensaje = new Timer(800,
+                e->{
+                    System.out.println("Temporizador Mensajes finalizado sin placa");
+                    onPlacaDisponible();
+                }
+        );
+        
+        temporizadorMensaje.setRepeats(false);
+        
         btnEnviar.addActionListener(e -> enviarMensaje());
         txtMensaje.addActionListener(e -> enviarMensaje()); // Enviar con Enter
         actualizarUsuarios();
