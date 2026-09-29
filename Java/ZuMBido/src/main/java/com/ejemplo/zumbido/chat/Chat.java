@@ -44,8 +44,8 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
  */
 public class Chat extends JFrame implements OyenteMensajes {
 
-    public static final int LONGITUD_MAXIMA_MENSAJES = 140;//229;
-    public static final int LONGITUD_MAXIMA_MENSAJES_PRIV = 140; //212; 
+    public static final int LONGITUD_MAXIMA_MENSAJES = 200;//229;
+    public static final int LONGITUD_MAXIMA_MENSAJES_PRIV = 200; //212; 
 
 //NOTA: La longitud máxima de los mensajes privados puede ser 214, pero se mantiene en 212 por precaución
     public static final int CANT_MAX_MENSAJES = 50;
@@ -70,8 +70,8 @@ public class Chat extends JFrame implements OyenteMensajes {
     private int cantMensajes = 0;
     private ArrayList<JPanel> mensajesRegistrados = new ArrayList<>();
 
+    private boolean placaDisp = true;
     private Map<String, ChatPrivado> chatsPrivados = new HashMap<>();
-    //private ArrayList<ChatPrivado> chatsPrivados = new ArrayList<>();
 
     Fuentes fuentes = new Fuentes();
     Iconos iconos = new Iconos();
@@ -274,7 +274,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     private void enviarMensaje() {
 
         String m = txtMensaje.getText().trim();
-        if (m.length() > 0) {
+        if (placaDisp & m.length() > 0) {
 
             if (m.length() > LONGITUD_MAXIMA_MENSAJES) {
                 JOptionPane.showMessageDialog(this,
@@ -287,11 +287,9 @@ public class Chat extends JFrame implements OyenteMensajes {
             } else {
                 String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
                 getPlaca().enviarComando(msj);
-                //getPlaca().getMensajero().agregarMensaje(msj, false);
                 agregarMensaje(getPlaca().getUsuario(), m, true);
                 txtMensaje.setText("");
-                txtMensaje.setEnabled(false);
-                btnEnviar.setEnabled(false);
+                placaDisp =false;
             }
         }
     }
@@ -449,15 +447,7 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     @Override
     public void onPlacaDisponible() {
-        txtMensaje.setEnabled(true);
-        btnEnviar.setEnabled(true);
-        if(isActive()){
-            System.out.println("activa");
-            txtMensaje.requestFocus();
-        }
-        else{
-            System.out.println("no activa");
-        }
+        placaDisp = true;
     }
 
     

@@ -12,18 +12,30 @@ public class Mensajes {
     
     // 1 - Comandos Base
     
+    
+    /**
+     * Comando: e
+     */
     public static final String COMANDO_ERROR = "e";
     
+    /**
+     * Comando: c
+     */
     public static final String COMANDO_SISTEMA = "c";
     
     /**
-     * r
+     * Comando: r
      */
     public static final String COMANDO_RED = "r";
     
     // 1.1 - Mensajes de la Placa
     public static final String PLACA_RECIBIDO = "recibido";
+    
+    /**
+     * 
+     */
     public static final String PLACA_MENSAJE = "m";
+    
     public static final String PLACA_DISPONIBLE = "pd";
     
     
