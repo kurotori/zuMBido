@@ -442,7 +442,7 @@ public class Chat extends JFrame implements OyenteMensajes {
                         // La ventana ya existe: la traemos al frente y le damos el foco
                         ChatPrivado chat = chatsPrivados.get(usuario.getIdPlaca());
                         chat.agregarMensajeGeneral(msj);
-                        chat.estado(false);
+                        chat.cambiarEstado(false);
                     }
 
                 }

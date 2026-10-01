@@ -8,9 +8,6 @@ import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.interfaz.Iconos;
 import com.ejemplo.zumbido.interfaz.LabelConImagen;
 import com.ejemplo.zumbido.interfaz.Textos;
-import com.ejemplo.zumbido.sistema.Placa;
-import com.ejemplo.zumbido.sistema.Mensajes;
-import com.ejemplo.zumbido.sistema.OyenteMensajes;
 import com.ejemplo.zumbido.sistema.Usuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -32,7 +29,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
  *
@@ -98,8 +94,6 @@ public class ChatPrivado extends JFrame{
         
         getContentPane().setBackground(Color.white);
 
-        //pnlLatUsuario = new PanelZonaUsuario(this);
-        //add(pnlLatUsuario, BorderLayout.WEST);
 
         // Panel Superior: Selección de Puerto
         JPanel pnlSuperior = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -241,10 +235,9 @@ public class ChatPrivado extends JFrame{
             }
             else{
                 ventanaChat.enviarMensajePrivado(m, otroUsuario);
-                //String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE, m);
-                //placa.enviarComando(msj);
                 agregarMensaje(ventanaChat.getPlaca().getUsuario(), m, true);
                 txtMensaje.setText("");
+                
             }
             
             
@@ -252,13 +245,10 @@ public class ChatPrivado extends JFrame{
 
     }
     
-    public void estado(boolean estado){
+    public void cambiarEstado(boolean estado){
         txtMensaje.setEnabled(estado);
         btnEnviar.setEnabled(estado);
     }
-
-
-   
 
     public static void main(String[] args) {
         
