@@ -53,7 +53,7 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     private Placa placa;
     private JFrame ventanaInicio;
-    
+
     private Timer temporizadorMensaje;
 
     private JPanel pnlChat;
@@ -74,7 +74,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     private ArrayList<JPanel> mensajesRegistrados = new ArrayList<>();
 
     private boolean placaDisp = true;
-    
+
     private Map<String, ChatPrivado> chatsPrivados = new HashMap<>();
 
     Fuentes fuentes = new Fuentes();
@@ -189,17 +189,17 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     private void configurarFunciones() {
-        
+
         //Configuración del temporizador anti-spam
         temporizadorMensaje = new Timer(800,
-                e->{
+                e -> {
                     System.out.println("Temporizador Mensajes finalizado sin placa");
                     onPlacaDisponible();
                 }
         );
-        
+
         temporizadorMensaje.setRepeats(false);
-        
+
         btnEnviar.addActionListener(e -> enviarMensaje());
         txtMensaje.addActionListener(e -> enviarMensaje()); // Enviar con Enter
         actualizarUsuarios();
@@ -284,10 +284,10 @@ public class Chat extends JFrame implements OyenteMensajes {
      * Envía un mensaje al chat general obteniendo los datos de la ventana
      */
     private void enviarMensaje() {
-        if(!placaDisp){
+        if (!placaDisp) {
             return;
         }
-        
+
         String m = txtMensaje.getText().trim();
         if (m.length() > 0) {
 
@@ -304,7 +304,16 @@ public class Chat extends JFrame implements OyenteMensajes {
                 getPlaca().enviarComando(msj);
                 agregarMensaje(getPlaca().getUsuario(), m, true);
                 txtMensaje.setText("");
-                placaDisp =false;
+
+                SwingUtilities.invokeLater(
+                        () -> {
+                            txtMensaje.setEnabled(false);
+                            btnEnviar.setEnabled(false);
+                        }
+                );
+
+                temporizadorMensaje.start();
+                placaDisp = false;
             }
         }
     }
@@ -349,6 +358,13 @@ public class Chat extends JFrame implements OyenteMensajes {
         nuevoChat.setVisible(true);
     }
 
+    /**
+     * Envía un mensaje generado en una ventana de Chat Privado a un usuario
+     * específico
+     *
+     * @param mensaje
+     * @param destinatario
+     */
     public void enviarMensajePrivado(String mensaje, Usuario destinatario) {
         String[] datos = {mensaje, destinatario.getIdPlaca()};
         String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE_PRIVADO, datos);
@@ -443,7 +459,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     @Override
     public void onUsuarioDesconectado(Usuario usuario) {
         String msj = "<html><i><b>" + usuario.getNombre()
-                      + "</b> se ha desconectado</i></html>";
+                + "</b> se ha desconectado</i></html>";
         SwingUtilities.invokeLater(
                 () -> {
                     agregarMensajeGeneral(msj);
@@ -463,13 +479,29 @@ public class Chat extends JFrame implements OyenteMensajes {
     @Override
     public void onPlacaDisponible() {
         placaDisp = true;
+        if (temporizadorMensaje != null && temporizadorMensaje.isRunning()) {
+            temporizadorMensaje.stop();
+        }
+
+        SwingUtilities.invokeLater(
+                () -> {
+                    txtMensaje.setEnabled(placaDisp);
+                    btnEnviar.setEnabled(placaDisp);
+                    if (isActive()) {
+                        txtMensaje.requestFocus();
+                    }
+                }
+        );
+
+        for (Map.Entry<String, ChatPrivado> elemento : chatsPrivados.entrySet()) {
+            if (placa.getUsuarios().buscarPorId(elemento.getKey()) != null) {
+                elemento.getValue().cambiarEstado(placaDisp);
+            }
+
+        }
+
     }
 
-    
-    
-    
-    
-    
     /**
      * @return the placa
      */

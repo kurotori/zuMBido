@@ -16,6 +16,7 @@
 #### Variables
 
 - **tka** : Tiempo Keep Alive, marca de tiempo de la última señal Keep Alive, para detectar una conexión activa desde la aplicación.
+- **tem** : Tiempo de Envío de Mensajes, marca de tiempo del último mensaje enviado por el usuario
 - **lOn** : LEDs ON, lista de LEDs para encender (para parpadeo)
 - **lOff** : LEDs OFF, lista de LEDs para apagar (para parpadeo)
 - **msgs** : Mensajes, lista de mensajes para enviar por radio

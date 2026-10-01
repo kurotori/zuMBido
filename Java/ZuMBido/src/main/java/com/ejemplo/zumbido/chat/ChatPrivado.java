@@ -237,7 +237,7 @@ public class ChatPrivado extends JFrame{
                 ventanaChat.enviarMensajePrivado(m, otroUsuario);
                 agregarMensaje(ventanaChat.getPlaca().getUsuario(), m, true);
                 txtMensaje.setText("");
-                
+                cambiarEstado(false);
             }
             
             
@@ -246,8 +246,15 @@ public class ChatPrivado extends JFrame{
     }
     
     public void cambiarEstado(boolean estado){
-        txtMensaje.setEnabled(estado);
-        btnEnviar.setEnabled(estado);
+        SwingUtilities.invokeLater(
+                ()->{
+                    txtMensaje.setEnabled(estado);
+                    btnEnviar.setEnabled(estado);
+                    if (isActive() && estado) {
+                        txtMensaje.requestFocus();
+                    }
+                }
+        );
     }
 
     public static void main(String[] args) {

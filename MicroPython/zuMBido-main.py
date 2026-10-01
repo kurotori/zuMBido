@@ -3,13 +3,15 @@ from micropython import const
 import radio
 import machine
 import gc
-VER="0.1.4"
+VER="0.1.5"
 IKA=const(5000)
 IEM=const(50)
 MMSG=const(10)
 IDP="".join("{:02x}".format(b) for b in machine.unique_id())
 
 tiempo=0
+
+tem=0
 
 tka=running_time() +  IKA #Temporizador para detectar conexión activa
 lOn = []
@@ -203,6 +205,6 @@ while True:
                         gc.collect()
                 else:
                     bfSr.append(b)
-            sleep(20)
+            sleep(250)
             enviarS("c:pd")
     sleep(10)
