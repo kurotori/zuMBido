@@ -10,6 +10,11 @@ package com.ejemplo.zumbido.sistema;
  */
 public class Mensajes {
     
+    public static final String SEP_1 = "\u001F";
+    public static final String SEP_2 = "\u001E";
+    public static final String SEP_3 = "\u001D";
+    
+    
     // 1 - Comandos Base
     
     

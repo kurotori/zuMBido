@@ -3,7 +3,7 @@ from micropython import const
 import radio
 import machine
 import gc
-VER="0.1.5"
+VER="0.1.6"
 IKA=const(5000)
 IEM=const(50)
 MMSG=const(10)
@@ -81,7 +81,7 @@ def evaluarComando(comando):
     # Si se recibió un comando, entonces la placa esta presente, por lo que actualizamos su estado
     tka = running_time() 
     
-    datos=comando.split(':')
+    datos=comando.split('\x1f')
     orden = datos[0]
     
     # C: Comandos de Sistema recibidos de la App
@@ -89,20 +89,20 @@ def evaluarComando(comando):
         
         # V: Versión. La app solicita la versión actual del script en la placa
         if(datos[1]=='v'):
-            enviarS('c:v:'+VER)
+            enviarS('c\x1fv\x1f'+VER)
         
         # C: Conexión. La App solicita conectarse a la placa
         if(datos[1]=='c'):
             display.set_pixel(0,0,9)
-            enviarS("c:bid:"+IDP)
-            enviarS("c:v:"+VER)
-            enviarS("c:gr:"+str(grpR))
+            enviarS("c\x1fbid\x1f"+IDP)
+            enviarS("c\x1fv\x1f"+VER)
+            enviarS("c\x1fgr\x1f"+str(grpR))
             tka = running_time()
             radioOn(grpR)
         
         # BID: ID de Placa: La App solicita la ID de la placa
         if(datos[1]=='bid'):
-            enviarS("c:bid:"+IDP)
+            enviarS("c\x1fbid\x1f"+IDP)
         
         # GR: Grupo Radial: La App quiere gestionar el grupo radial de la placa
         if(datos[1]=='gr'):
@@ -111,24 +111,24 @@ def evaluarComando(comando):
             if(len(datos)>2):
                 grupo=datos[2]
                 radioOn(grupo)
-                enviarS("m:b:Grupo radial establecido a " + grupo)
+                enviarS("m\x1fb\x1fGrupo radial establecido a " + grupo)
             
             #Si solo se trata del comando 'gr', la App solicita el grupo radial actual
             else:
-                enviarS("c:gr:"+str(grpR))
+                enviarS("c\x1fgr\x1f"+str(grpR))
         
         # KA: KeepAlive: comando para mantener la conexión activa --> EN DESARROLLO, NO IMPLEMENTADO
         if(datos[1]=='ka'): 
             if not rOn:
                 radioOn(grpR)
-            agrMsg('ka:' + IDP, True) #Agregamos el KEEP ALIVE como mensaje prioritario
+            agrMsg('ka\x1f' + IDP, True) #Agregamos el KEEP ALIVE como mensaje prioritario
             
     
     # R: Comandos de Red
     #           NOTA: En general, y por ahora, todo comando 'r' es un mensaje saliente
     if(orden=="r"):
-       cuerpo = ":".join(datos[1:])
-       agrMsg(cuerpo + ':' + IDP)
+       cuerpo = "\x1f".join(datos[1:])
+       agrMsg(cuerpo + '\x1f' + IDP)
        
     gc.collect()   
     
@@ -139,7 +139,7 @@ while True:
     
     # --- PARA PRUEBAS ----
     if button_a.was_pressed():
-        enviarR("m:algo:"+IDP)
+        enviarR("m\x1falgo\x1f"+IDP)
     # --- --- --- --- --- --
     
     #KEEP ALIVE Local: La placa comprueba que la app este presente, de lo contrario, cierra la comunicación radial
@@ -171,12 +171,12 @@ while True:
         if mensaje_radio:
             if(mensaje_radio[0] == 'p'):
                 display.set_pixel(1,1,9)
-                datos=mensaje_radio.split(':')
+                datos=mensaje_radio.split('\x1f')
                 if(datos[2] == IDP):
-                    enviarS('r:'+mensaje_radio)
+                    enviarS('r\x1f'+mensaje_radio)
                 display.set_pixel(1,1,0)
             else:        
-                enviarS('r:'+mensaje_radio)
+                enviarS('r\x1f'+mensaje_radio)
             pLed(3)
 
     # -------------------------------------------------------------
@@ -206,5 +206,5 @@ while True:
                 else:
                     bfSr.append(b)
             sleep(250)
-            enviarS("c:pd")
+            enviarS("c\x1fpd")
     sleep(10)

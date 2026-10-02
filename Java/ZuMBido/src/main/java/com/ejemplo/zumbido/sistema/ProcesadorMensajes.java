@@ -39,11 +39,14 @@ public class ProcesadorMensajes {
      * @param mensaje el mensaje recibido por via serial
      */
     public void analizarMensaje(String mensaje) {
+        
+        //Si el mensaje es nulo o sol contiene espacios
         if (mensaje == null || mensaje.trim().isEmpty()) {
             return;
         }
 
-        String[] cadena = mensaje.split(":");
+        //Separamos el mensaje en secciones mediante el Separador 1
+        String[] cadena = mensaje.split(Mensajes.SEP_1);
 
         if (cadena.length < 2) {
             System.out.println("Mensaje truncado: " + mensaje);
@@ -62,7 +65,6 @@ public class ProcesadorMensajes {
             datos = new String[]{""};
         }
 
-        //datos = ?Arrays.copyOfRange(cadena, 2, cadena.length):{"w"}
         switch (comando) {
             case Mensajes.COMANDO_SISTEMA:
 
@@ -100,14 +102,13 @@ public class ProcesadorMensajes {
 
             case Mensajes.SUBR_NUEVO_LOGIN:
                 // Lógica de red automática (independiente de la ventana)
-                
-                System.out.println("cadena 0:" + cadena[0]);
+
                 if (placa.getUsuario() != null) {
                     if (placa.getUsuario().getNombre().equals(cadena[0])) {
                         String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_NOMBRE_REPETIDO);
                         placa.enviarComando(msj);
                     } else if(cadena.length > 1){
-                        System.out.println("cadena 1:" + cadena[1]);
+                        
                         Usuario nuevo = new Usuario(cadena[0], cadena[1]);
                         placa.getUsuarios().agregarUsuario(nuevo);
                         oyente.onNuevoLogin(nuevo);
