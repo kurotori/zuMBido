@@ -77,7 +77,7 @@ public class Mensajes {
      * @return 
      */
     public static String componerMensaje(String comando, String subcomando){
-        String mensaje = comando + ":" + subcomando;
+        String mensaje = comando + SEP_1 + subcomando;
         return mensaje;
     }
     
@@ -95,7 +95,7 @@ public class Mensajes {
         
         if (datos!=null && datos.length > 0) {
             for (String dato : datos) {
-                mensaje += (":" + dato);
+                mensaje += (SEP_1 + dato);
             }
         }
         
@@ -110,7 +110,7 @@ public class Mensajes {
      * @return 
      */
     public static String componerMensaje(String comando, String subcomando, String dato){
-        String mensaje = comando + ":" + subcomando + ":" + dato;
+        String mensaje = comando + SEP_1 + subcomando + SEP_1 + dato;
         return mensaje;
     }
     

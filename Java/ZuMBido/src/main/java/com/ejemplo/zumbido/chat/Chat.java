@@ -12,7 +12,6 @@ import com.ejemplo.zumbido.sistema.Placa;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import com.ejemplo.zumbido.sistema.OyenteMensajes;
 import com.ejemplo.zumbido.sistema.Usuario;
-import com.ejemplo.zumbido.sistema.Usuarios;
 import com.ejemplo.zumbido.sistema.Ventanas;
 import java.awt.BorderLayout;
 import java.awt.Color;

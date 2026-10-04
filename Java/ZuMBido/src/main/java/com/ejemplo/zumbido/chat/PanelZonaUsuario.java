@@ -51,6 +51,11 @@ public class PanelZonaUsuario extends JPanel {
         JScrollPane scrlListaUsuarios = new JScrollPane(lstListaUsuarios);
         scrlListaUsuarios.setPreferredSize(new Dimension(0, 350));
         add(scrlListaUsuarios, BorderLayout.NORTH);
+        
+        pnlMenuUsuario = new JPanel();
+        pnlMenuUsuario.setPreferredSize(new Dimension(0,249));
+        pnlMenuUsuario.setBackground(Color.red);
+        add(pnlMenuUsuario, BorderLayout.SOUTH);
     }
 
     private void configurarFunciones() {
