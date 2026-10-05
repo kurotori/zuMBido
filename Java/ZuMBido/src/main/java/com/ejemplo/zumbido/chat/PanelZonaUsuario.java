@@ -4,15 +4,23 @@
  */
 package com.ejemplo.zumbido.chat;
 
+import com.ejemplo.zumbido.interfaz.BotonImagenChico;
+import com.ejemplo.zumbido.interfaz.Fuentes;
+import com.ejemplo.zumbido.interfaz.Textos;
+import com.ejemplo.zumbido.sistema.Mensajes;
 import com.ejemplo.zumbido.sistema.Usuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -29,7 +37,13 @@ public class PanelZonaUsuario extends JPanel {
     private DefaultListModel<Usuario> modeloUsuarios;
     private JList<Usuario> lstListaUsuarios;
     private JPanel pnlMenuUsuario;
+    
+    private JButton btnCambiarNombre;
+    private BotonImagenChico btnJuegos;
 
+    private GridBagConstraints gbc = new GridBagConstraints();
+    private Fuentes fuentes = new Fuentes();
+    
     public PanelZonaUsuario(Chat ventana) {
         this.ventana = ventana;
         configurar();
@@ -53,9 +67,26 @@ public class PanelZonaUsuario extends JPanel {
         add(scrlListaUsuarios, BorderLayout.NORTH);
         
         pnlMenuUsuario = new JPanel();
-        pnlMenuUsuario.setPreferredSize(new Dimension(0,249));
-        pnlMenuUsuario.setBackground(Color.red);
+        pnlMenuUsuario.setLayout(new GridBagLayout());
+        pnlMenuUsuario.setPreferredSize(new Dimension(0,149));
+        pnlMenuUsuario.setBackground(Color.white);
         add(pnlMenuUsuario, BorderLayout.SOUTH);
+        
+        gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTH;
+        
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        
+        btnJuegos = new BotonImagenChico(Textos.CHAT_BTN_ABRIR_JUEGOS, "/imagen/juegos.png", 32, 32);
+        pnlMenuUsuario.add(btnJuegos, gbc);
+        
+        gbc.gridy = 1;
+        
+        btnCambiarNombre = new BotonImagenChico(Textos.CHAT_BTN_CAMBIAR_NOMBRE, "/imagen/cambiar_nombre.png", 32, 32);
+        
+        pnlMenuUsuario.add(btnCambiarNombre, gbc);
+        
     }
 
     private void configurarFunciones() {
