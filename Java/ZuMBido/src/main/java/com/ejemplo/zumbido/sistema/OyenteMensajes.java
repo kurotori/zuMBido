@@ -37,5 +37,7 @@ public interface OyenteMensajes {
     
     default void onPlacaDisponible(){}
     
+    default void onCambiarNombre(){}
+    
 }
 
