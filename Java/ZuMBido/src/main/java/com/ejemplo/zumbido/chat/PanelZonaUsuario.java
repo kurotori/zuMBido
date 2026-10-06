@@ -108,6 +108,9 @@ public class PanelZonaUsuario extends JPanel {
             }
         });
         
+        btnCambiarNombre.addActionListener(
+                e->ventana.cambiarNombre()
+        );
         
     }
 

@@ -79,6 +79,12 @@ public class Chat extends JFrame implements OyenteMensajes {
     Fuentes fuentes = new Fuentes();
     Iconos iconos = new Iconos();
     private GridBagConstraints gbc = new GridBagConstraints();
+    
+    public enum ResultadoEspera {
+        //TIMEOUT,
+        CAMBIO_REPETIDO_OK,
+        NOMBRE_REPETIDO
+    }
 
     public Chat(Placa placa, JFrame ventanaInicio) {
         this.placa = placa;
@@ -368,6 +374,34 @@ public class Chat extends JFrame implements OyenteMensajes {
         String[] datos = {mensaje, destinatario.getIdPlaca()};
         String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_MENSAJE_PRIVADO, datos);
         placa.enviarComando(msj);
+    }
+
+    public void cambiarNombre() {
+
+        JTextField txtNuevoNombre = new JTextField(getPlaca().getUsuario().getNombre());
+        txtNuevoNombre.setFont(fuentes.VENTANA_NORMAL_A);
+
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                txtNuevoNombre,
+                "Cambiar Nombre de Usuario",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                iconos.ICONO_CAMBIAR_NOMBRE_64 // Ícono personalizado a la izquierda del campo
+        );
+
+        if (opcion == JOptionPane.OK_OPTION) {
+            String nombreIngresado = txtNuevoNombre.getText().trim();
+
+            if (!nombreIngresado.isEmpty() && !nombreIngresado.equals(getPlaca().getUsuario().getNombre())) {
+                if (nombreIngresado.length() > 12 || nombreIngresado.length() < 3) { // Ejemplo de límite de nombre
+                    JOptionPane.showMessageDialog(this, "El nombre de usuario debe\ntener entre 3 y 12 caracteres");
+                } else {
+                    // Procesar cambio de nombre
+                    
+                }
+            }
+        }
     }
 
     /**

@@ -91,7 +91,7 @@ public class Mensajes {
      * @return 
      */
     public static String componerMensaje(String comando, String subcomando, String[] datos){
-        String mensaje = comando + ":" + subcomando;
+        String mensaje = comando + SEP_1 + subcomando;
         
         if (datos!=null && datos.length > 0) {
             for (String dato : datos) {
