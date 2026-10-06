@@ -82,7 +82,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     
     public enum ResultadoEspera {
         //TIMEOUT,
-        CAMBIO_REPETIDO_OK,
+        CAMBIO_NOMBRE_OK,
         NOMBRE_REPETIDO
     }
 
