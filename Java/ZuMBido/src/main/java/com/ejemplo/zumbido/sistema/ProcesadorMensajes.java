@@ -39,7 +39,7 @@ public class ProcesadorMensajes {
      * @param mensaje el mensaje recibido por via serial
      */
     public void analizarMensaje(String mensaje) {
-        
+
         //Si el mensaje es nulo o sol contiene espacios
         if (mensaje == null || mensaje.trim().isEmpty()) {
             return;
@@ -107,11 +107,12 @@ public class ProcesadorMensajes {
                     if (placa.getUsuario().getNombre().equals(cadena[0])) {
                         String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_NOMBRE_REPETIDO);
                         placa.enviarComando(msj);
-                    } else if(cadena.length > 1){
+                    } else if (cadena.length > 1) {
                         
-                        Usuario nuevo = new Usuario(cadena[0], cadena[1]);
-                        placa.getUsuarios().agregarUsuario(nuevo);
-                        oyente.onNuevoLogin(nuevo);
+                        //Quitamos al usuario de la lista de usuarios para evitar datos viejos en los registros
+                        placa.getUsuarios().quitarUsuario(
+                                placa.getUsuarios().buscarPorId(cadena[1])
+                        );
 
                         String msj = Mensajes.componerMensaje(
                                 Mensajes.COMANDO_RED,
@@ -121,14 +122,14 @@ public class ProcesadorMensajes {
                     }
                 }
                 break;
-                
+
             //Automático, independiente de ventana
             case Mensajes.SUBR_NOMBRE_REPETIDO:
                 if (placa.getUsuario() == null && oyente != null) {
                     oyente.onNombreRepetido();
                 }
                 break;
-            
+
             //Recepción de mensajes públicos
             case Mensajes.SUBR_MENSAJE:
                 if (placa.getUsuario() != null) {
@@ -138,13 +139,17 @@ public class ProcesadorMensajes {
                 }
 
                 break;
-            
+
             //Registro de un usuario conectado al entrar a la red.
             case Mensajes.SUBR_HOLA:
+                System.out.println("[Procesador]: Llegó un hola:" + cadena[0]);
+                if (!placa.getUsuarios().estaRegistrado(cadena[0])) {
+                    Usuario nuevo = new Usuario(cadena[0], cadena[1]);
+
+                    placa.getUsuarios().agregarUsuario(nuevo);
+                    placa.solicitarActualizarUsuarios();
+                }
                 
-                Usuario nuevo = new Usuario(cadena[0], cadena[1]);
-                placa.getUsuarios().agregarUsuario(nuevo);
-                placa.solicitarActualizarUsuarios();
                 break;
 
             //Actualiza el registro de un usuario al recibir su señal "keep alive"
@@ -153,7 +158,7 @@ public class ProcesadorMensajes {
                 Usuario u = placa.getUsuarios().buscarPorId(cadena[0]);
                 placa.getUsuarios().actualizarTiempoUsuario(u);
                 break;
-                
+
             // Maneja la llegada de un mensaje privado
             case Mensajes.SUBR_MENSAJE_PRIVADO:
                 Usuario e = placa.getUsuarios().buscarPorId(cadena[2]);
@@ -202,11 +207,11 @@ public class ProcesadorMensajes {
                 System.out.println("ZuMBido v: " + cadena[0]);
                 oyente.onVersionPlaca(cadena[0]);
                 break;
-            
+
             case Mensajes.PLACA_DISPONIBLE:
                 oyente.onPlacaDisponible();
                 break;
-            
+
             default:
                 System.out.println("SubComando no conocido: " + subcomando);
         }

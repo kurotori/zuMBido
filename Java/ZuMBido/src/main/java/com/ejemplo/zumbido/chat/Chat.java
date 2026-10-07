@@ -213,6 +213,13 @@ public class Chat extends JFrame implements OyenteMensajes {
         actualizarUsuarios();
         agregarMensajeGeneral("<html>Hola <b>" + getPlaca().getUsuario().getNombre() + "</b>. Te conectaste a la red <b>zuMBido-MicroChat</b></html>");
         txtMensaje.requestFocus();
+        
+        //El usuario "se presenta" ante el grupo
+        String msj = Mensajes.componerMensaje(
+                Mensajes.COMANDO_RED, 
+                Mensajes.SUBR_HOLA,
+                placa.getUsuario().getNombre());
+        placa.enviarComando(msj);
     }
 
     /**

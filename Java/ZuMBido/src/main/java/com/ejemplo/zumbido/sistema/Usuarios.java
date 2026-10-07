@@ -21,11 +21,17 @@ public class Usuarios {
      * @param idPlaca
      * @return 
      */
-    public boolean estaRegistrada(String idPlaca){
-        boolean resultado = false;
+    public boolean estaRegistrado(String idPlaca){
         
-        return false;
+        if (buscarPorId(idPlaca)!=null) {
+            return true;
+        }
+        else{
+            return false;
+        }
+        
     }
+    
 
     /**
      * Permite buscar un usuario en el listado mediante la id de su placa
