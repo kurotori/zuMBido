@@ -27,6 +27,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -80,7 +81,9 @@ public class Chat extends JFrame implements OyenteMensajes {
     Iconos iconos = new Iconos();
     private GridBagConstraints gbc = new GridBagConstraints();
     
-    public enum ResultadoEspera {
+     private JDialog dialogoEspera;
+    
+    public enum ResultadoCambioNombre {
         //TIMEOUT,
         CAMBIO_NOMBRE_OK,
         NOMBRE_REPETIDO
@@ -376,6 +379,9 @@ public class Chat extends JFrame implements OyenteMensajes {
         placa.enviarComando(msj);
     }
 
+    /**
+     * Comienza el proceso de cambio de nombre del usuario
+     */
     public void cambiarNombre() {
 
         JTextField txtNuevoNombre = new JTextField(getPlaca().getUsuario().getNombre());
@@ -402,6 +408,17 @@ public class Chat extends JFrame implements OyenteMensajes {
                 }
             }
         }
+    }
+    
+    
+    public ResultadoCambioNombre iniciarCambioNombre(String nuevoNombre){
+        ResultadoCambioNombre resultado = ResultadoCambioNombre.CAMBIO_NOMBRE_OK;
+        
+        dialogoEspera = new JDialog(this, "Conectando...", true); // true = Modal
+        dialogoEspera.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE); // Bloquea el botón 'X'
+        dialogoEspera.setLayout(new BorderLayout(10, 10));
+        
+        return resultado;
     }
 
     /**
