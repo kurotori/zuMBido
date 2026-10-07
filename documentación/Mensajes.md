@@ -85,6 +85,18 @@ La placa notifica a la aplicación que esta disponible para recibir otra orden.
 
 >**Nota:** Todos estos mensajes son **radiales** e incluyen la **id de la placa** donde se origina el mensaje.
 
+#### nl - "NUEVO LOGIN" - Mensaje de solicitud de login
+
+#### nr - "NOMBRE REPETIDO" - Mensaje de rechazo de login por nombre repetido
+
+#### hl - "HOLA" - Respuesta a un ingreso al grupo tras un login exitoso
+
+`hl{<nombre_usuario>{<id_placa>`
+
+#### hls - "HOLA, SOY" - Mensaje de ingreso al grupo tras el login exitoso
+
+`hls{<nombre_usuario>{<id_placa>`
+
 #### m - Mensajes Públicos
 
 `m{<mensaje>{<id_placa>`
