@@ -347,7 +347,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
      * @param senalB Segunda señal esperada (ej. "nombre_repetido")
      * @return ResultadoEspera indicando qué ocurrió (TIMEOUT, SENAL_A, SENAL_B)
      */
-    public ResultadoEspera esperarSenialPlaca(String senalA, String senalB) {
+    public ResultadoEspera esperarLoginOk(String senalA, String senalB) {
         // 1. Estado por defecto si expira el tiempo
         resultadoEspera = ResultadoEspera.LOGIN_OK;//TIMEOUT;
 
@@ -409,7 +409,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
             placa.enviarComando(msj);
 
             // Iniciar la espera bloqueante de 3 segundos o respuesta
-            ResultadoEspera res = esperarSenialPlaca("login_ok", "nombre_repetido");
+            ResultadoEspera res = esperarLoginOk("login_ok", "nombre_repetido");
 
             // Evaluar la resolución después de cerrar el diálogo
             switch (res) {
@@ -432,10 +432,6 @@ public class InicioBase extends JFrame implements OyenteMensajes {
                             JOptionPane.PLAIN_MESSAGE,
                             iconos.ICONO_ERROR_96);
                     break;
-//            case TIMEOUT:
-//                JOptionPane.showMessageDialog(this, "No se recibió respuesta de la placa (Tiempo agotado).",
-//                        "Timeout", JOptionPane.WARNING_MESSAGE);
-//                break;
             }
         }
         if (nombreUsuario.length() < 3) {

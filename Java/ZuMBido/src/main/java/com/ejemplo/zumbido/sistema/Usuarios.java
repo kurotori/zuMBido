@@ -14,6 +14,18 @@ import java.util.Optional;
 public class Usuarios {
 
     private ArrayList<Usuario> usuarios = new ArrayList<>();
+    
+    
+    /**
+     * Determina si un usuario esta registrado
+     * @param idPlaca
+     * @return 
+     */
+    public boolean estaRegistrada(String idPlaca){
+        boolean resultado = false;
+        
+        return false;
+    }
 
     /**
      * Permite buscar un usuario en el listado mediante la id de su placa

@@ -141,6 +141,7 @@ public class ProcesadorMensajes {
             
             //Registro de un usuario conectado al entrar a la red.
             case Mensajes.SUBR_HOLA:
+                
                 Usuario nuevo = new Usuario(cadena[0], cadena[1]);
                 placa.getUsuarios().agregarUsuario(nuevo);
                 placa.solicitarActualizarUsuarios();
