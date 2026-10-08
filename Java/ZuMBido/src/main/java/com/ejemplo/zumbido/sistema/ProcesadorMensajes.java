@@ -167,12 +167,14 @@ public class ProcesadorMensajes {
 
                 Usuario u = placa.getUsuarios().buscarPorId(cadena[0]);
                 placa.getUsuarios().actualizarTiempoUsuario(u);
+                u.setActivo(true);
                 break;
 
             // Maneja la llegada de un mensaje privado
             case Mensajes.SUBR_MENSAJE_PRIVADO:
                 Usuario e = placa.getUsuarios().buscarPorId(cadena[2]);
                 placa.getUsuarios().actualizarTiempoUsuario(e);
+                e.setActivo(true);
                 oyente.onMensajePrivado(cadena[0], cadena[2]);
                 break;
         }
