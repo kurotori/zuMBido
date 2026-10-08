@@ -49,10 +49,8 @@ public class ProcesadorMensajes {
         String[] cadena = mensaje.split(Mensajes.SEP_1);
 
         if (cadena.length < 2) {
-            System.out.println("Mensaje truncado: " + mensaje);
+            System.out.println("[Procesador]: Mensaje truncado: " + mensaje);
             return;
-        } else {
-
         }
 
         String comando = cadena[0];
@@ -85,7 +83,7 @@ public class ProcesadorMensajes {
                 break;
 
             default:
-                System.out.println("Mensaje desconocido: " + mensaje);
+                System.out.println("[Procesador]:Mensaje desconocido: " + mensaje);
             //throw new AssertionError();
         }
 
@@ -224,7 +222,7 @@ public class ProcesadorMensajes {
                 break;
 
             default:
-                System.out.println("SubComando no conocido: " + subcomando);
+                System.out.println("[Procesador]:SubComando no conocido: " + subcomando);
         }
     }
 
