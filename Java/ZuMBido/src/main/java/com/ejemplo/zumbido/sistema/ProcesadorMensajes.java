@@ -134,6 +134,7 @@ public class ProcesadorMensajes {
                 if (placa.getUsuario() != null) {
                     Usuario u = placa.getUsuarios().buscarPorId(cadena[1]);
                     placa.getUsuarios().actualizarTiempoUsuario(u);
+                    u.setActivo(true);
                     oyente.onMensajePublico(cadena[0], cadena[1]);
                 }
 

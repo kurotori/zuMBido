@@ -7,6 +7,7 @@ public class Usuario {
     private String nombre;
     private String idPlaca;
     private long ultimoMsg = 0;
+    private boolean activo = true;
 
     public Usuario(String nombre, String idPlaca) {
         this.nombre = nombre;
@@ -47,6 +48,20 @@ public class Usuario {
     
     public String colorTexto(){
         return Colores.obtenerColorTextoHex(colorFondo());
+    }
+
+    /**
+     * @return the activo
+     */
+    public boolean isActivo() {
+        return activo;
+    }
+
+    /**
+     * @param activo the activo to set
+     */
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
 }
