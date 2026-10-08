@@ -108,12 +108,13 @@ public class ProcesadorMensajes {
                         String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_NOMBRE_REPETIDO);
                         placa.enviarComando(msj);
                     } else if (cadena.length > 1) {
-                        
+
                         //Quitamos al usuario de la lista de usuarios para evitar datos viejos en los registros
                         placa.getUsuarios().quitarUsuario(
                                 placa.getUsuarios().buscarPorId(cadena[1])
                         );
 
+                        //Se envía el mensaje "de bienvenida" con los datos del usuario local
                         String msj = Mensajes.componerMensaje(
                                 Mensajes.COMANDO_RED,
                                 Mensajes.SUBR_HOLA,
@@ -140,7 +141,7 @@ public class ProcesadorMensajes {
 
                 break;
 
-            //Registro de un usuario conectado al entrar a la red.
+            //Datos del usuario local para los usuarios que recién se conectan
             case Mensajes.SUBR_HOLA:
                 System.out.println("[Procesador]: Llegó un hola:" + cadena[0]);
                 if (!placa.getUsuarios().estaRegistrado(cadena[0])) {
@@ -149,7 +150,17 @@ public class ProcesadorMensajes {
                     placa.getUsuarios().agregarUsuario(nuevo);
                     placa.solicitarActualizarUsuarios();
                 }
-                
+
+                break;
+
+            //Datos del usuario que recién se conecta para los demás
+            case Mensajes.SUBR_HOLA_SOY:
+                System.out.println("[Procesador]: Nuevo Login:" + cadena[0]);
+                Usuario nuevo = new Usuario(cadena[0], cadena[1]);
+
+                placa.getUsuarios().agregarUsuario(nuevo);
+                placa.solicitarActualizarUsuarios();
+                oyente.onNuevoLogin(nuevo);
                 break;
 
             //Actualiza el registro de un usuario al recibir su señal "keep alive"

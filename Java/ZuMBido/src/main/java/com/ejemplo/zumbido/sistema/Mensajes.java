@@ -60,6 +60,7 @@ public class Mensajes {
     public static final String SUBR_NUEVO_LOGIN = "nl";
     public static final String SUBR_KEEP_ALIVE = "ka";
     public static final String SUBR_HOLA = "hl";
+    public static final String SUBR_HOLA_SOY = "hls";
     public static final String SUBR_MENSAJE = "m";
     public static final String SUBR_MENSAJE_PRIVADO = "p";
     

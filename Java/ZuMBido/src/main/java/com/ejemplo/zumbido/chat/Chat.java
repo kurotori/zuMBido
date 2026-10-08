@@ -217,7 +217,7 @@ public class Chat extends JFrame implements OyenteMensajes {
         //El usuario "se presenta" ante el grupo
         String msj = Mensajes.componerMensaje(
                 Mensajes.COMANDO_RED, 
-                Mensajes.SUBR_HOLA,
+                Mensajes.SUBR_HOLA_SOY,
                 placa.getUsuario().getNombre());
         placa.enviarComando(msj);
     }
