@@ -233,7 +233,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
         if (puerto == null) {
             return;
         }
-        //placa = new Placa(this, SerialPort.getCommPort(puerto));
+
         placa = new Placa(SerialPort.getCommPort(puerto));
 
         placa.getProcesador().setOyente(this);
@@ -279,11 +279,6 @@ public class InicioBase extends JFrame implements OyenteMensajes {
         txtNombreUsuario.setEnabled(true);
         txtNombreUsuario.requestFocus();
         cmbGruposRadio.setSelectedIndex(grupo);
-    }
-
-    @Override
-    public void onMensajeGenerico(String comando, String subcomando, String[] parametros) {
-
     }
 
     @Override
@@ -415,7 +410,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
             switch (res) {
                 //Login exitoso: No hay otro usuario con el mismo nombre
                 case LOGIN_OK:
-                    //JOptionPane.showMessageDialog(this, "¡Conexión exitosa!");
+                    
                     Usuario u = new Usuario(nombreUsuario, placa.getId());
                     placa.setUsuario(u);
                     Chat chat = new Chat(placa, this);
