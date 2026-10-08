@@ -237,7 +237,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     /**
-     * Agrega un mensaje al panel de chat
+     * Agrega un mensaje público al panel de chat, distinguiendo entre mensajes propios y externos
      *
      * @param usuario
      * @param msj
@@ -296,7 +296,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     /**
-     * Envía un mensaje al chat general obteniendo los datos de la ventana
+     * Envía un mensaje al chat público obteniendo los datos de la ventana
      */
     private void enviarMensaje() {
         if (!placaDisp) {

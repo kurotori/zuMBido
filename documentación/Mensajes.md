@@ -87,7 +87,15 @@ La placa notifica a la aplicación que esta disponible para recibir otra orden.
 
 #### nl - "NUEVO LOGIN" - Mensaje de solicitud de login
 
+`nl{<nombre_usuario>{<id_placa>`
+
+Contiene una solicitud de login en el grupo radial elegido incluyendo el nombre de usuario elegido para su autorización dentro del grupo.
+
 #### nr - "NOMBRE REPETIDO" - Mensaje de rechazo de login por nombre repetido
+
+`nr{<id_placa>`
+
+El sistema emite este mensaje ante un mensaje de login que contenga un nombre exactamente igual al propio, negando su uso.
 
 #### hl - "HOLA" - Respuesta a un ingreso al grupo tras un login exitoso
 
@@ -103,9 +111,9 @@ La placa notifica a la aplicación que esta disponible para recibir otra orden.
 
 Los mensajes públicos se envían al chat general (o su equivalente), y son recibidos y vistos por todos los usuarios conectados en ese grupo radial.
 
-Tienen una longitud máxima de 229 caracteres.
+Tienen una longitud máxima de 200 caracteres.
 
->NOTA: La longitud máxima de los mensajes públicos puede ser 231, pero se mantiene en 229 para evitar sobrecargar el sistema radial.
+>NOTA: La longitud máxima de los mensajes públicos puede ser 231 caracteres, pero se mantiene en 200 caracteres para evitar sobrecargar el sistema radial.
 
 #### p - Mensajes Privados (de usuario a usuario)
 
@@ -113,6 +121,6 @@ Tienen una longitud máxima de 229 caracteres.
 
 Los mensajes privados se envían a una ventana de chat privado (o su equivalente). Al recibirse en cada placa, se compara, a nivel de placa, la id de la placa. Si no es igual a la id de la placa local, se ignora el mensaje (no pasa a la aplicación).
 
-Tienen una longitud máxima de 212 caracteres.
+Tienen una longitud máxima de 200 caracteres.
 
->NOTA: La longitud máxima de los mensajes públicos puede ser 214, pero se mantiene en 212 para evitar sobrecargar el sistema radial.
+>NOTA: La longitud máxima de los mensajes públicos puede ser 214 caracteres, pero se mantiene en 200 para evitar sobrecargar el sistema radial.
