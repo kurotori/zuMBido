@@ -429,6 +429,11 @@ public class Chat extends JFrame implements OyenteMensajes {
                             placa.getUsuario().setNombre(nombreIngresado);
                             this.lblUsuario.setText(nombreIngresado);
                             agregarMensajeGeneral("<html>Tu nombre ha cambiado a <b>" + nombreIngresado + "</b></html>");
+                            String msjn = Mensajes.componerMensaje(
+                                    Mensajes.COMANDO_RED, 
+                                    Mensajes.SUBR_NUEVO_NOMBRE, 
+                                    nombreIngresado);
+                            placa.enviarComando(msjn);
                             break;
                         case NOMBRE_REPETIDO:
                             JOptionPane.showMessageDialog(
@@ -454,7 +459,7 @@ public class Chat extends JFrame implements OyenteMensajes {
      * @return 
      */
     public ResultadoCambioNombre iniciarCambioNombre() {
-        ResultadoCambioNombre resultado = ResultadoCambioNombre.CAMBIO_NOMBRE_OK;
+        resultadoEspera = ResultadoCambioNombre.CAMBIO_NOMBRE_OK;
 
         dialogoEspera = new JDialog(this, "Realizando Solicitud...", true); // true = Modal
         dialogoEspera.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE); // Bloquea el botón 'X'
@@ -477,7 +482,7 @@ public class Chat extends JFrame implements OyenteMensajes {
 
         // 3. Crear el temporizador de 3000 ms (3 segundos)
         temporizadorEspera = new Timer(3000, e -> {
-            resultadoEspera = ResultadoCambioNombre.CAMBIO_NOMBRE_OK;//TIMEOUT;
+            //resultadoEspera = ResultadoCambioNombre.CAMBIO_NOMBRE_OK;//TIMEOUT;
             if (dialogoEspera != null && dialogoEspera.isVisible()) {
                 dialogoEspera.dispose(); // Cierra el diálogo al agotar tiempo
             }
@@ -493,7 +498,7 @@ public class Chat extends JFrame implements OyenteMensajes {
             temporizadorEspera.stop();
         }
 
-        return resultado;
+        return resultadoEspera;
     }
 
     /**
