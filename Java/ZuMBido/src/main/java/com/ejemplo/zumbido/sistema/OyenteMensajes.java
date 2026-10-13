@@ -37,7 +37,16 @@ public interface OyenteMensajes {
     
     default void onPlacaDisponible(){}
     
+    /**
+     * Solicitud de un usuario para cambiar su nombre
+     */
     default void onCambiarNombre(){}
+    
+    
+    /**
+     * Aviso de un usuario que cambió su nombre
+     */
+    default void onNombreCambiado(String nombreViejo, String nombreNuevo){}
     
 }
 

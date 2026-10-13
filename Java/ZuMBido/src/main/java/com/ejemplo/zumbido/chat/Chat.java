@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -80,9 +82,12 @@ public class Chat extends JFrame implements OyenteMensajes {
     Fuentes fuentes = new Fuentes();
     Iconos iconos = new Iconos();
     private GridBagConstraints gbc = new GridBagConstraints();
-    
-     private JDialog dialogoEspera;
-    
+
+    //Elementos para diálogo de cambio de nombre 
+    private JDialog dialogoEspera;
+    private ResultadoCambioNombre resultadoEspera;
+    private Timer temporizadorEspera;
+
     public enum ResultadoCambioNombre {
         //TIMEOUT,
         CAMBIO_NOMBRE_OK,
@@ -213,13 +218,14 @@ public class Chat extends JFrame implements OyenteMensajes {
         actualizarUsuarios();
         agregarMensajeGeneral("<html>Hola <b>" + getPlaca().getUsuario().getNombre() + "</b>. Te conectaste a la red <b>zuMBido-MicroChat</b></html>");
         txtMensaje.requestFocus();
-        
+
         //El usuario "se presenta" ante el grupo
         String msj = Mensajes.componerMensaje(
-                Mensajes.COMANDO_RED, 
+                Mensajes.COMANDO_RED,
                 Mensajes.SUBR_HOLA_SOY,
                 placa.getUsuario().getNombre());
         placa.enviarComando(msj);
+
     }
 
     /**
@@ -237,7 +243,8 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     /**
-     * Agrega un mensaje público al panel de chat, distinguiendo entre mensajes propios y externos
+     * Agrega un mensaje público al panel de chat, distinguiendo entre mensajes
+     * propios y externos
      *
      * @param usuario
      * @param msj
@@ -411,20 +418,81 @@ public class Chat extends JFrame implements OyenteMensajes {
                     JOptionPane.showMessageDialog(this, "El nombre de usuario debe\ntener entre 3 y 12 caracteres");
                 } else {
                     // Procesar cambio de nombre
+                    String msj = Mensajes.componerMensaje(
+                            Mensajes.COMANDO_RED, 
+                            Mensajes.SUBR_CAMBIAR_NOMBRE, nombreIngresado);
+                    placa.enviarComando(msj);
+                    resultadoEspera = iniciarCambioNombre();
                     
+                    switch (resultadoEspera) {
+                        case CAMBIO_NOMBRE_OK:
+                            placa.getUsuario().setNombre(nombreIngresado);
+                            this.lblUsuario.setText(nombreIngresado);
+                            agregarMensajeGeneral("<html>Tu nombre ha cambiado a <b>" + nombreIngresado + "</b></html>");
+                            break;
+                        case NOMBRE_REPETIDO:
+                            JOptionPane.showMessageDialog(
+                            this, 
+                            "ERROR: Ese nombre de usuario ya esta en uso en la red."+
+                                    "\nPrueba con otro nombre",
+                            "Error"            ,
+                            JOptionPane.PLAIN_MESSAGE,
+                            iconos.ICONO_ERROR_96);
+                            break;
+                        default:
+                            throw new AssertionError();
+                    }
+
                 }
             }
         }
     }
-    
-    
-    public ResultadoCambioNombre iniciarCambioNombre(String nuevoNombre){
+
+    /**
+     * Proceso de cambio de nombre del usuario
+     * @param nuevoNombre
+     * @return 
+     */
+    public ResultadoCambioNombre iniciarCambioNombre() {
         ResultadoCambioNombre resultado = ResultadoCambioNombre.CAMBIO_NOMBRE_OK;
-        
-        dialogoEspera = new JDialog(this, "Conectando...", true); // true = Modal
+
+        dialogoEspera = new JDialog(this, "Realizando Solicitud...", true); // true = Modal
         dialogoEspera.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE); // Bloquea el botón 'X'
         dialogoEspera.setLayout(new BorderLayout(10, 10));
-        
+
+        // Panel interno con texto y barra de progreso
+        JPanel pnlContenido = new JPanel(new GridLayout(2, 1, 5, 5));
+        pnlContenido.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+
+        JLabel lblMensaje = new JLabel("Solicitando cambio de nombre...", JLabel.CENTER);
+        JProgressBar barraProgreso = new JProgressBar();
+        barraProgreso.setIndeterminate(true); // Animación de espera
+
+        pnlContenido.add(lblMensaje);
+        pnlContenido.add(barraProgreso);
+
+        dialogoEspera.add(pnlContenido, BorderLayout.CENTER);
+        dialogoEspera.pack();
+        dialogoEspera.setLocationRelativeTo(this); // Centrar respecto a la ventana principal
+
+        // 3. Crear el temporizador de 3000 ms (3 segundos)
+        temporizadorEspera = new Timer(3000, e -> {
+            resultadoEspera = ResultadoCambioNombre.CAMBIO_NOMBRE_OK;//TIMEOUT;
+            if (dialogoEspera != null && dialogoEspera.isVisible()) {
+                dialogoEspera.dispose(); // Cierra el diálogo al agotar tiempo
+            }
+        });
+        temporizadorEspera.setRepeats(false); // Ejecutar una sola vez
+        temporizadorEspera.start();
+
+        // 4. Mostrar el diálogo modal (Bucle de eventos bloqueante hasta que se llame a dispose())
+        dialogoEspera.setVisible(true);
+
+        // 5. Al cerrarse el diálogo, detener el timer si seguía activo
+        if (temporizadorEspera.isRunning()) {
+            temporizadorEspera.stop();
+        }
+
         return resultado;
     }
 
@@ -558,6 +626,22 @@ public class Chat extends JFrame implements OyenteMensajes {
         }
 
     }
+
+    @Override
+    public void onNombreCambiado(String nombreViejo, String nombreNuevo) {
+        agregarMensajeGeneral("<html>"+nombreViejo+" cambió su nombre a <b>"+nombreNuevo+"</b></html>");
+    }
+
+    @Override
+    public void onNombreRepetido() {
+        if (dialogoEspera != null && dialogoEspera.isVisible()) {
+                dialogoEspera.dispose();
+            }
+
+            resultadoEspera = ResultadoCambioNombre.NOMBRE_REPETIDO;
+    }
+    
+    
 
     /**
      * @return the placa

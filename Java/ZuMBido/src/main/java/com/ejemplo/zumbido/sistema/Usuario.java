@@ -64,4 +64,11 @@ public class Usuario {
         this.activo = activo;
     }
 
+    /**
+     * @param nombre the nombre to set
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
 }

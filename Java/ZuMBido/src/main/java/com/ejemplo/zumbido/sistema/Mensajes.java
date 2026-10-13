@@ -61,6 +61,8 @@ public class Mensajes {
     public static final String SUBR_KEEP_ALIVE = "ka";
     public static final String SUBR_HOLA = "hl";
     public static final String SUBR_HOLA_SOY = "hls";
+    public static final String SUBR_CAMBIAR_NOMBRE = "cn";
+    public static final String SUBR_NUEVO_NOMBRE = "nn";
     public static final String SUBR_MENSAJE = "m";
     public static final String SUBR_MENSAJE_PRIVADO = "p";
     

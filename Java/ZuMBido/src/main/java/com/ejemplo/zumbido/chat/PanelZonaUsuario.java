@@ -112,6 +112,7 @@ public class PanelZonaUsuario extends JPanel {
                 e->ventana.cambiarNombre()
         );
         
+        
     }
 
     public void actualizarUsuarios(ArrayList<Usuario> listaUsuarios) {

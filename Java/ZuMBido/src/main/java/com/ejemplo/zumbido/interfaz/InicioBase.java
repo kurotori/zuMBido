@@ -292,7 +292,6 @@ public class InicioBase extends JFrame implements OyenteMensajes {
 
     @Override
     public void onNombreRepetido() {
-        System.out.println("Nombre repetido");
         if (placa.getUsuario() == null) {
 
             if (dialogoEspera != null && dialogoEspera.isVisible()) {
