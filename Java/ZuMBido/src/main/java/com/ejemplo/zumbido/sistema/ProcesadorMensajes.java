@@ -201,8 +201,11 @@ public class ProcesadorMensajes {
             case Mensajes.SUBR_KEEP_ALIVE:
                 
                 Usuario u = placa.getUsuarios().buscarPorId(cadena[0]);
-                placa.getUsuarios().actualizarTiempoUsuario(u);
-                u.setActivo(true);
+                if(u!=null){
+                    placa.getUsuarios().actualizarTiempoUsuario(u);
+                    u.setActivo(true);
+                    
+                }
                 break;
 
             // Maneja la llegada de un mensaje privado
