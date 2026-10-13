@@ -634,11 +634,12 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     @Override
     public void onNombreRepetido() {
+        System.out.println("[Chat]: Nombre Repetido - recibido");
         if (dialogoEspera != null && dialogoEspera.isVisible()) {
                 dialogoEspera.dispose();
             }
 
-            resultadoEspera = ResultadoCambioNombre.NOMBRE_REPETIDO;
+        resultadoEspera = ResultadoCambioNombre.NOMBRE_REPETIDO;
     }
     
     
