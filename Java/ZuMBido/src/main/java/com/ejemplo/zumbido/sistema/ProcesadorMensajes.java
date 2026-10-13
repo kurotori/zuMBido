@@ -162,7 +162,7 @@ public class ProcesadorMensajes {
                 placa.solicitarActualizarUsuarios();
                 oyente.onNombreCambiado(nv, cadena[0]); //Avisamos a la interfáz
                 break;
-                
+                    
             //Recepción de mensajes públicos
             case Mensajes.SUBR_MENSAJE:
                 if (placa.getUsuario() != null) {
