@@ -11,14 +11,14 @@ import java.util.Arrays;
  * @author sebastian
  */
 public class ProcesadorMensajes {
-    
+
     private final Placa placa;
     private OyenteMensajes oyente;
-    
+
     public ProcesadorMensajes(Placa placa) {
         this.placa = placa;
     }
-    
+
     public void mostrarEvento(String evento) {
         System.out.println("[Procesador]: " + evento);
     }
@@ -51,48 +51,48 @@ public class ProcesadorMensajes {
 
         //Separamos el mensaje en secciones mediante el Separador 1
         String[] cadena = mensaje.split(Mensajes.SEP_1);
-        
+
         if (cadena.length < 2) {
             System.out.println("[Procesador]: Mensaje truncado: " + mensaje);
             return;
         }
-        
+
         String comando = cadena[0];
         String subcomando = cadena[1];
         String[] datos;
-        
+
         if (cadena.length > 2) {
             datos = Arrays.copyOfRange(cadena, 2, cadena.length);
         } else {
             datos = new String[]{""};
         }
-        
+
         switch (comando) {
             case Mensajes.COMANDO_SISTEMA:
-                
+
                 procesarComandoSistema(subcomando, datos);
                 break;
-            
+
             case Mensajes.PLACA_MENSAJE:
                 procesarMensajePlaca(subcomando, datos);
-                
+
                 break;
-            
+
             case Mensajes.COMANDO_RED:
                 procesarComandoRed(subcomando, datos);
                 break;
-            
+
             case Mensajes.PLACA_RECIBIDO:
                 System.out.println("->" + mensaje);
                 break;
-            
+
             default:
                 System.out.println("[Procesador]:Mensaje desconocido: " + mensaje);
             //throw new AssertionError();
         }
-        
+
     }
-    
+
     public static final int USUARIO_NUEVO = 10;
     public static final int CAMBIAR_NOMBRE = 11;
 
@@ -118,7 +118,7 @@ public class ProcesadorMensajes {
                             placa.getUsuario().getNombre());
                     placa.enviarComando(msj);
                 }
-                
+
             }
         }
     }
@@ -131,11 +131,11 @@ public class ProcesadorMensajes {
      */
     private void procesarComandoRed(String subcomando, String[] cadena) {
         switch (subcomando) {
-            
+
             case Mensajes.SUBR_NUEVO_LOGIN:
                 // Lógica de red automática (independiente de la ventana)
                 registrarUsuario(cadena, USUARIO_NUEVO);
-                
+
                 break;
 
             //Se recibe un aviso de que el nombre elegido ya está en uso. Automático, independiente de ventana
@@ -143,7 +143,7 @@ public class ProcesadorMensajes {
                 mostrarEvento("Nombre Repetido");
                 //if (placa.getUsuario() == null && oyente != null) {
                 //if (oyente != null) {
-                    oyente.onNombreRepetido();
+                oyente.onNombreRepetido();
                 //}
                 break;
 
@@ -152,17 +152,24 @@ public class ProcesadorMensajes {
                 mostrarEvento("Solicitud de cambio de nombre de " + cadena[1]);
                 registrarUsuario(cadena, CAMBIAR_NOMBRE);
                 break;
-            
+
             //Un usuario avisa que ha cambiado su nombre
             case Mensajes.SUBR_NUEVO_NOMBRE:
-                mostrarEvento(cadena[1] + "cambió su nombre de usuario a " + cadena[0]);
+                mostrarEvento("Aviso de cambio de nombre de " + cadena[1]);
                 Usuario a = placa.getUsuarios().buscarPorId(cadena[1]); //Ubicamos al usuario
-                String nv = a.getNombre(); //Obtenemos el nombre anterior del usuario
-                a.setNombre(cadena[0]); //Cambiamos su nombre
-                placa.solicitarActualizarUsuarios();
-                oyente.onNombreCambiado(nv, cadena[0]); //Avisamos a la interfáz
+                if (a != null) {
+                    mostrarEvento(cadena[1] + "cambió su nombre de usuario a " + cadena[0]);
+                    String nv = a.getNombre(); //Obtenemos el nombre anterior del usuario
+                    a.setNombre(cadena[0]); //Cambiamos su nombre
+                    placa.solicitarActualizarUsuarios();
+                    oyente.onNombreCambiado(nv, cadena[0]); //Avisamos a la interfáz
+                }
+                else{
+                    mostrarEvento("ERROR - el usuario esta en la red pero no aparece en el registro");
+                }
+
                 break;
-                    
+
             //Recepción de mensajes públicos
             case Mensajes.SUBR_MENSAJE:
                 if (placa.getUsuario() != null) {
@@ -171,7 +178,7 @@ public class ProcesadorMensajes {
                     u.setActivo(true);
                     oyente.onMensajePublico(cadena[0], cadena[1]);
                 }
-                
+
                 break;
 
             //Datos del usuario local para los usuarios que recién se conectan
@@ -179,32 +186,31 @@ public class ProcesadorMensajes {
                 System.out.println("[Procesador]: Llegó un hola:" + cadena[0]);
                 if (!placa.getUsuarios().estaRegistrado(cadena[0])) {
                     Usuario nuevo = new Usuario(cadena[0], cadena[1]);
-                    
+
                     placa.getUsuarios().agregarUsuario(nuevo);
                     placa.solicitarActualizarUsuarios();
                 }
-                
+
                 break;
 
             //Datos del usuario que recién se conecta para los demás
             case Mensajes.SUBR_HOLA_SOY:
                 System.out.println("[Procesador]: Nuevo Login:" + cadena[0]);
                 Usuario nuevo = new Usuario(cadena[0], cadena[1]);
-                
+
                 placa.getUsuarios().agregarUsuario(nuevo);
                 placa.solicitarActualizarUsuarios();
                 oyente.onNuevoLogin(nuevo);
                 break;
-            
 
             //Actualiza el registro de un usuario al recibir su señal "keep alive"
             case Mensajes.SUBR_KEEP_ALIVE:
-                
+
                 Usuario u = placa.getUsuarios().buscarPorId(cadena[0]);
-                if(u!=null){
+                if (u != null) {
                     placa.getUsuarios().actualizarTiempoUsuario(u);
                     u.setActivo(true);
-                    
+
                 }
                 break;
 
@@ -234,39 +240,39 @@ public class ProcesadorMensajes {
                     oyente.onBoardIdRecibido(id);
                 }
                 break;
-            
+
             case Mensajes.SUBC_GRUPO_RADIO:
-                
+
                 int grupo = Integer.parseInt(cadena[0]);
                 placa.setGrupoRadial(grupo);
                 if (oyente != null) {
                     oyente.onGrupoRadioCambiado(grupo);
                 }
-                
+
                 break;
-            
+
             case Mensajes.SUBC_KEEP_ALIVE:
                 placa.enviarComando(Mensajes.SUBC_KEEP_ALIVE);
                 break;
-            
+
             case Mensajes.SUBI_ACTUALIZAR_USUARIOS:
                 oyente.onActualizarUsuarios();
                 break;
-            
+
             case Mensajes.SUBC_PLACA_VERSION:
                 System.out.println("ZuMBido v: " + cadena[0]);
                 oyente.onVersionPlaca(cadena[0]);
                 break;
-            
+
             case Mensajes.PLACA_DISPONIBLE:
                 oyente.onPlacaDisponible();
                 break;
-            
+
             default:
                 System.out.println("[Procesador]:SubComando no conocido: " + subcomando);
         }
     }
-    
+
     private void procesarMensajePlaca(String subcomando, String[] cadena) {
 //        if (cadena.length < 3) {
 //            return;
@@ -276,5 +282,5 @@ public class ProcesadorMensajes {
             oyente.onMensajePlaca(placa.getId(), cadena[0], esError);
         }
     }
-    
+
 }
