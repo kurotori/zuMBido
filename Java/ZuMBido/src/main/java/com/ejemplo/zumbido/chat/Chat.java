@@ -11,6 +11,7 @@ import com.ejemplo.zumbido.interfaz.Textos;
 import com.ejemplo.zumbido.sistema.Placa;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import com.ejemplo.zumbido.sistema.OyenteMensajes;
+import com.ejemplo.zumbido.sistema.Registro;
 import com.ejemplo.zumbido.sistema.Usuario;
 import com.ejemplo.zumbido.sistema.Ventanas;
 import java.awt.BorderLayout;
@@ -206,7 +207,8 @@ public class Chat extends JFrame implements OyenteMensajes {
         //Configuración del temporizador anti-spam
         temporizadorMensaje = new Timer(800,
                 e -> {
-                    System.out.println("Temporizador Mensajes finalizado sin placa");
+                    Registro.registrarEvento(this, "Temporizador Mensajes finalizado sin placa");
+                    
                     onPlacaDisponible();
                 }
         );
@@ -235,7 +237,8 @@ public class Chat extends JFrame implements OyenteMensajes {
 
         pnlLatUsuario.actualizarUsuarios(getPlaca().getUsuarios().getListaUsuarios());
         SwingUtilities.invokeLater(() -> {
-            System.out.println(Textos.CHAT_ET_USUARIOS_CONECTADOS + "-->" + getPlaca().getUsuarios().getCantUsuarios());
+            Registro.registrarEvento(this, Textos.CHAT_ET_USUARIOS_CONECTADOS + "-->" + getPlaca().getUsuarios().getCantUsuarios());
+            
             lblcantUsuarios.setText(Textos.CHAT_ET_USUARIOS_CONECTADOS + getPlaca().getUsuarios().getCantUsuarios());
         }
         );

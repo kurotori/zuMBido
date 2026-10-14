@@ -10,6 +10,7 @@ import com.ejemplo.zumbido.sistema.Placa;
 import com.ejemplo.zumbido.sistema.Usuario;
 import com.ejemplo.zumbido.sistema.Mensajes;
 import com.ejemplo.zumbido.sistema.OyenteMensajes;
+import com.ejemplo.zumbido.sistema.Registro;
 import com.fazecast.jSerialComm.SerialPort;
 
 import javax.swing.*;
@@ -266,7 +267,7 @@ public class InicioBase extends JFrame implements OyenteMensajes {
      */
     @Override
     public void onBoardIdRecibido(String id) {
-        System.out.println("bid ib: " + id);
+        Registro.registrarEvento(this, "ID de placa recibida: "+id);
         placa.setId(id);
         lblIdPlaca.setText(id);
     }
@@ -399,7 +400,6 @@ public class InicioBase extends JFrame implements OyenteMensajes {
 
             // Enviar orden por el puerto serie
             String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_NUEVO_LOGIN, nombreUsuario);
-            System.out.println(msj);
             placa.enviarComando(msj);
 
             // Iniciar la espera bloqueante de 3 segundos o respuesta

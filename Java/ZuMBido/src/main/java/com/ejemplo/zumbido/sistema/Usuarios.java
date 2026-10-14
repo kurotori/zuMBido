@@ -40,7 +40,8 @@ public class Usuarios {
      * @return el <b>Usuario</b> encontrado, o null
      */
     public Usuario buscarPorId(String idPlaca) {
-        System.out.println("Buscando un usuario con la placa " + idPlaca);
+        Registro.registrarEvento(this, "Buscando un usuario con la placa " + idPlaca);
+        
         Usuario resultado = null;
         Optional<Usuario> busqueda = usuarios.stream()
                 .filter(usuario -> usuario.getIdPlaca().equals(idPlaca))
@@ -84,7 +85,8 @@ public class Usuarios {
             this.usuarios.add(nuevo);
             actualizarTiempoUsuario(nuevo); //Hay que marcar su tiempo al agregarlo
         } else {
-            System.out.println("Usuario repetido");
+            Registro.registrarEvento(this, "ERROR: Usuario repetido");
+            
         }
     }
 
@@ -111,7 +113,8 @@ public class Usuarios {
         if (pos >= 0) {
             long marcaTiempo = System.currentTimeMillis();
             usuarios.get(pos).setTiempoUltimoMsg(marcaTiempo);
-            System.out.println("Actualizado:" + usuario.getNombre() + ":" + marcaTiempo);
+            Registro.registrarEvento(this, "Actualizado:" + usuario.getNombre() + ":" + marcaTiempo);
+           
         }
 
     }

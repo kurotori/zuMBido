@@ -70,7 +70,8 @@ public class Placa {
                 salidaSerie.write((texto + "\n").getBytes(StandardCharsets.UTF_8));
                 salidaSerie.flush();
             } catch (Exception ex) {
-                System.err.println("[Placa]:Error al enviar mensaje: " + ex.getMessage());
+                Registro.registrarEvento(this, "Error al enviar mensaje: " + ex.getMessage());
+                
             }
         }
     }
@@ -109,7 +110,8 @@ public class Placa {
             iniciarEscuchaSerie();
         } else {
             //txtHistorial.append
-            System.err.println("[Placa]:Error al abrir el puerto " + nombrePuerto + "\n");
+            Registro.registrarEvento(this, "Error al abrir el puerto " + nombrePuerto + "\n");
+            
         }
     }
 
@@ -151,7 +153,7 @@ public class Placa {
                     if (!lineaCompleta.isEmpty()) {
                         // Enviar la línea completa a la interfaz gráfica
                         SwingUtilities.invokeLater(() -> {
-                            System.out.println("[Placa]: " + lineaCompleta);
+                            Registro.registrarEvento(this, lineaCompleta);
                             procesador.analizarMensaje(lineaCompleta);
                         });
                     }
@@ -166,7 +168,7 @@ public class Placa {
                             String msj = Mensajes.componerMensaje(
                                     Mensajes.COMANDO_SISTEMA, 
                                     Mensajes.SUBI_ACTUALIZAR_USUARIOS);
-                            System.out.println("[Placa]:[INTERNO]: " + msj);
+                            Registro.registrarEvento(this, "[INTERNO]:" + msj);
                             //getVentana().evaluarMensaje(lineaCompleta);
                             procesador.analizarMensaje(msj);
                         });

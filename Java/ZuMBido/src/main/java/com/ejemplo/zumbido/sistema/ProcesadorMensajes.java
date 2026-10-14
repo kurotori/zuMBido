@@ -20,7 +20,7 @@ public class ProcesadorMensajes {
     }
 
     public void mostrarEvento(String evento) {
-        System.out.println("[Procesador]: " + evento);
+        Registro.registrarEvento(this, evento);
     }
 
     /**
@@ -53,7 +53,7 @@ public class ProcesadorMensajes {
         String[] cadena = mensaje.split(Mensajes.SEP_1);
 
         if (cadena.length < 2) {
-            System.out.println("[Procesador]: Mensaje truncado: " + mensaje);
+            Registro.registrarEvento(this, "Mensaje truncado: "+mensaje);
             return;
         }
 
@@ -83,12 +83,13 @@ public class ProcesadorMensajes {
                 break;
 
             case Mensajes.PLACA_RECIBIDO:
-                System.out.println("->" + mensaje);
+                Registro.registrarEvento(this, "Recibido: "+mensaje);
+                
                 break;
 
             default:
-                System.out.println("[Procesador]:Mensaje desconocido: " + mensaje);
-            //throw new AssertionError();
+                Registro.registrarEvento(this, "ERROR:Mensaje desconocido:"+mensaje);
+          
         }
 
     }
@@ -195,7 +196,8 @@ public class ProcesadorMensajes {
 
             //Datos del usuario que recién se conecta para los demás
             case Mensajes.SUBR_HOLA_SOY:
-                System.out.println("[Procesador]: Nuevo Login:" + cadena[0]);
+                Registro.registrarEvento(this, "Nuevo Login:" + cadena[0]);
+                
                 Usuario nuevo = new Usuario(cadena[0], cadena[1]);
 
                 placa.getUsuarios().agregarUsuario(nuevo);
@@ -235,7 +237,8 @@ public class ProcesadorMensajes {
             case Mensajes.SUBC_BOARD_ID:
                 String id = cadena[0];
                 placa.setId(id);
-                System.out.println("placa: " + placa.getId());
+                Registro.registrarEvento(this, "placa: " + placa.getId());
+              
                 if (oyente != null) {
                     oyente.onBoardIdRecibido(id);
                 }
@@ -260,7 +263,8 @@ public class ProcesadorMensajes {
                 break;
 
             case Mensajes.SUBC_PLACA_VERSION:
-                System.out.println("ZuMBido v: " + cadena[0]);
+                Registro.registrarEvento(this, "ZuMBido v: " + cadena[0]);
+                
                 oyente.onVersionPlaca(cadena[0]);
                 break;
 
@@ -269,7 +273,8 @@ public class ProcesadorMensajes {
                 break;
 
             default:
-                System.out.println("[Procesador]:SubComando no conocido: " + subcomando);
+                Registro.registrarEvento(this, "SubComando no conocido: " + subcomando);
+                
         }
     }
 
