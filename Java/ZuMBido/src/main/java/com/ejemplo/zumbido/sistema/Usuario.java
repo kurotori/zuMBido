@@ -8,6 +8,14 @@ public class Usuario {
     private String idPlaca;
     private long ultimoMsg = 0;
     private boolean activo = true;
+    
+    private Estado estado = Estado.ACTIVO;
+    
+    public enum Estado {
+      ACTIVO,
+      INACTIVO,
+      DESCONECTADO
+    }
 
     public Usuario(String nombre, String idPlaca) {
         this.nombre = nombre;
@@ -54,7 +62,7 @@ public class Usuario {
      * @return the activo
      */
     public boolean isActivo() {
-        return activo;
+        return estado == Estado.ACTIVO;
     }
 
     /**
@@ -63,6 +71,16 @@ public class Usuario {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+    
+    public void setEstado(Estado estado){
+        this.estado = estado;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+    
+    
 
     /**
      * @param nombre the nombre to set

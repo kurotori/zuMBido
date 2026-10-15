@@ -59,6 +59,7 @@ public class Mensajes {
     public static final String SUBR_NOMBRE_REPETIDO = "nr";
     public static final String SUBR_NUEVO_LOGIN = "nl";
     public static final String SUBR_KEEP_ALIVE = "ka";
+    public static final String SUBR_AUN_ACTIVO = "ka?";
     public static final String SUBR_HOLA = "hl";
     public static final String SUBR_HOLA_SOY = "hls";
     public static final String SUBR_CAMBIAR_NOMBRE = "cn";
