@@ -3,7 +3,7 @@ from micropython import const
 import radio
 import machine
 import gc
-VER="0.1.6"
+VER="0.1.7"
 IKA=const(5000)
 IEM=const(50)
 MMSG=const(10)
@@ -169,6 +169,9 @@ while True:
     if rOn:
         mensaje_radio = radio.receive()
         if mensaje_radio:
+            if(mensaje_radio[0] == 'ka?'):
+                if(datos[2] == IDP):
+                    agrMsg('ka\x1f' + IDP, True)
             if(mensaje_radio[0] == 'p'):
                 display.set_pixel(1,1,9)
                 datos=mensaje_radio.split('\x1f')

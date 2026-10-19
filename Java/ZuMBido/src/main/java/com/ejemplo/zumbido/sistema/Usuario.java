@@ -70,6 +70,9 @@ public class Usuario {
      */
     public void setActivo(boolean activo) {
         this.activo = activo;
+        if (activo) {
+            this.estado = Estado.ACTIVO;
+        }
     }
     
     public void setEstado(Estado estado){

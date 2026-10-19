@@ -215,6 +215,11 @@ public class ProcesadorMensajes {
 
                 }
                 break;
+            case Mensajes.SUBR_AUN_ACTIVO:
+                
+                String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_KEEP_ALIVE);
+                placa.enviarComando(msj);
+                break;
 
             // Maneja la llegada de un mensaje privado
             case Mensajes.SUBR_MENSAJE_PRIVADO:

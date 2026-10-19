@@ -34,21 +34,21 @@ public class GestorUsuarios {
                             for (Usuario usuario : placa.getUsuarios().getListaUsuarios()) {
                                 if ((tiempo - usuario.getTiempoUltimoMsg()) > 5000) {
                                     usuario.setEstado(Usuario.Estado.INACTIVO);
-                                }
-                                else{
-                                    if (usuario.getEstado()==Usuario.Estado.INACTIVO && (tiempo - usuario.getTiempoUltimoMsg()) > 6500) {
-                                        
+                                    Registro.registrarEvento(this, usuario.getNombre() + "pasa a INACTIVO");
+                                } else {
+                                    if (usuario.getEstado() == Usuario.Estado.INACTIVO && (tiempo - usuario.getTiempoUltimoMsg()) > 6500) {
+                                        String msj = Mensajes.componerMensaje(Mensajes.COMANDO_RED, Mensajes.SUBR_AUN_ACTIVO, usuario.getIdPlaca());
+                                        placa.enviarComando(msj);
+                                    } else {
+                                        if (usuario.getEstado() == Usuario.Estado.INACTIVO && (tiempo - usuario.getTiempoUltimoMsg()) > 7500) {
+
+                                            placa.getUsuarios().quitarUsuario(usuario);
+                                            placa.getProcesador().getOyente().onActualizarUsuarios();
+                                            placa.getProcesador().getOyente().onUsuarioDesconectado(usuario);
+                                        }
                                     }
                                 }
-                                
-                                
-                                
-                                if ( !usuario.isActivo() && (tiempo - usuario.getTiempoUltimoMsg()) > 6500) {
-                                    
-                                    placa.getUsuarios().quitarUsuario(usuario);
-                                    placa.getProcesador().getOyente().onActualizarUsuarios();
-                                    placa.getProcesador().getOyente().onUsuarioDesconectado(usuario);
-                                }
+
                             }
                         }
                     } catch (Exception e) {
