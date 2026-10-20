@@ -112,6 +112,14 @@ public class PanelZonaUsuario extends JPanel {
                 e->ventana.cambiarNombre()
         );
         
+        btnJuegos.addActionListener(
+                e->{
+                    Partidas p = new Partidas();
+                    ventana.setVntPartidas(p);
+                    p.setLocationRelativeTo(ventana);
+                }
+        );
+        
         
     }
 
