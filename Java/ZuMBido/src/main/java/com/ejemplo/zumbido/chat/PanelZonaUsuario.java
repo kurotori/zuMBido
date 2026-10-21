@@ -114,9 +114,10 @@ public class PanelZonaUsuario extends JPanel {
         
         btnJuegos.addActionListener(
                 e->{
-                    Partidas p = new Partidas();
+                    VentanaPartidas p = new VentanaPartidas();
                     ventana.setVntPartidas(p);
                     p.setLocationRelativeTo(ventana);
+                    p.setLocation(p.getLocation().x+600, p.getLocation().y);
                 }
         );
         

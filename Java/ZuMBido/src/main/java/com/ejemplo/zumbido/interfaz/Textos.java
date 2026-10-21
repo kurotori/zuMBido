@@ -28,7 +28,7 @@ public class Textos {
     
     public static final String CHAT_PRIVADO_ET_CHATEANDO_CON = "<html><b>Hablando con </b></html>";
     
-    
+    public static final String PARTIDAS_ET_TITULO = "<html><b>Partidas<br>Disponibles</b></html>";
     
     
     

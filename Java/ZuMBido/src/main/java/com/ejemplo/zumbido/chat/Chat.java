@@ -73,7 +73,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     private JLabel lblcantUsuarios;
     private JScrollPane scrl;
     
-    private Partidas vntPartidas;
+    private VentanaPartidas vntPartidas;
 
     private int cantMensajes = 0;
     private ArrayList<JPanel> mensajesRegistrados = new ArrayList<>();
@@ -675,14 +675,14 @@ public class Chat extends JFrame implements OyenteMensajes {
     /**
      * @return the vntPartidas
      */
-    public Partidas getVntPartidas() {
+    public VentanaPartidas getVntPartidas() {
         return vntPartidas;
     }
 
     /**
      * @param vntPartidas the vntPartidas to set
      */
-    public void setVntPartidas(Partidas vntPartidas) {
+    public void setVntPartidas(VentanaPartidas vntPartidas) {
         this.vntPartidas = vntPartidas;
     }
 
