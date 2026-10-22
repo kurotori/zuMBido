@@ -11,6 +11,8 @@ public class Usuario {
     
     private Estado estado = Estado.ACTIVO;
     
+    private Partida partida = null;
+    
     public enum Estado {
       ACTIVO,
       INACTIVO,
@@ -90,6 +92,20 @@ public class Usuario {
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    /**
+     * @return the partida
+     */
+    public Partida getPartida() {
+        return partida;
+    }
+
+    /**
+     * @param partida the partida to set
+     */
+    public void setPartida(Partida partida) {
+        this.partida = partida;
     }
 
 }

@@ -28,4 +28,17 @@ public class BotonImagenChico extends JButton {
         img = new ImageIcon(i);
         this.setIcon(img);
     }
+    
+    
+    /**
+     * Permite cambiar la imágen del botón
+     * La imágen se aplica con las mismas dimensiones especificadas en el método constructor
+     * @param rutaImg 
+     */
+    public void cambiarImagen(String rutaImg){
+        ImageIcon img = new ImageIcon(getClass().getResource(rutaImg));
+        Image i = img.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+        img = new ImageIcon(i);
+        this.setIcon(img);
+    }
 }
