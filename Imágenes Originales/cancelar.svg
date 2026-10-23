@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46666 135.46667"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="cancelar.svg"
+   inkscape:export-filename="cancelar_b.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     showguides="false"
+     inkscape:zoom="0.84096521"
+     inkscape:cx="60.050047"
+     inkscape:cy="283.00814"
+     inkscape:window-width="1920"
+     inkscape:window-height="1048"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="rect234"
+       style="fill:#ff0000;stroke:none;stroke-width:1.32292;stroke-linecap:round;paint-order:stroke fill markers;stop-color:#000000"
+       d="M 9.8828128 32.136864 C 7.3588913 29.612942 3.8679184 28.055992 1.7763568e-15 28.055992 C -7.7358368 28.055992 -13.963684 34.28384 -13.963684 42.019677 L -13.963684 81.825714 L -53.769722 81.825714 C -61.505559 81.825714 -67.733406 88.053562 -67.733406 95.789399 C -67.733406 103.52524 -61.505559 109.75308 -53.769722 109.75308 L -13.963684 109.75308 L -13.963684 149.55912 C -13.963684 157.29495 -7.7358368 163.52281 1.4210855e-14 163.52281 C 7.7358368 163.52281 13.963684 157.29495 13.963684 149.55912 L 13.963684 109.75308 L 53.769722 109.75308 C 61.505559 109.75308 67.733406 103.52524 67.733406 95.789399 C 67.733406 88.053562 61.505559 81.825714 53.769722 81.825714 L 13.963684 81.825714 L 13.963684 42.019677 C 13.963684 38.151758 12.406734 34.660785 9.8828128 32.136864 z "
+       transform="rotate(-45)" />
+    <path
+       id="path953"
+       style="fill:none;stroke:#ffffff;stroke-width:2.64583;stroke-linecap:round;stroke-dasharray:none;paint-order:stroke fill markers;stop-color:#000000"
+       d="m 13.963684,42.019677 c 0,-3.867919 -1.55695,-7.358892 -4.0808712,-9.882813 C 7.3588913,29.612942 3.8679184,28.055992 0,28.055992 c -7.7358368,0 -13.963684,6.227848 -13.963684,13.963685 v 39.806037 l -39.806038,0 c -7.735837,0 -13.963684,6.227848 -13.963684,13.963685 0,7.735841 6.227847,13.963681 13.963684,13.963681 l 39.806038,0 0,39.80604 c 0,7.73583 6.2278472,13.96369 13.963684,13.96369 7.7358368,0 13.963684,-6.22786 13.963684,-13.96369 l 0,-39.80604 h 39.806038 c 7.735837,0 13.963684,-6.22784 13.963684,-13.963681 0,-7.735837 -6.227847,-13.963685 -13.963684,-13.963685 H 13.963684 V 56.249561 Z"
+       transform="rotate(-45)"
+       sodipodi:nodetypes="cssscssscssscsssccc" />
+  </g>
+</svg>

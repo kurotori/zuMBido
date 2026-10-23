@@ -13,14 +13,15 @@ import java.util.UUID;
  */
 public class Partida {
     private Usuario propietario;
-    private UUID marcaTiempo;
+    private UUID id;
     
     private ArrayList<Usuario> jugadores = new ArrayList<>();
 
     public Partida(Usuario propietario) {
         this.propietario = propietario;
-        this.jugadores.add(0, propietario);
-        this.marcaTiempo = UUID.randomUUID();
+        this.propietario.setPartida(this);
+        this.jugadores.addFirst(propietario);
+        this.id = UUID.randomUUID();
     }
 
     /**
@@ -33,8 +34,8 @@ public class Partida {
     /**
      * @return the marcaTiempo
      */
-    public UUID getMarcaTiempo() {
-        return marcaTiempo;
+    public UUID getId() {
+        return id;
     }
     
     

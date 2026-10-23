@@ -9,6 +9,8 @@ import com.ejemplo.zumbido.interfaz.Colores;
 import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.interfaz.LabelConImagen;
 import com.ejemplo.zumbido.interfaz.Textos;
+import com.ejemplo.zumbido.juegos.NuevaPartida;
+import com.ejemplo.zumbido.sistema.Registro;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -109,10 +111,11 @@ public class VentanaPartidas extends JFrame {
                 e->{
                     
                     if (vntChat.getPlaca().getUsuario().getPartida() != null) {
-                        System.out.println("Nueva Partida");
+                        Registro.registrarEvento(this,"Este usuario ya tiene una partida creada");
                     }
                     else{
-                        
+                        System.out.println("Nueva Partida");
+                        NuevaPartida nPartida = new NuevaPartida(this.vntChat);
                     }
                 }
         );

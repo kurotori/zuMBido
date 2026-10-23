@@ -13,6 +13,9 @@ import java.awt.Color;
 public class Colores {
 
     public static final Color COLOR_GRIS_CLARO = Color.decode("#CFCFCF");
+    public static final Color COLOR_VERDE_CREAR = Color.decode("#2EFF9D");
+    public static final Color COLOR_CELESTE_ACEPTAR = Color.decode("#2E90FF");
+    public static final Color COLOR_NARANJA_CANCELAR = Color.decode("#FF352E");
 
     //*/ Funciones basadas en el trabajo de Adam Cole en StackOverflow: https://stackoverflow.com/a/7419630
     public static Color crearColorArcoiris(int numOfSteps, int step) {

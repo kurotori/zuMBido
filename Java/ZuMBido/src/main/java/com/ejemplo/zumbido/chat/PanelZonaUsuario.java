@@ -31,6 +31,7 @@ import javax.swing.SwingUtilities;
 public class PanelZonaUsuario extends JPanel {
 
     private Chat ventana;
+    private VentanaPartidas vntPartidas;
 
     private DefaultListModel<Usuario> modeloUsuarios;
     private JList<Usuario> lstListaUsuarios;
@@ -114,10 +115,21 @@ public class PanelZonaUsuario extends JPanel {
         
         btnJuegos.addActionListener(
                 e->{
-                    VentanaPartidas p = new VentanaPartidas(ventana);
-                    ventana.setVntPartidas(p);
-                    p.setLocationRelativeTo(ventana);
-                    p.setLocation(p.getLocation().x+600, p.getLocation().y);
+
+                    if (vntPartidas == null){
+                        vntPartidas = new VentanaPartidas(ventana);
+                        vntPartidas.setLocationRelativeTo(ventana);
+                        vntPartidas.setLocation(vntPartidas.getLocation().x+600, vntPartidas.getLocation().y);
+                    }
+                    else{
+                        if (vntPartidas.isVisible()){
+                            vntPartidas.setVisible(false);
+                        }
+                        else {
+                            vntPartidas.setVisible(true);
+                        }
+                    }
+
                 }
         );
         
