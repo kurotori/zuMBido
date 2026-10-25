@@ -105,9 +105,9 @@ public class VentanaPartidas extends JFrame {
                 new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                btnNuevaPartida.setBackground(Color.decode("#FF352E"));
-                btnNuevaPartida.setForeground(Color.white);
-                btnNuevaPartida.cambiarImagen("/imagen/agregar_b.png");
+                btnNuevaPartida.setBackground(Colores.COLOR_VERDE_CREAR);//Color.decode("#FF352E"));
+                //btnNuevaPartida.setForeground(Color.white);
+                //btnNuevaPartida.cambiarImagen("/imagen/agregar_b.png");
             }
 
             @Override
