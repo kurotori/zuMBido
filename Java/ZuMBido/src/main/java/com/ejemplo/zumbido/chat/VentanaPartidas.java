@@ -10,6 +10,8 @@ import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.interfaz.LabelConImagen;
 import com.ejemplo.zumbido.interfaz.Textos;
 import com.ejemplo.zumbido.juegos.NuevaPartida;
+import com.ejemplo.zumbido.juegos.TarjetaPartida;
+import com.ejemplo.zumbido.sistema.Partida;
 import com.ejemplo.zumbido.sistema.Registro;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.BorderLayout;
@@ -19,11 +21,8 @@ import java.awt.HeadlessException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import java.util.ArrayList;
+import javax.swing.*;
 
 /**
  *
@@ -36,7 +35,12 @@ public class VentanaPartidas extends JFrame {
     private JPanel pnlInferior;
     private JPanel pnlPartidas;
     private BotonImagenChico btnNuevaPartida;
-    
+
+    private DefaultListModel<Partida> modeloPartidas;
+    private JList<Partida> lstListaPartidas;
+
+    private ArrayList<Partida> arrPartidas =  new ArrayList<>();
+
 
     private Fuentes fuentes = new Fuentes();
 
@@ -84,6 +88,14 @@ public class VentanaPartidas extends JFrame {
         btnNuevaPartida.setBackground(Color.WHITE);
         pnlInferior.add(btnNuevaPartida);
 
+        modeloPartidas = new DefaultListModel<>();
+        lstListaPartidas = new JList<>(modeloPartidas);
+        lstListaPartidas.setCellRenderer(new TarjetaPartida());
+        lstListaPartidas.setPreferredSize(new Dimension(0, 350));
+        lstListaPartidas.setBackground(Color.white);
+        JScrollPane scrlListaPartidas = new JScrollPane(lstListaPartidas);
+        scrlListaPartidas.setPreferredSize(new Dimension(0, 350));
+        add(scrlListaPartidas, BorderLayout.CENTER);
         //revalidate();
         //repaint();
     }
@@ -115,7 +127,7 @@ public class VentanaPartidas extends JFrame {
                     }
                     else{
                         System.out.println("Nueva Partida");
-                        NuevaPartida nPartida = new NuevaPartida(this.vntChat);
+                        NuevaPartida nPartida = new NuevaPartida(this.vntChat, this);
                     }
                 }
         );
@@ -125,5 +137,34 @@ public class VentanaPartidas extends JFrame {
         FlatLightLaf.setup();
 
         new VentanaPartidas(1);
+    }
+
+    /**
+     * Actualiza el listado de partidas
+     */
+    public void actualizarPartidas() {
+        SwingUtilities.invokeLater(() -> {
+            modeloPartidas.removeAllElements();
+
+            for(Partida partida : arrPartidas) {
+                modeloPartidas.addElement(partida);
+            }
+        });
+    }
+
+    /**
+     * Añade una partida, diferenciando entre partidas propias y de otros usuarios
+     * @param partida La partida que se agrega al listado
+     * @param esPropia establece si la partida es del mismo usuario o de otro
+     */
+    public void agregarPartida(Partida partida, boolean esPropia) {
+        if (esPropia){
+            arrPartidas.addFirst(partida);
+        }
+        else{
+            arrPartidas.add(partida);
+        }
+
+        actualizarPartidas();
     }
 }

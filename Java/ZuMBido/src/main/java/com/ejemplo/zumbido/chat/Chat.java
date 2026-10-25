@@ -460,7 +460,6 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     /**
      * Proceso de cambio de nombre del usuario
-     * @param nuevoNombre
      * @return 
      */
     public ResultadoCambioNombre iniciarCambioNombre() {

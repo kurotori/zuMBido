@@ -4,8 +4,9 @@
  */
 package com.ejemplo.zumbido.sistema;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.UUID;
+
 
 /**
  *
@@ -13,7 +14,8 @@ import java.util.UUID;
  */
 public class Partida {
     private Usuario propietario;
-    private UUID id;
+    //private UUID id;
+    private Instant marcaTiempo;
     
     private ArrayList<Usuario> jugadores = new ArrayList<>();
 
@@ -21,7 +23,7 @@ public class Partida {
         this.propietario = propietario;
         this.propietario.setPartida(this);
         this.jugadores.addFirst(propietario);
-        this.id = UUID.randomUUID();
+        this.marcaTiempo = Instant.now();
     }
 
     /**
@@ -31,14 +33,12 @@ public class Partida {
         return propietario;
     }
 
+
     /**
-     * @return the marcaTiempo
+     *
+     * @return
      */
-    public UUID getId() {
-        return id;
+    public Instant getMarcaTiempo() {
+        return marcaTiempo;
     }
-    
-    
-    
-    
 }

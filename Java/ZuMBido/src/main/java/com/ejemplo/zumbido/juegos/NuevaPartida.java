@@ -5,6 +5,7 @@
 package com.ejemplo.zumbido.juegos;
 
 import com.ejemplo.zumbido.chat.Chat;
+import com.ejemplo.zumbido.chat.VentanaPartidas;
 import com.ejemplo.zumbido.interfaz.BotonImagenChico;
 import com.ejemplo.zumbido.interfaz.Colores;
 import com.ejemplo.zumbido.interfaz.Fuentes;
@@ -25,6 +26,7 @@ import javax.swing.*;
 public class NuevaPartida extends JFrame{
 
     private Chat vntChat;
+    private VentanaPartidas vntPartidas;
 
     private BotonImagenChico btnCrearPartida;
     private BotonImagenChico btnCancelar;
@@ -33,8 +35,9 @@ public class NuevaPartida extends JFrame{
 
     //Métodos Constructores
     // 1 - De uso práctico
-    public NuevaPartida(Chat vntChat) throws HeadlessException {
+    public NuevaPartida(Chat vntChat, VentanaPartidas vntPartidas) throws HeadlessException {
         this.vntChat = vntChat;
+        this.vntPartidas = vntPartidas;
         configurarVentana();
         configurarFunciones();
         setVisible(true);
@@ -158,9 +161,10 @@ public class NuevaPartida extends JFrame{
     private void crearPartida(){
         Partida partida = new Partida(vntChat.getPlaca().getUsuario());
         Registro.registrarEvento(this,
-                "El usuario " + vntChat.getPlaca().getUsuario().getNombre() + " creó la partida "+
-                        vntChat.getPlaca().getUsuario().getPartida().getId().toString()
+                "El usuario " + vntChat.getPlaca().getUsuario().getNombre() + " creó una partida con esta marca: "+
+                        vntChat.getPlaca().getUsuario().getPartida().getMarcaTiempo().toString()
                 );
+        vntPartidas.agregarPartida(partida, true);
         cerrarVentana();
     }
 
