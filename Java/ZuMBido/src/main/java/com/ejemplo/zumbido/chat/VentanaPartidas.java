@@ -125,8 +125,7 @@ public class VentanaPartidas extends JFrame {
                     if (vntChat.getPlaca().getUsuario().getPartida() != null) {
                         Registro.registrarEvento(this,"Este usuario ya tiene una partida creada");
                     }
-                    else{
-                        System.out.println("Nueva Partida");
+                    else {
                         NuevaPartida nPartida = new NuevaPartida(this.vntChat, this);
                     }
                 }

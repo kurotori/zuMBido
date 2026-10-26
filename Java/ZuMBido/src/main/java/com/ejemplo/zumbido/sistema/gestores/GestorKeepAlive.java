@@ -2,7 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ejemplo.zumbido.sistema;
+package com.ejemplo.zumbido.sistema.gestores;
+
+import com.ejemplo.zumbido.sistema.Mensajes;
+import com.ejemplo.zumbido.sistema.Placa;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
