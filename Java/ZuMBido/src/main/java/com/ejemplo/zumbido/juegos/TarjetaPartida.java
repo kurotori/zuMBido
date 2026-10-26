@@ -1,5 +1,6 @@
 package com.ejemplo.zumbido.juegos;
 
+import com.ejemplo.zumbido.interfaz.BotonImagenChico;
 import com.ejemplo.zumbido.interfaz.Colores;
 import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.interfaz.LabelConImagen;
@@ -19,6 +20,8 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
     private JPanel pnlZonaDatos;
     private Fuentes fuentes = new Fuentes();
 
+    private BotonImagenChico btnEliminar;
+
     public TarjetaPartida() {
     configurar();
     }
@@ -27,6 +30,7 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
         setLayout(new BorderLayout(8, 0));
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
         setBackground(Color.white);
+
         setOpaque(true);
 
         lblIcono = new LabelConImagen(32, 32, "/imagen/juegos.png");
@@ -47,6 +51,13 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
         lblIdPlaca = new JLabel("...");
         lblIdPlaca.setFont(fuentes.LISTADO_USUARIOS_PLACA);
         pnlZonaDatos.add(lblIdPlaca, BorderLayout.SOUTH);
+
+        btnEliminar = new BotonImagenChico("","/imagen/cancelar_b.png",16,16);
+        pnlZonaDatos.add(btnEliminar,BorderLayout.EAST);
+    }
+
+    private void configurarFunciones(){
+        //btnEliminar.a
     }
 
 
@@ -56,6 +67,10 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
             int index, boolean isSelected, boolean cellHasFocus) {
 
         this.partida = partida;
+
+        if(! partida.isPropia()){
+            pnlZonaDatos.remove(btnEliminar);
+        }
 
         this.lblNombreUsuario.setText(partida.getPropietario().getNombre());
         //this.

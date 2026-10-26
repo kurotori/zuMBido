@@ -16,11 +16,12 @@ public class Partida {
     private Usuario propietario;
     //private UUID id;
     private Instant marcaTiempo;
-    
+    private boolean propia =false;
     private ArrayList<Usuario> jugadores = new ArrayList<>();
 
-    public Partida(Usuario propietario) {
+    public Partida(Usuario propietario, boolean propia) {
         this.propietario = propietario;
+        this.propia = propia;
         this.propietario.setPartida(this);
         this.jugadores.addFirst(propietario);
         this.marcaTiempo = Instant.now();
@@ -41,4 +42,9 @@ public class Partida {
     public Instant getMarcaTiempo() {
         return marcaTiempo;
     }
+
+    public boolean isPropia() {
+        return propia;
+    }
 }
+
