@@ -1,17 +1,18 @@
 package com.ejemplo.zumbido.juegos;
 
-import com.ejemplo.zumbido.interfaz.BotonImagenChico;
-import com.ejemplo.zumbido.interfaz.Colores;
-import com.ejemplo.zumbido.interfaz.Fuentes;
-import com.ejemplo.zumbido.interfaz.LabelConImagen;
+import com.ejemplo.zumbido.chat.VentanaPartidas;
+import com.ejemplo.zumbido.interfaz.*;
 import com.ejemplo.zumbido.sistema.Partida;
 //import com.ejemplo.zumbido.sistema.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> {
 
+    private VentanaPartidas vntPartidas;
     private Partida partida;
 
     private LabelConImagen lblIcono;
@@ -19,11 +20,14 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
     private JLabel lblIdPlaca;
     private JPanel pnlZonaDatos;
     private Fuentes fuentes = new Fuentes();
+    private Iconos iconos = new Iconos();
 
     private BotonImagenChico btnEliminar;
 
-    public TarjetaPartida() {
-    configurar();
+    public TarjetaPartida(VentanaPartidas vntPartidas) {
+        this.vntPartidas = vntPartidas;
+        configurar();
+        configurarFunciones();
     }
 
     private void configurar(){
@@ -53,11 +57,19 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
         pnlZonaDatos.add(lblIdPlaca, BorderLayout.SOUTH);
 
         btnEliminar = new BotonImagenChico("","/imagen/cancelar_b.png",16,16);
-        pnlZonaDatos.add(btnEliminar,BorderLayout.EAST);
+        add(btnEliminar,BorderLayout.EAST);
     }
 
     private void configurarFunciones(){
-        //btnEliminar.a
+        SwingUtilities.invokeLater(
+                ()->{
+                    System.out.println("configurando");
+                    btnEliminar.addActionListener(
+                            e->{vntPartidas.eliminarPartida();}
+                    );
+                }
+        );
+
     }
 
 

@@ -4,6 +4,8 @@
  */
 package com.ejemplo.zumbido.sistema;
 
+import com.ejemplo.zumbido.juegos.Juego;
+
 import java.time.Instant;
 import java.util.ArrayList;
 
@@ -14,7 +16,7 @@ import java.util.ArrayList;
  */
 public class Partida {
     private Usuario propietario;
-    //private UUID id;
+    private Juego juego; //TODO: A implementar
     private Instant marcaTiempo;
     private boolean propia =false;
     private ArrayList<Usuario> jugadores = new ArrayList<>();

@@ -4,11 +4,7 @@
  */
 package com.ejemplo.zumbido.chat;
 
-import com.ejemplo.zumbido.interfaz.BotonImagenChico;
-import com.ejemplo.zumbido.interfaz.Colores;
-import com.ejemplo.zumbido.interfaz.Fuentes;
-import com.ejemplo.zumbido.interfaz.LabelConImagen;
-import com.ejemplo.zumbido.interfaz.Textos;
+import com.ejemplo.zumbido.interfaz.*;
 import com.ejemplo.zumbido.juegos.NuevaPartida;
 import com.ejemplo.zumbido.juegos.TarjetaPartida;
 import com.ejemplo.zumbido.sistema.Partida;
@@ -43,6 +39,7 @@ public class VentanaPartidas extends JFrame {
 
 
     private Fuentes fuentes = new Fuentes();
+    private Iconos iconos = new Iconos();
 
     public VentanaPartidas(Chat vntChat) {
         this.vntChat = vntChat;
@@ -90,7 +87,7 @@ public class VentanaPartidas extends JFrame {
 
         modeloPartidas = new DefaultListModel<>();
         lstListaPartidas = new JList<>(modeloPartidas);
-        lstListaPartidas.setCellRenderer(new TarjetaPartida());
+        lstListaPartidas.setCellRenderer(new TarjetaPartida(this));
         lstListaPartidas.setPreferredSize(new Dimension(0, 350));
         lstListaPartidas.setBackground(Color.white);
         JScrollPane scrlListaPartidas = new JScrollPane(lstListaPartidas);
@@ -124,6 +121,13 @@ public class VentanaPartidas extends JFrame {
                     
                     if (vntChat.getPlaca().getUsuario().getPartida() != null) {
                         Registro.registrarEvento(this,"Este usuario ya tiene una partida creada");
+                        JOptionPane.showMessageDialog(
+                                this,
+                                "ERROR: Ya tienes una partida en curso."+
+                                        "\nElimina esa partida primero",
+                                "Error"            ,
+                                JOptionPane.PLAIN_MESSAGE,
+                                iconos.ICONO_ERROR_96);
                     }
                     else {
                         NuevaPartida nPartida = new NuevaPartida(this.vntChat, this);
@@ -159,11 +163,23 @@ public class VentanaPartidas extends JFrame {
     public void agregarPartida(Partida partida, boolean esPropia) {
         if (esPropia){
             arrPartidas.addFirst(partida);
+            btnNuevaPartida.setText("Eliminar Partida");
+            btnNuevaPartida.setBackground(Colores.COLOR_NARANJA_CANCELAR);
+            btnNuevaPartida.cambiarImagen("/imagen/cancelar_b.png");
         }
         else{
             arrPartidas.add(partida);
         }
 
         actualizarPartidas();
+    }
+
+    public void eliminarPartida(){
+        JFrame fr = this;
+        JOptionPane.showOptionDialog(
+                fr, "pruebas",
+                "pruebas",JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                iconos.ICONO_ERROR_64,null,0);
     }
 }
