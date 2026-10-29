@@ -21,7 +21,8 @@ public class Iconos {
     public ImageIcon ICONO_CAMBIAR_NOMBRE_64;
     public ImageIcon ICONO_CAMBIAR_NOMBRE_96;
     //public ImageIcon ICONO_ADVERTENCIA;
-    //public ImageIcon ICONO_PREGUNTA;
+    public ImageIcon ICONO_PREGUNTA_64;
+    public ImageIcon ICONO_PREGUNTA_96;
 
     public Iconos() {
         ICONO_ZUMBIDO_64 = escalarImagen("/imagen/icono.png",64,64);
@@ -30,6 +31,8 @@ public class Iconos {
         ICONO_ERROR_96 = escalarImagen("/imagen/icono_error.png", 96, 96);
         ICONO_CHAT_64 = escalarImagen("/imagen/icono_chat.png", 64, 64);
         ICONO_CHAT_96 = escalarImagen("/imagen/icono_chat.png", 96,96);
+        ICONO_PREGUNTA_64 = escalarImagen("/imagen/icono_pregunta.png", 64,64);
+        ICONO_PREGUNTA_96 = escalarImagen("/imagen/icono_pregunta.png", 96,96);
         ICONO_CAMBIAR_NOMBRE_64 = escalarImagen("/imagen/cambiar_nombre.png", 64,64);
         ICONO_CAMBIAR_NOMBRE_96 = escalarImagen("/imagen/cambiar_nombre.png", 96,96);
     }

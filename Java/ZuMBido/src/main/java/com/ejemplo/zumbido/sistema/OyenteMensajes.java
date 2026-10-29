@@ -47,6 +47,7 @@ public interface OyenteMensajes {
      * Aviso de un usuario que cambió su nombre
      */
     default void onNombreCambiado(String nombreViejo, String nombreNuevo){}
-    
+
+    default void onPartida(String nombreJuego){}
 }
 

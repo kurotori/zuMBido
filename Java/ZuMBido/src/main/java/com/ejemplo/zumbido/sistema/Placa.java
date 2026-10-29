@@ -6,6 +6,7 @@ package com.ejemplo.zumbido.sistema;
 
 import com.ejemplo.zumbido.sistema.gestores.GestorKeepAlive;
 import com.ejemplo.zumbido.sistema.gestores.GestorMensajeria;
+import com.ejemplo.zumbido.sistema.gestores.GestorPartidas;
 import com.ejemplo.zumbido.sistema.gestores.GestorUsuarios;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
@@ -36,6 +37,7 @@ public class Placa {
     private GestorKeepAlive keepAlive;
     private GestorUsuarios gestorUsuarios;
     private GestorMensajeria mensajero;
+    private GestorPartidas partidas;
 
     private OutputStream salidaSerie = null;
 
@@ -58,6 +60,9 @@ public class Placa {
         gestorUsuarios.iniciar();
         this.mensajero = new GestorMensajeria(this);
         mensajero.iniciar();
+        this.partidas = new GestorPartidas(this);
+        partidas.iniciar();
+
     }
 
     /**

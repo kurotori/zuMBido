@@ -113,6 +113,10 @@ Los mensajes públicos se envían al chat general (o su equivalente), y son reci
 
 Tienen una longitud máxima de 200 caracteres.
 
+#### pj - Partidas de Juego
+
+`pj{<nombreJuego>{<id_placa_origen>`
+
 >NOTA: La longitud máxima de los mensajes públicos puede ser 231 caracteres, pero se mantiene en 200 caracteres para evitar sobrecargar el sistema radial.
 
 #### p - Mensajes Privados (de usuario a usuario)

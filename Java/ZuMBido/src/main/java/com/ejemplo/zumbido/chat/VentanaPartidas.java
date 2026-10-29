@@ -13,10 +13,8 @@ import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.HeadlessException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -102,7 +100,14 @@ public class VentanaPartidas extends JFrame {
                 new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                btnNuevaPartida.setBackground(Colores.COLOR_VERDE_CREAR);//Color.decode("#FF352E"));
+                if (vntChat.getPlaca().getUsuario().getPartida() != null) {
+                    btnNuevaPartida.setBackground(Colores.COLOR_NARANJA_CANCELAR);
+                    btnNuevaPartida.setForeground(Color.white);
+                }
+                else{
+                    btnNuevaPartida.setBackground(Colores.COLOR_VERDE_CREAR);
+                }
+                //Color.decode("#FF352E"));
                 //btnNuevaPartida.setForeground(Color.white);
                 //btnNuevaPartida.cambiarImagen("/imagen/agregar_b.png");
             }
@@ -110,8 +115,14 @@ public class VentanaPartidas extends JFrame {
             @Override
             public void mouseExited(MouseEvent e) {
                 btnNuevaPartida.setBackground(Color.WHITE);
-                btnNuevaPartida.setForeground(Color.black);
-                btnNuevaPartida.cambiarImagen("/imagen/agregar_n.png");
+                if (vntChat.getPlaca().getUsuario().getPartida() != null) {
+                    btnNuevaPartida.setForeground(Color.red);
+                }
+                else{
+                    btnNuevaPartida.setForeground(Color.black);
+                }
+
+                //btnNuevaPartida.cambiarImagen("/imagen/agregar_n.png");
             }
         }
         );
@@ -121,15 +132,20 @@ public class VentanaPartidas extends JFrame {
                     
                     if (vntChat.getPlaca().getUsuario().getPartida() != null) {
                         Registro.registrarEvento(this,"Este usuario ya tiene una partida creada");
-                        JOptionPane.showMessageDialog(
+                        int opcion = JOptionPane.showConfirmDialog(
                                 this,
-                                "ERROR: Ya tienes una partida en curso."+
-                                        "\nElimina esa partida primero",
-                                "Error"            ,
+                                "¿Deseas eliminar tu partida actual?",
+                                "Atención",
+                                JOptionPane.YES_NO_OPTION,
                                 JOptionPane.PLAIN_MESSAGE,
-                                iconos.ICONO_ERROR_96);
+                                iconos.ICONO_PREGUNTA_96
+                                );
+                        if (opcion == JOptionPane.YES_OPTION) {
+                            eliminarPartida(vntChat.getPlaca().getUsuario().getPartida());
+                        }
                     }
                     else {
+                        Registro.registrarEvento(this,"Abriendo ventana de creación de partida");
                         NuevaPartida nPartida = new NuevaPartida(this.vntChat, this);
                     }
                 }
@@ -164,7 +180,7 @@ public class VentanaPartidas extends JFrame {
         if (esPropia){
             arrPartidas.addFirst(partida);
             btnNuevaPartida.setText("Eliminar Partida");
-            btnNuevaPartida.setBackground(Colores.COLOR_NARANJA_CANCELAR);
+
             btnNuevaPartida.cambiarImagen("/imagen/cancelar_b.png");
         }
         else{
@@ -174,12 +190,9 @@ public class VentanaPartidas extends JFrame {
         actualizarPartidas();
     }
 
-    public void eliminarPartida(){
-        JFrame fr = this;
-        JOptionPane.showOptionDialog(
-                fr, "pruebas",
-                "pruebas",JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                iconos.ICONO_ERROR_64,null,0);
+    public void eliminarPartida(Partida partida){
+        arrPartidas.remove(partida);
+        vntChat.getPlaca().getUsuario().setPartida(null);
+        actualizarPartidas();
     }
 }

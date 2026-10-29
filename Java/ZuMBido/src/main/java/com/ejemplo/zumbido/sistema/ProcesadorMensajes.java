@@ -44,7 +44,7 @@ public class ProcesadorMensajes {
      */
     public void analizarMensaje(String mensaje) {
 
-        //Si el mensaje es nulo o sol contiene espacios
+        //Si el mensaje es nulo o solo contiene espacios
         if (mensaje == null || mensaje.trim().isEmpty()) {
             return;
         }
@@ -228,6 +228,11 @@ public class ProcesadorMensajes {
                 e.setActivo(true);
                 oyente.onMensajePrivado(cadena[0], cadena[2]);
                 break;
+
+            case Mensajes.SUBR_PARTIDA:
+                mostrarEvento("Nueva partida publicada");
+
+                oyente.onPartida();
         }
     }
 

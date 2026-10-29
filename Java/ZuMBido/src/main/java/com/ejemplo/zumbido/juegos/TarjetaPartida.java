@@ -61,14 +61,6 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
     }
 
     private void configurarFunciones(){
-        SwingUtilities.invokeLater(
-                ()->{
-                    System.out.println("configurando");
-                    btnEliminar.addActionListener(
-                            e->{vntPartidas.eliminarPartida();}
-                    );
-                }
-        );
 
     }
 
