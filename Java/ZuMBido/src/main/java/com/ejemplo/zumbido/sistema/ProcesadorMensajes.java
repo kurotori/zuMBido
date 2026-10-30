@@ -43,7 +43,7 @@ public class ProcesadorMensajes {
      * @param mensaje el mensaje recibido por via serial
      */
     public void analizarMensaje(String mensaje) {
-
+        mostrarEvento("----> Recibido: " + mensaje);
         //Si el mensaje es nulo o solo contiene espacios
         if (mensaje == null || mensaje.trim().isEmpty()) {
             return;
@@ -232,7 +232,10 @@ public class ProcesadorMensajes {
             case Mensajes.SUBR_PARTIDA:
                 mostrarEvento("Nueva partida publicada");
 
-                oyente.onPartida();
+                Usuario uj = placa.getUsuarios().buscarPorId(cadena[1]);
+                String nj = cadena[0];
+                mostrarEvento(uj.getNombre() + " publicó una partida de " + nj);
+                oyente.onPartida(uj, nj);
         }
     }
 

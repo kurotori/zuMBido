@@ -66,7 +66,7 @@ public class Mensajes {
     public static final String SUBR_NUEVO_NOMBRE = "nn";
     public static final String SUBR_MENSAJE = "m";
     public static final String SUBR_MENSAJE_PRIVADO = "p";
-    public static final String SUBR_PARTIDA = "pj";
+    public static final String SUBR_PARTIDA = "j";
     
     
     //4 - Sub Comandos internos

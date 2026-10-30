@@ -121,7 +121,7 @@ Tienen una longitud máxima de 200 caracteres.
 
 #### p - Mensajes Privados (de usuario a usuario)
 
-`p{<mensaje>{<id_placa_origen>{<id_placa_destino>`
+`p{<mensaje>{<id_placa_destino>{<id_placa_origen>`
 
 Los mensajes privados se envían a una ventana de chat privado (o su equivalente). Al recibirse en cada placa, se compara, a nivel de placa, la id de la placa. Si no es igual a la id de la placa local, se ignora el mensaje (no pasa a la aplicación).
 

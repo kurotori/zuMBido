@@ -118,6 +118,7 @@ public class PanelZonaUsuario extends JPanel {
 
                     if (vntPartidas == null){
                         vntPartidas = new VentanaPartidas(ventana);
+                        ventana.setVntPartidas(vntPartidas);
                         vntPartidas.setLocationRelativeTo(ventana);
                         vntPartidas.setLocation(vntPartidas.getLocation().x+600, vntPartidas.getLocation().y);
                     }

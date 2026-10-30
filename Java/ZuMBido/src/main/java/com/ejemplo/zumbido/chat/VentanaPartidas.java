@@ -195,4 +195,10 @@ public class VentanaPartidas extends JFrame {
         vntChat.getPlaca().getUsuario().setPartida(null);
         actualizarPartidas();
     }
+
+    //TODO: Mover la gestión de las partidas a su propia clase para mejor manejo
+
+    public Partida buscarPartida(Partida p){
+
+    }
 }

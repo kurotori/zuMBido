@@ -8,12 +8,8 @@ import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.interfaz.Iconos;
 import com.ejemplo.zumbido.interfaz.LabelConImagen;
 import com.ejemplo.zumbido.interfaz.Textos;
-import com.ejemplo.zumbido.sistema.Placa;
-import com.ejemplo.zumbido.sistema.Mensajes;
-import com.ejemplo.zumbido.sistema.OyenteMensajes;
-import com.ejemplo.zumbido.sistema.Registro;
-import com.ejemplo.zumbido.sistema.Usuario;
-import com.ejemplo.zumbido.sistema.Ventanas;
+import com.ejemplo.zumbido.sistema.*;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -650,8 +646,14 @@ public class Chat extends JFrame implements OyenteMensajes {
 
         resultadoEspera = ResultadoCambioNombre.NOMBRE_REPETIDO;
     }
-    
-    
+
+    @Override
+    public void onPartida(Usuario usuario, String nombreJuego) {
+        if (vntPartidas != null){
+            Partida p = new Partida(usuario, false);
+            vntPartidas.agregarPartida(p,false);
+        }
+    }
 
     /**
      * @return the placa
@@ -684,5 +686,7 @@ public class Chat extends JFrame implements OyenteMensajes {
     public void setVntPartidas(VentanaPartidas vntPartidas) {
         this.vntPartidas = vntPartidas;
     }
+
+
 
 }
