@@ -37,12 +37,13 @@ public class Placa {
     private GestorKeepAlive keepAlive;
     private GestorUsuarios gestorUsuarios;
     private GestorMensajeria mensajero;
-    private GestorPartidas partidas;
+    private GestorPartidas gestorPartidas;
 
     private OutputStream salidaSerie = null;
 
     private Usuario usuario = null;
     private Usuarios usuarios = new Usuarios();
+    private Partidas partidas = new Partidas();
 
     
     /***/
@@ -60,8 +61,8 @@ public class Placa {
         gestorUsuarios.iniciar();
         this.mensajero = new GestorMensajeria(this);
         mensajero.iniciar();
-        this.partidas = new GestorPartidas(this);
-        partidas.iniciar();
+        this.gestorPartidas = new GestorPartidas(this);
+        gestorPartidas.iniciar();
 
     }
 
@@ -273,6 +274,8 @@ public class Placa {
     public GestorMensajeria getMensajero() {
         return mensajero;
     }
-    
-    
+
+    public Partidas getPartidas() {
+        return partidas;
+    }
 }

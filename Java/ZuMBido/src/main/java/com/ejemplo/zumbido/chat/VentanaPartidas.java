@@ -141,7 +141,7 @@ public class VentanaPartidas extends JFrame {
                                 iconos.ICONO_PREGUNTA_96
                                 );
                         if (opcion == JOptionPane.YES_OPTION) {
-                            eliminarPartida(vntChat.getPlaca().getUsuario().getPartida());
+                            eliminarPartidaPropia(vntChat.getPlaca().getUsuario().getPartida());
                         }
                     }
                     else {
@@ -190,15 +190,13 @@ public class VentanaPartidas extends JFrame {
         actualizarPartidas();
     }
 
-    public void eliminarPartida(Partida partida){
-        arrPartidas.remove(partida);
+    public void eliminarPartidaPropia(Partida partida){
+        vntChat.getPlaca().getPartidas().eliminarPartida(partida);
+        //arrPartidas.remove(partida);
         vntChat.getPlaca().getUsuario().setPartida(null);
         actualizarPartidas();
     }
 
     //TODO: Mover la gestión de las partidas a su propia clase para mejor manejo
 
-    public Partida buscarPartida(Partida p){
-
-    }
 }

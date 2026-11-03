@@ -17,20 +17,43 @@ public class Partidas {
             partidas.addFirst(partida);
         }
         else{
-            partidas.add(partida);
+            if(buscarPartida(partida)==null){
+                partidas.addLast(partida);
+            }
         }
     }
 
     public Partida buscarPartida(Usuario creador){
-        Partida resultado = null;
+        if (creador == null || creador.getIdPlaca() == null) {
+            return null;
+        }
 
         Optional<Partida> busqueda = partidas.
                 stream().
-                filter(
-                        Partida p -> p.
+                filter( (Partida partida) -> partida.getPropietario().getIdPlaca().equals( creador.getIdPlaca() )
                 ).
                 findFirst();
 
+        return busqueda.orElse(null);
     }
+
+    public Partida buscarPartida(Partida nueva){
+        if (nueva == null) {
+            return null;
+        }
+
+        Optional<Partida> busqueda = partidas.
+                stream().
+                filter( (Partida partida) -> partida.getPropietario().getIdPlaca().equals( nueva.getPropietario().getIdPlaca() )
+                ).
+                findFirst();
+
+        return busqueda.orElse(null);
+    }
+
+    public void eliminarPartida(Partida partida){
+        partidas.remove(partida);
+    }
+
 
 }
