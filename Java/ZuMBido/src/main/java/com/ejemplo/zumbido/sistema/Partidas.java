@@ -11,18 +11,35 @@ public class Partidas {
      * Añade una partida, diferenciando entre partidas propias y de otros usuarios
      * @param partida La partida que se agrega al listado
      * @param esPropia establece si la partida es del mismo usuario o de otro
+     * @return <b>true<b/> si es posible agregar la partida, <b>false</b> si no lo es.
      */
-    public void agregarPartida(Partida partida, boolean esPropia) {
+    public boolean agregarPartida(Partida partida, boolean esPropia) {
         if (esPropia){
-            partidas.addFirst(partida);
+            if(partidas.getFirst().isPropia()){
+                return false;
+            }
+            else{
+                partidas.addFirst(partida);
+                return true;
+            }
+
         }
         else{
             if(buscarPartida(partida)==null){
                 partidas.addLast(partida);
+                return true;
+            }
+            else{
+                return false;
             }
         }
     }
 
+    /**
+     * Busca una partida a partir del usuario
+     * @param creador El Usuario que creó la partida
+     * @return La Partida ubicada, o null
+     */
     public Partida buscarPartida(Usuario creador){
         if (creador == null || creador.getIdPlaca() == null) {
             return null;
@@ -37,6 +54,11 @@ public class Partidas {
         return busqueda.orElse(null);
     }
 
+    /**
+     * Busca una partida para determinar si ya ha sido agregada en el sistema
+     * @param nueva La Partida que se busca
+     * @return la misma Partida, si ya existe, o null
+     */
     public Partida buscarPartida(Partida nueva){
         if (nueva == null) {
             return null;
@@ -55,5 +77,7 @@ public class Partidas {
         partidas.remove(partida);
     }
 
-
+    public ArrayList<Partida> getListaPartidas() {
+        return partidas;
+    }
 }

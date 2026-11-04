@@ -33,9 +33,6 @@ public class VentanaPartidas extends JFrame {
     private DefaultListModel<Partida> modeloPartidas;
     private JList<Partida> lstListaPartidas;
 
-    private ArrayList<Partida> arrPartidas =  new ArrayList<>();
-
-
     private Fuentes fuentes = new Fuentes();
     private Iconos iconos = new Iconos();
 
@@ -165,7 +162,7 @@ public class VentanaPartidas extends JFrame {
         SwingUtilities.invokeLater(() -> {
             modeloPartidas.removeAllElements();
 
-            for(Partida partida : arrPartidas) {
+            for(Partida partida : vntChat.getPlaca().getPartidas().getListaPartidas()) {
                 modeloPartidas.addElement(partida);
             }
         });
@@ -177,16 +174,12 @@ public class VentanaPartidas extends JFrame {
      * @param esPropia establece si la partida es del mismo usuario o de otro
      */
     public void agregarPartida(Partida partida, boolean esPropia) {
-        if (esPropia){
-            arrPartidas.addFirst(partida);
-            btnNuevaPartida.setText("Eliminar Partida");
+        boolean agregada = vntChat.getPlaca().getPartidas().agregarPartida(partida,esPropia);
 
+        if (agregada && esPropia){
+            btnNuevaPartida.setText("Eliminar Partida");
             btnNuevaPartida.cambiarImagen("/imagen/cancelar_b.png");
         }
-        else{
-            arrPartidas.add(partida);
-        }
-
         actualizarPartidas();
     }
 
