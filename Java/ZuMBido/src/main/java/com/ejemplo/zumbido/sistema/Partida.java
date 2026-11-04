@@ -45,6 +45,10 @@ public class Partida {
         return marcaTiempo;
     }
 
+    public void setMarcaTiempo(Instant marcaTiempo){
+        this.marcaTiempo = marcaTiempo;
+    }
+
     public boolean isPropia() {
         return propia;
     }

@@ -7,8 +7,6 @@ import com.ejemplo.zumbido.sistema.Partida;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> {
 
@@ -17,12 +15,10 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
 
     private LabelConImagen lblIcono;
     private JLabel lblNombreUsuario;
-    private JLabel lblIdPlaca;
+    private JLabel lblNombreJuego;
     private JPanel pnlZonaDatos;
     private Fuentes fuentes = new Fuentes();
     private Iconos iconos = new Iconos();
-
-    private BotonImagenChico btnEliminar;
 
     public TarjetaPartida(VentanaPartidas vntPartidas) {
         this.vntPartidas = vntPartidas;
@@ -52,12 +48,10 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
         lblNombreUsuario.setFont(fuentes.LISTADO_USUARIOS_NOMBRE);
         pnlZonaDatos.add(lblNombreUsuario, BorderLayout.NORTH);
 
-        lblIdPlaca = new JLabel("...");
-        lblIdPlaca.setFont(fuentes.LISTADO_USUARIOS_PLACA);
-        pnlZonaDatos.add(lblIdPlaca, BorderLayout.SOUTH);
+        lblNombreJuego = new JLabel("...");
+        lblNombreJuego.setFont(fuentes.LISTADO_USUARIOS_PLACA);
+        pnlZonaDatos.add(lblNombreJuego, BorderLayout.SOUTH);
 
-        btnEliminar = new BotonImagenChico("","/imagen/cancelar_b.png",16,16);
-        add(btnEliminar,BorderLayout.EAST);
     }
 
     private void configurarFunciones(){
@@ -72,12 +66,8 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
 
         this.partida = partida;
 
-        if(! partida.isPropia()){
-            pnlZonaDatos.remove(btnEliminar);
-        }
-
         this.lblNombreUsuario.setText(partida.getPropietario().getNombre());
-        //this.
+        //this.lblNombreJuego.setText(partida.get);
 
         if (isSelected){
             this.pnlZonaDatos.setBackground(Colores.COLOR_AZUL_SELECCIONAR);

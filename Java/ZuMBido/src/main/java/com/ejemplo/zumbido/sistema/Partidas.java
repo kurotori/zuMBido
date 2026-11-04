@@ -1,5 +1,6 @@
 package com.ejemplo.zumbido.sistema;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -25,11 +26,13 @@ public class Partidas {
 
         }
         else{
-            if(buscarPartida(partida)==null){
+            Partida p = buscarPartida(partida);
+            if(p == null){
                 partidas.addLast(partida);
                 return true;
             }
             else{
+                p.setMarcaTiempo(Instant.now());
                 return false;
             }
         }

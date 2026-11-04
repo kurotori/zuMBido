@@ -1,9 +1,11 @@
 package com.ejemplo.zumbido.sistema.gestores;
 
 import com.ejemplo.zumbido.sistema.Mensajes;
+import com.ejemplo.zumbido.sistema.Partida;
 import com.ejemplo.zumbido.sistema.Placa;
 import com.ejemplo.zumbido.sistema.Registro;
 
+import java.time.Instant;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +37,20 @@ public class GestorPartidas {
                                 );
                                 placa.getMensajero().agregarMensaje(msj, false);
                             }
+
+                            Instant tiempo = Instant.now();
+                            for(Partida p: placa.getPartidas().getListaPartidas()){
+                                long lapso = tiempo.toEpochMilli() - p.getMarcaTiempo().toEpochMilli();
+                                if(lapso >= 9000){
+                                    Registro.registrarEvento(this,
+                                            "La partida de " + p.getPropietario().getNombre() +
+                                            " ha caducado");
+                                    placa.getPartidas().eliminarPartida(p);
+
+                                }
+
+                            }
+                            placa.getProcesador().getOyente().onActualizarPartidas();
                         }
                     } catch (Exception e) {
                         Registro.registrarEvento(this,"ERROR:" +  e.getMessage());

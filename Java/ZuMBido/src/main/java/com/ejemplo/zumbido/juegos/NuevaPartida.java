@@ -111,8 +111,7 @@ public class NuevaPartida extends JFrame{
                     @Override
                     public void mouseEntered(MouseEvent e) {
                         btnCrearPartida.setBackground(Colores.COLOR_VERDE_CREAR);
-                        //btnCrearPartida.setForeground(Color.white);
-                        //btnCrearPartida.cambiarImagen("/imagen/agregar_b.png");
+
                     }
 
                     @Override

@@ -49,5 +49,7 @@ public interface OyenteMensajes {
     default void onNombreCambiado(String nombreViejo, String nombreNuevo){}
 
     default void onPartida(Usuario usuario, String nombreJuego){}
+
+    default void onActualizarPartidas(){}
 }
 

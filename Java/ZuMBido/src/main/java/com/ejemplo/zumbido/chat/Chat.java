@@ -655,6 +655,11 @@ public class Chat extends JFrame implements OyenteMensajes {
         }
     }
 
+    @Override
+    public void onActualizarPartidas() {
+        vntPartidas.actualizarPartidas();
+    }
+
     /**
      * @return the placa
      */
