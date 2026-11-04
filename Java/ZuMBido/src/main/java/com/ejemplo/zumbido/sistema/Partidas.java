@@ -15,7 +15,7 @@ public class Partidas {
      */
     public boolean agregarPartida(Partida partida, boolean esPropia) {
         if (esPropia){
-            if(partidas.getFirst().isPropia()){
+            if(partidas.size() > 0 && partidas.getFirst().isPropia()){
                 return false;
             }
             else{
