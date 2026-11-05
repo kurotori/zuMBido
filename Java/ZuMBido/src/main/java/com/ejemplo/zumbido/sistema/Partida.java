@@ -52,5 +52,13 @@ public class Partida {
     public boolean isPropia() {
         return propia;
     }
+
+    public Juego getJuego() {
+        return juego;
+    }
+
+    public void setJuego(Juego juego){
+        this.juego = juego;
+    }
 }
 

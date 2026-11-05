@@ -33,7 +33,7 @@ public class GestorPartidas {
                                 String msj = Mensajes.componerMensaje(
                                         Mensajes.COMANDO_RED,
                                         Mensajes.SUBR_PARTIDA,
-                                        "UNO"
+                                        placa.getUsuario().getPartida().getJuego().getNombre()
                                 );
                                 placa.getMensajero().agregarMensaje(msj, false);
                             }

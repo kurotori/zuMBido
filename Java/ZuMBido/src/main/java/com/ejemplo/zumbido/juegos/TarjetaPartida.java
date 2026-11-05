@@ -67,7 +67,7 @@ public class TarjetaPartida extends JPanel implements ListCellRenderer<Partida> 
         this.partida = partida;
 
         this.lblNombreUsuario.setText(partida.getPropietario().getNombre());
-        //this.lblNombreJuego.setText(partida.get);
+        this.lblNombreJuego.setText(partida.getJuego().getNombre());
 
         if (isSelected){
             this.pnlZonaDatos.setBackground(Colores.COLOR_AZUL_SELECCIONAR);

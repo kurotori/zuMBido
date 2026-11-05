@@ -159,6 +159,10 @@ public class NuevaPartida extends JFrame{
 
     private void crearPartida(){
         Partida partida = new Partida(vntChat.getPlaca().getUsuario(), true);
+        //TODO: Modificar este juego para que sea mediante selección del usaurio
+        JuegoUno uno = new JuegoUno();
+        partida.setJuego(uno);
+
         Registro.registrarEvento(this,
                 "El usuario " + vntChat.getPlaca().getUsuario().getNombre() + " creó una partida con esta marca: "+
                         vntChat.getPlaca().getUsuario().getPartida().getMarcaTiempo().toString()
