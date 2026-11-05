@@ -8,6 +8,8 @@ import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.interfaz.Iconos;
 import com.ejemplo.zumbido.interfaz.LabelConImagen;
 import com.ejemplo.zumbido.interfaz.Textos;
+import com.ejemplo.zumbido.juegos.Juego;
+import com.ejemplo.zumbido.juegos.titulos.FabricaJuegos;
 import com.ejemplo.zumbido.sistema.*;
 
 import java.awt.BorderLayout;
@@ -581,9 +583,7 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     @Override
     public void onActualizarUsuarios() {
-        SwingUtilities.invokeLater(() -> {
-            actualizarUsuarios();
-        });
+        SwingUtilities.invokeLater(this::actualizarUsuarios);
     }
 
     @Override
@@ -639,7 +639,8 @@ public class Chat extends JFrame implements OyenteMensajes {
 
     @Override
     public void onNombreRepetido() {
-        System.out.println("[Chat]: Nombre Repetido - recibido");
+        Registro.registrarEvento(this, "ERROR: Nombre repetido");
+        //System.out.println("[Chat]: Nombre Repetido - recibido");
         if (dialogoEspera != null && dialogoEspera.isVisible()) {
                 dialogoEspera.dispose();
             }
@@ -648,9 +649,11 @@ public class Chat extends JFrame implements OyenteMensajes {
     }
 
     @Override
-    public void onPartida(Usuario usuario, String nombreJuego) {
+    public void onPartida(Usuario usuario, String idJuego) {
         if (vntPartidas != null){
             Partida p = new Partida(usuario, false);
+            Juego j = FabricaJuegos.crearJuego(idJuego);
+            p.setJuego(j);
             vntPartidas.agregarPartida(p,false);
         }
     }

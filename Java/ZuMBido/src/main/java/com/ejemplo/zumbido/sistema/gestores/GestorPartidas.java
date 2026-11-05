@@ -40,14 +40,21 @@ public class GestorPartidas {
 
                             Instant tiempo = Instant.now();
                             for(Partida p: placa.getPartidas().getListaPartidas()){
-                                long lapso = tiempo.toEpochMilli() - p.getMarcaTiempo().toEpochMilli();
-                                if(lapso >= 9000){
-                                    Registro.registrarEvento(this,
-                                            "La partida de " + p.getPropietario().getNombre() +
-                                            " ha caducado");
-                                    placa.getPartidas().eliminarPartida(p);
-
+                                if (!p.isPropia()){
+                                    long lapso = tiempo.toEpochMilli() - p.getMarcaTiempo().toEpochMilli();
+                                    if(lapso >= 9000){
+                                        Registro.registrarEvento(this,
+                                                "La partida de " + p.getPropietario().getNombre() +
+                                                        " ha caducado");
+                                        placa.getPartidas().eliminarPartida(p);
+                                    }
                                 }
+                                //Si la partida es propia, se actualiza su marca de tiempo
+                                //TODO:Chequear condiciones de la partida para su renovación
+                                else{
+                                    p.setMarcaTiempo(Instant.now());
+                                }
+
 
                             }
                             placa.getProcesador().getOyente().onActualizarPartidas();

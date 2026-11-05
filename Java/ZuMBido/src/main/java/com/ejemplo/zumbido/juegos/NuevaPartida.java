@@ -10,6 +10,7 @@ import com.ejemplo.zumbido.interfaz.BotonImagenChico;
 import com.ejemplo.zumbido.interfaz.Colores;
 import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.interfaz.LabelConImagen;
+import com.ejemplo.zumbido.juegos.titulos.JuegoUno;
 import com.ejemplo.zumbido.sistema.Partida;
 import com.ejemplo.zumbido.sistema.Registro;
 import com.formdev.flatlaf.FlatLightLaf;

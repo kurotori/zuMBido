@@ -185,7 +185,6 @@ public class VentanaPartidas extends JFrame {
 
     public void eliminarPartidaPropia(Partida partida){
         vntChat.getPlaca().getPartidas().eliminarPartida(partida);
-        //arrPartidas.remove(partida);
         vntChat.getPlaca().getUsuario().setPartida(null);
         actualizarPartidas();
     }
