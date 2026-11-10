@@ -29,7 +29,12 @@ public class GestorPartidas {
                 ()->{
                     try {
                         if (placa != null) {
+                            //TODO: Las partidas propias tienen condiciones para ser publicadas,
+                            // y deben chequearse en este punto
+
+                            //Chequeamos la existencia de una partida propia
                             if(placa.getUsuario().getPartida()!=null) {
+                                //Si la partida existe, comenzamos a publicarla en la red
                                 String msj = Mensajes.componerMensaje(
                                         Mensajes.COMANDO_RED,
                                         Mensajes.SUBR_PARTIDA,
@@ -38,10 +43,16 @@ public class GestorPartidas {
                                 placa.getMensajero().agregarMensaje(msj, false);
                             }
 
+                            //Se obtiene la marca de tiempo
                             Instant tiempo = Instant.now();
+
+                            //Se evalúan las partidas registradas en la placa.
                             for(Partida p: placa.getPartidas().getListaPartidas()){
                                 if (!p.isPropia()){
+
+                                    //Comparamos el lapso pasado desde la última publicación
                                     long lapso = tiempo.toEpochMilli() - p.getMarcaTiempo().toEpochMilli();
+                                    //Si el lapso es superior a 9s se elimina la partida del listado
                                     if(lapso >= 9000){
                                         Registro.registrarEvento(this,
                                                 "La partida de " + p.getPropietario().getNombre() +
@@ -57,6 +68,8 @@ public class GestorPartidas {
 
 
                             }
+
+                            //Tras cada ciclo del gestor, se emite una solicitud de actulización del listado de partidas
                             placa.getProcesador().getOyente().onActualizarPartidas();
                         }
                     } catch (Exception e) {
