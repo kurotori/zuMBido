@@ -10,6 +10,7 @@ import com.ejemplo.zumbido.interfaz.BotonImagenChico;
 import com.ejemplo.zumbido.interfaz.Colores;
 import com.ejemplo.zumbido.interfaz.Fuentes;
 import com.ejemplo.zumbido.interfaz.LabelConImagen;
+import com.ejemplo.zumbido.juegos.titulos.FabricaJuegos;
 import com.ejemplo.zumbido.juegos.titulos.JuegoUno;
 import com.ejemplo.zumbido.sistema.Partida;
 import com.ejemplo.zumbido.sistema.Registro;
@@ -160,7 +161,8 @@ public class NuevaPartida extends JFrame{
 
     private void crearPartida(){
         Partida partida = new Partida(vntChat.getPlaca().getUsuario(), true);
-        //TODO: Modificar este juego para que sea mediante selección del usaurio
+        //TODO: Modificar este juego para que sea mediante selección del usuario
+        FabricaJuegos fb = new FabricaJuegos();
         JuegoUno uno = new JuegoUno();
         partida.setJuego(uno);
 

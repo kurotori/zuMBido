@@ -13,7 +13,11 @@ public class FabricaJuegos {
 
     static {
         GestorDeClases gestorDeClases = new GestorDeClases();
-        gestorDeClases.
+        for(Class clase:gestorDeClases.buscarJuegos()){
+            System.out.println(clase.getCanonicalName());
+
+            REGISTRO_JUEGOS.put();
+        }
         //REGISTRO_JUEGOS.put("BN", BatallaNaval::new);
         //REGISTRO_JUEGOS.put("UNO", JuegoUno::new);
         //REGISTRO_JUEGOS.put("DC", DungeonCrawler::new);
